@@ -1,0 +1,46 @@
+baseurl = "http://shenwenqing.com/"
+title = "outrunJ笔记"
+theme = "whiteplain"
+languageCode = "ja"
+pygmentsCodefences = true
+pygmentsUseClasses = true
+pygmentsOptions = "linenos=table"
+copyright = "&copy; Copyright 2017 outrunJ"
+
+[params.author]
+  name = "outrunJ"
+
+  avatar = "/avatar.jpg"
+  email = "outrun.mail@gmail.com"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[[menu.main]]
+  name = "Categories"
+  weight = 1
+  identifier = "categories"
+  url = "/categories/"
+[[menu.main]]
+  name = "Tags"
+  weight = 2
+  identifier = "tags"
+  url = "/tags/"
+[[menu.main]]
+  name = "Archives"
+  weight = 3
+  identifier = "archives"
+  url = "/archives/"
+[[menu.main]]
+  name = "About"
+  weight = 4
+  identifier = "about"
+  url = "/about/"
+
+[[menu.footer]]
+  name = "About"
+  weight = 1
+  identifier = "about"
+  url = "/about/"
