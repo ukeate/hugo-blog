@@ -1,2 +1,10 @@
-.idea
+**/.idea
+**/.git
+**/node_module
+**/vendor
+
+*.class
+*.exe
+*.log
+
 public

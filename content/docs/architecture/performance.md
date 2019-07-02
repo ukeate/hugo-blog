@@ -45,22 +45,14 @@ date: 2018-10-10T17:20:46+08:00
 # 带宽
     建议
             热门并发1.5倍到2倍购买
-    价格
-            静态IP企业宽带                                5M                10M        50M        100M        200M
-            盛大云 华东双线                        216/月                396        1836        3636        7236
-            盛大云 华北BGP                        318                618        3018        6018        12018
-            阿里云 BGP                                100/兆/月        5k        1w        2w
-            Amazon EC2 流量计费                                                   $3313         
-            idcexpert.cn                                                 1.5w                 10w         
-            linkcloud.cn 双线 也可流量计费        168        480        3300        6600         
 # cdn
     介绍
             流量不大时带宽比cdn便宜, 流量大时cdn便宜。
             界限为250Mbps左右，价格在9k/month
     价格
             50TB/月        100TB/月 
-    阿里云        3.8w/月        6.9w/月
-    盛大云        9k/月                1.7w/月
+    阿里云   3.8w/月        6.9w/月
+    盛大云   9k/月          1.7w/月
     网宿                  
     蓝汛                  
 # 服务
@@ -73,31 +65,24 @@ date: 2018-10-10T17:20:46+08:00
             shimo
             dropbox
             trello
-            
-
     itsm/erp
             # IT Service Management, 信息技术服务管理
             salesforce
             servicenow
             workday
                     # hr平台
-
     pay
             支付宝
             易宝
             财付通
-
     cti
             天润
             云之讯
             容联
-
     report/olap
             palo
-
     idc
             # infomation data corporation 互联网数据中心
-
     cdn
             七牛
     ws
@@ -235,4 +220,4 @@ date: 2018-10-10T17:20:46+08:00
             200并发, 每次3ms, 37000次/s
 
     mysql
-            3.5w写入/s                        # 最多
+            最多3.5w写入/s

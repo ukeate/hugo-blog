@@ -65,4 +65,5 @@ date: 2018-10-10T20:53:25+08:00
             T is silent after N with lax vowels
 
 # 缩写
-    gtd         get things done
+    gtd     get things done
+    lgtm    looks good to me

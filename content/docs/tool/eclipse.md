@@ -164,14 +164,19 @@ date: 2018-10-11T18:33:08+08:00
 
     本地安装svn插件
 ## 快捷键
+    alt /
+    ctrl shift f
+        # 代码格式化
+    alt enter
+        # 补全提示
+    f3
+        # 跳转到声明
     f2 显示类或方法的全限定名
     ctrl + h 多文件搜索        
     alt shift s
     alt shift z :surround with 
     ctrl /
     ctrl shift /
-    alt /
-    ctrl shift f
     F5 F6 F7
     ctrl alt 上下
     alt 上下
@@ -301,8 +306,7 @@ date: 2018-10-11T18:33:08+08:00
     ｊａｖａ编辑器 打开结构 Ctrl+F3 
     全局 打开类型 Ctrl+Shift+T 
     全局 打开类型层次结构 F4 
-    全局 打开声明 F3 
-    全局 打开外部ｊａｖａdoc Shift+F2 
+    全局 打开外部ｊａｖａdoc Shift+F2
     全局 打开资源 Ctrl+Shift+R 
     全局 后退历史记录 Alt+← 
     全局 前进历史记录 Alt+→ 

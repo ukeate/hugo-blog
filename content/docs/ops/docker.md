@@ -61,6 +61,9 @@ date: 2018-10-11T18:18:21+08:00
                     # 持续运行
                     --rm=true -i -t --volumes-from etc_share --name=ls_etc centos ls /etc
                     # 使用共享
+        run
+            # 在新容器中运行命令
+            --name nsqd -p 4150:4150 nsqio/nsq /nsqd
 # 配置
     /etc/sysconfig/docker
             # /etc/init.d/docker.conf

@@ -5,165 +5,165 @@ date: 2018-10-11T10:33:48+08:00
 ---
 
 # 特点
-        commonJs规范                                        # 用于构建模块
-        javascript书写(v8引擎)                                # 关键字1
-                                                        # 原因1: 成熟的事件驱动模式
-                                                        ## 原因2: 没有i/o库, 没有历史包袱
-                                                        ## 原因3: v8性能好
-                                                        # js设计之初就可以运行在后端
-        单线程                                                # 关键字2
-        非阻塞io(non-blocking i/o model)                # 关键字3        
-                                                        ## io与数据处理分离（所以必须异步）
-                                                        ## 线程池结合event-driven实现
-        事件驱动(event-driven)                                # 关键字4
-                                                        ## event loop[while(true)] -> watcher -> handles
-                                                        ### event loop每一周询问多个watcher是否有事件
-                                                        ### http模块就是启动了一个watcher,所以执行后进程不结束
-                                                                # 注: event loop中没有watcher时进程退出
-                                                        ### 其它watcher有 timer, fs, udp/req, process
-                                                        ### watcher产生事件后, event loop取到并执行其handle(回调函数)
-                                                        ## 不同操作系统中event driven的实现:
-                                                        ### windows: IOCP, Linux: epoll, Mac:kqueue
-        异步操作                                        # 书写难度的解决
-                                                        ## go语言有协程(coroutine)而node.js没有，协程可以同步式编程
-                                                        ### 已有开发中的实现模块
-                                                        ## promise(commonJs的规范, 其实现有whenJs, Q)
-                                                        ## eventProxy alibaba朴灵写
-                                                        ## async/step
+    commonJs规范                                        # 用于构建模块
+    javascript书写(v8引擎)                                # 关键字1
+                                                    # 原因1: 成熟的事件驱动模式
+                                                    ## 原因2: 没有i/o库, 没有历史包袱
+                                                    ## 原因3: v8性能好
+                                                    # js设计之初就可以运行在后端
+    单线程                                                # 关键字2
+    非阻塞io(non-blocking i/o model)                # 关键字3
+                                                    ## io与数据处理分离（所以必须异步）
+                                                    ## 线程池结合event-driven实现
+    事件驱动(event-driven)                                # 关键字4
+                                                    ## event loop[while(true)] -> watcher -> handles
+                                                    ### event loop每一周询问多个watcher是否有事件
+                                                    ### http模块就是启动了一个watcher,所以执行后进程不结束
+                                                            # 注: event loop中没有watcher时进程退出
+                                                    ### 其它watcher有 timer, fs, udp/req, process
+                                                    ### watcher产生事件后, event loop取到并执行其handle(回调函数)
+                                                    ## 不同操作系统中event driven的实现:
+                                                    ### windows: IOCP, Linux: epoll, Mac:kqueue
+    异步操作                                        # 书写难度的解决
+                                                    ## go语言有协程(coroutine)而node.js没有，协程可以同步式编程
+                                                    ### 已有开发中的实现模块
+                                                    ## promise(commonJs的规范, 其实现有whenJs, Q)
+                                                    ## eventProxy alibaba朴灵写
+                                                    ## async/step
 # 层次
-        javascript
-        v8
-        node
-        libuv
-        *nix/ windows                # 分别编译
+    javascript
+    v8
+    node
+    libuv
+    *nix/ windows                # 分别编译
 # 技术
-        libev的windows与linux接口实现
-        c++扩展
+    libev的windows与linux接口实现
+    c++扩展
 
 # 工具
-        node --v8-options | grep harmony
-                # 查看支持的es6特性
-        npm
-            介绍
-                    cnpm是一个alibaba开发维护的，提供私有npm注册服务
+    node --v8-options | grep harmony
+            # 查看支持的es6特性
+    npm
+        介绍
+                cnpm是一个alibaba开发维护的，提供私有npm注册服务
 
-            搭建cnpm服务器
-                    git clone https://github.com/cnpm/cnpmjs.org.git
-                    cd cnpmjs.org
-                    npm install npm -g
-                            # 升级npm的版本
-                    npm install
-                    创建mysql数据库，并在config/index.js中修改mysql数据库的用户名和密码
-                    config/index.js中注释bindingHost来对外网开放
-                    node --harmony_generators dispatch.js
-                            # 启动了两个端口, 7001用于npm注册服务, 7002用于web访问
-            使用私有库
-                    npm install ape-algorithm --registry=http://192.168.1.20:7001
-                            # 如果私有库中没有，cnpm会到npm中同步一个到cnpm, 再传给客户端一份
+        搭建cnpm服务器
+                git clone https://github.com/cnpm/cnpmjs.org.git
+                cd cnpmjs.org
+                npm install npm -g
+                        # 升级npm的版本
+                npm install
+                创建mysql数据库，并在config/index.js中修改mysql数据库的用户名和密码
+                config/index.js中注释bindingHost来对外网开放
+                node --harmony_generators dispatch.js
+                        # 启动了两个端口, 7001用于npm注册服务, 7002用于web访问
+        使用私有库
+                npm install ape-algorithm --registry=http://192.168.1.20:7001
+                        # 如果私有库中没有，cnpm会到npm中同步一个到cnpm, 再传给客户端一份
 
-            项目设置私有库
-                    npm config list
-                            # 查看项目的默认设置。registry属性指向npm官方资源位置
-                    npm config set registry http://192.168.1.20:7001
+        项目设置私有库
+                npm config list
+                        # 查看项目的默认设置。registry属性指向npm官方资源位置
+                npm config set registry http://192.168.1.20:7001
 
-            用户设置私有库
-                    // ~/.npmrc
-                    registry=http://192.168.1.20:7001
-                            # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
+        用户设置私有库
+                // ~/.npmrc
+                registry=http://192.168.1.20:7001
+                        # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
 
-            cnpm客户端
-                    npm install cnpm
-                            # 可以像使用npm一样使用
-                    cnpm sync gulp
-                            # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
-                        
-                    调试
-                            o-> 代码中插入断点
-                                    debugger;
-                            o-> 以debug模式运行
-                                    # debug模式运行时, help查看可用命令
-                                    node debug app.js
-            package.json
-                {
-                        "name": "test",
-                        "version": "0.1.0",
-                        "keywords": ["a", "b"],
-                                # npm search时用
-                        "description": "A testing package",
-                        "os": ["linux", "darwin"],
-                        "author": "outrun<outrun@mail.com>",
-                        "dependencies": {
-                                "express": "^1.0.0",
-                                "redis": ">= 0.6.7"
-                        },
-                        "devDependencies": {
-                                "grunt": "^0.4.5"
-                        },
-                        "main": "index",
-                        "bin": {
-                                "test": "./bin/test.js"
-                        },
-                        "scripts": {
-                                "start": "node server.js",
-                                "test": "vows test/*.js",
-                                        # "grunt test" "mocha test" "make test" "make test-all"
-                                "preinstall": "./configure",
-                                "install": "make && make install",
-                                "uninstall": ""
-                        },
-                        "engines": {
-                                "node": "5.0.0"
-                        }
-                }
+        cnpm客户端
+                npm install cnpm
+                        # 可以像使用npm一样使用
+                cnpm sync gulp
+                        # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
 
-                        contributors
-                        bugs
-                        licenses
-                        repositories
-                        homepage
-                        cpu
-                        builtin
-                                # 内建在底层系统的哪些组件上
-                        directories
-                        implements
-                        bin
-                                # 全局安装bin命令的位置
-        n
-        node-gyp
-        nvm
-        cnpm
-            介绍
-                    cnpm是一个alibaba开发维护的，提供私有npm注册服务
+                调试
+                        o-> 代码中插入断点
+                                debugger;
+                        o-> 以debug模式运行
+                                # debug模式运行时, help查看可用命令
+                                node debug app.js
+        package.json
+            {
+                    "name": "test",
+                    "version": "0.1.0",
+                    "keywords": ["a", "b"],
+                            # npm search时用
+                    "description": "A testing package",
+                    "os": ["linux", "darwin"],
+                    "author": "outrun<outrun@mail.com>",
+                    "dependencies": {
+                            "express": "^1.0.0",
+                            "redis": ">= 0.6.7"
+                    },
+                    "devDependencies": {
+                            "grunt": "^0.4.5"
+                    },
+                    "main": "index",
+                    "bin": {
+                            "test": "./bin/test.js"
+                    },
+                    "scripts": {
+                            "start": "node server.js",
+                            "test": "vows test/*.js",
+                                    # "grunt test" "mocha test" "make test" "make test-all"
+                            "preinstall": "./configure",
+                            "install": "make && make install",
+                            "uninstall": ""
+                    },
+                    "engines": {
+                            "node": "5.0.0"
+                    }
+            }
 
-            搭建cnpm服务器
-                    git clone https://github.com/cnpm/cnpmjs.org.git
-                    cd cnpmjs.org
-                    npm install npm -g
-                            # 升级npm的版本
-                    npm install
-                    创建mysql数据库，并在config/index.js中修改mysql数据库的用户名和密码
-                    config/index.js中注释bindingHost来对外网开放
-                    node --harmony_generators dispatch.js
-                            # 启动了两个端口, 7001用于npm注册服务, 7002用于web访问
-            使用私有库
-                    npm install ape-algorithm --registry=http://192.168.1.20:7001
-                            # 如果私有库中没有，cnpm会到npm中同步一个到cnpm, 再传给客户端一份
+                    contributors
+                    bugs
+                    licenses
+                    repositories
+                    homepage
+                    cpu
+                    builtin
+                            # 内建在底层系统的哪些组件上
+                    directories
+                    implements
+                    bin
+                            # 全局安装bin命令的位置
+    n
+    node-gyp
+    nvm
+    cnpm
+        介绍
+                cnpm是一个alibaba开发维护的，提供私有npm注册服务
 
-            项目设置私有库
-                    npm config list
-                            # 查看项目的默认设置。registry属性指向npm官方资源位置
-                    npm config set registry http://192.168.1.20:7001
+        搭建cnpm服务器
+                git clone https://github.com/cnpm/cnpmjs.org.git
+                cd cnpmjs.org
+                npm install npm -g
+                        # 升级npm的版本
+                npm install
+                创建mysql数据库，并在config/index.js中修改mysql数据库的用户名和密码
+                config/index.js中注释bindingHost来对外网开放
+                node --harmony_generators dispatch.js
+                        # 启动了两个端口, 7001用于npm注册服务, 7002用于web访问
+        使用私有库
+                npm install ape-algorithm --registry=http://192.168.1.20:7001
+                        # 如果私有库中没有，cnpm会到npm中同步一个到cnpm, 再传给客户端一份
 
-            用户设置私有库
-                    // ~/.npmrc
-                    registry=http://192.168.1.20:7001
-                            # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
+        项目设置私有库
+                npm config list
+                        # 查看项目的默认设置。registry属性指向npm官方资源位置
+                npm config set registry http://192.168.1.20:7001
 
-            cnpm客户端
-                    npm install cnpm
-                            # 可以像使用npm一样使用
-                    cnpm sync gulp
-                            # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
+        用户设置私有库
+                // ~/.npmrc
+                registry=http://192.168.1.20:7001
+                        # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
+
+        cnpm客户端
+                npm install cnpm
+                        # 可以像使用npm一样使用
+                cnpm sync gulp
+                        # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
             
 # api     
 ## 宿主对象
@@ -325,57 +325,57 @@ date: 2018-10-11T10:33:48+08:00
                     # 发起客户端请求
 ### https
     介绍
-            nodejs
-            申请ca证书
-            访问端口为443
+        nodejs
+        申请ca证书
+        访问端口为443
     使用
-            express -e nodejs-https
-            cd nodejs-https && npm install
-            git --version
-            openssl version -a
-            openssl genrsa -out privatekey.pem 1024
-                    # 生成证书文件
-            openssl req -new -key privatekey.pem -out certrequest.csr
-                    # 通过私钥生成CSR证书签名
-            openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
-                    # 通过私钥和证书签名生成证书文件
-                    ## 这时生成了三个文件: certificate.pem, certrequest.csr, privatekey.pem
-                    ### 分别是: 证书文件, CSR证书签名, 私钥
-                    ## 由于证书是自己创建的，没有经过第三方机构验证，用户访问时会出现警告提示
-            服务器
-                var https = require('https')
-                        , fs = require('fs');
-                var options = {
-                        key: fs.readFileSync('./privatekey.pem'),
-                        cert: fs.readFileSync('./certificate.pem')
-                };
-                https.createServer(options, app).listen(3011, function(){
-                        console.log('Https server listening on port: ' + 3011);
-                });
-            客户端
-                var options = {
-                        hostname: 'localhost',
-                        port: 8000,
-                        path: '/',
-                        method: 'GET',
-                        key: fs.readFileSync('./keys/client.key'),
-                        cert: fs.readFileSync('./keys/client.crt'),
-                        ca: [fs.readFileSync('./keys/ca.crt')]
-                                # 设置rejectUnauthorized: false 来忽略ca验证
-                }
-                options.agent = new https.Agent(options)
+        express -e nodejs-https
+        cd nodejs-https && npm install
+        git --version
+        openssl version -a
+        openssl genrsa -out privatekey.pem 1024
+                # 生成证书文件
+        openssl req -new -key privatekey.pem -out certrequest.csr
+                # 通过私钥生成CSR证书签名
+        openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
+                # 通过私钥和证书签名生成证书文件
+                ## 这时生成了三个文件: certificate.pem, certrequest.csr, privatekey.pem
+                ### 分别是: 证书文件, CSR证书签名, 私钥
+                ## 由于证书是自己创建的，没有经过第三方机构验证，用户访问时会出现警告提示
+        服务器
+            var https = require('https')
+                    , fs = require('fs');
+            var options = {
+                    key: fs.readFileSync('./privatekey.pem'),
+                    cert: fs.readFileSync('./certificate.pem')
+            };
+            https.createServer(options, app).listen(3011, function(){
+                    console.log('Https server listening on port: ' + 3011);
+            });
+        客户端
+            var options = {
+                    hostname: 'localhost',
+                    port: 8000,
+                    path: '/',
+                    method: 'GET',
+                    key: fs.readFileSync('./keys/client.key'),
+                    cert: fs.readFileSync('./keys/client.crt'),
+                    ca: [fs.readFileSync('./keys/ca.crt')]
+                            # 设置rejectUnauthorized: false 来忽略ca验证
+            }
+            options.agent = new https.Agent(options)
 
-                var req = https.request(options, function (res) {
-                        res.setEncoding('utf-8')
-                        res.on('data', function (d) {
-                                console.log(d)
-                        })
-                })
-                req.end()
+            var req = https.request(options, function (res) {
+                    res.setEncoding('utf-8')
+                    res.on('data', function (d) {
+                            console.log(d)
+                    })
+            })
+            req.end()
 
-                req.on('error', function(e){
-                        console.log(e)
-                })
+            req.on('error', function(e){
+                    console.log(e)
+            })
 ### net
     介绍
             处理tcp请求

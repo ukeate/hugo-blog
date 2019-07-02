@@ -1,19 +1,141 @@
 ---
-title: 关于我
+title: 寄存器
 title: "Register"
 type: docs
 ---
 
 # 连接
-<a href="http://localhost:1313/series/infomation/infomation/" target="_blank">信息</a>
+<a href="http://localhost:1315/docs/infomation/" target="_blank">信息</a>
 <a href="https://shimo.im/" target="_blank">石墨</a>
-<a href="https://bitbucket.org/" target="_blank">bitbucket</a>
+<a href="https://processon.com/" target="_blank">processon</a>
+<a href="https://www.vtrhome.net/" target="_blank">vpntech</a>
 
-# hugo
-    hugo server -s /home/outrun/code/bitbucket/project/blog/blog-hugo --buildDrafts
-    chromium http://localhost:1313/series/life/register
 
-# vim
+# go
+    go test -bench=.  --cpuprofile=cpu.prof --memprofile=mem.prof -config ../conf/config_lc.toml -test.run TestCreateType
+    go tool pprof service.test cpu.prof
+    go-torch -b cpu.prof
+    go test -cover -args -config config.toml -test.run "TestCreate"
+
+# linux
+    dmesg
+    journalctl
+
+# 系统配置
+    bin
+        # 系统需要
+        yaourt
+        network-manager
+        awesome
+        i3-wm
+        ibus
+        wireless-tools
+        pkgfile
+        os-prober
+        ntfs-3g
+        pepper-flash
+        tree
+        unzip
+        alsamixer
+        arandr
+        xscreensaver
+
+        virtualbox
+        firefox
+        chromium
+        thunderbird
+        tmux
+        vim
+
+        # 运维需要
+        openssh
+        git
+        expect
+        wget
+        sysdig
+
+        # 程序需要
+        g++
+        python
+        lua
+        ruby
+        cmake
+        protobuf
+        openjdk8
+        docker
+            mysql
+            nginx
+            nginx-php
+            nsq
+            redis
+            zipkin
+    opt
+        # ide
+        webstorm
+        datagrip
+        eclipse-inst
+        eclipse-birt
+        eclipse-jee-neon
+        goland
+        intellij idea
+        phpstorm
+        pycharm
+        vscode
+        sublime
+        mps
+        android studio
+
+        # 图形工具
+        wireshark
+        filezilla
+        postman
+        robomongo
+        emacs
+        neoclipse
+        wps
+
+        # 数据库
+        elasticsearch
+        elasticsearch-head
+        elasticsearch-analysis-hanlp
+        elasticsearch-ik
+        elasticsearch-pinyin
+        redis
+        mongodb
+        mariadb
+        neo4j
+        pgsql
+
+        # 工具
+        go
+        maven
+        tomcat
+        flame-graph
+        jdk1.8
+        node
+        protoc
+    diy
+        blog
+    文件
+        ~/code
+        ~/scripts/work
+        ~/scripts/app
+        ~/scripts/config
+        ~/scripts/login
+        ~/.xinitrc
+        ~/.bashrc
+        ~/.gitconfig
+        ~/.openvpn
+        ~/.ssh
+        ~/.tmux.conf
+        /opt/env
+        /opt/svc
+        /etc/resolv.conf
+        /data/var/mysql
+        /db/mongo
+        /srv/ftp
+        /srv/http
+# vim常用
     可视模式
         o   # 切换头尾
         gv  # 重选上次
@@ -56,8 +178,6 @@ type: docs
         :! command     # 执行shell命令
                       # !! 执行前一命令
                       # r!command 结果插入当前
-                      # w!command 当前文件作为输入
-        :cd  # 修改当前目录
             # sh 打开sh
             # pwd
             # grep t *  当前文件匹配t
@@ -101,7 +221,22 @@ type: docs
         <C - w> w
         <C - w> s
         <C - w> v
-# awesome
-    <M - w>
+
+
+# awesome常用
+    帮助
+        <M - w>
+    client
+        <M - 回车>
+        <M - c>
+            # 自定义chromium
+        <M - f>
+            # 全屏
+        <M - shift - c>
+            # 关闭
+        <M - 数字>
+        <M - j> <M - k>
+        <M - 空格>
+            # 变布局
 # tmux
 
