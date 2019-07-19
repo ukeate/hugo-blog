@@ -5,26 +5,26 @@ date: 2018-10-11T10:33:48+08:00
 ---
 
 # 特点
-    commonJs规范                                        # 用于构建模块
-    javascript书写(v8引擎)                                # 关键字1
+    commonJs规范                                    # 用于构建模块
+    javascript书写(v8引擎)                           # 关键字1
                                                     # 原因1: 成熟的事件驱动模式
                                                     ## 原因2: 没有i/o库, 没有历史包袱
                                                     ## 原因3: v8性能好
                                                     # js设计之初就可以运行在后端
-    单线程                                                # 关键字2
-    非阻塞io(non-blocking i/o model)                # 关键字3
+    单线程                                           # 关键字2
+    非阻塞io(non-blocking i/o model)                 # 关键字3
                                                     ## io与数据处理分离（所以必须异步）
                                                     ## 线程池结合event-driven实现
-    事件驱动(event-driven)                                # 关键字4
+    事件驱动(event-driven)                           # 关键字4
                                                     ## event loop[while(true)] -> watcher -> handles
                                                     ### event loop每一周询问多个watcher是否有事件
                                                     ### http模块就是启动了一个watcher,所以执行后进程不结束
-                                                            # 注: event loop中没有watcher时进程退出
+                                                    # 注: event loop中没有watcher时进程退出
                                                     ### 其它watcher有 timer, fs, udp/req, process
                                                     ### watcher产生事件后, event loop取到并执行其handle(回调函数)
                                                     ## 不同操作系统中event driven的实现:
                                                     ### windows: IOCP, Linux: epoll, Mac:kqueue
-    异步操作                                        # 书写难度的解决
+    异步操作                                         # 书写难度的解决
                                                     ## go语言有协程(coroutine)而node.js没有，协程可以同步式编程
                                                     ### 已有开发中的实现模块
                                                     ## promise(commonJs的规范, 其实现有whenJs, Q)
@@ -624,55 +624,54 @@ date: 2018-10-11T10:33:48+08:00
     })
 ### child_process
     介绍
-            可以创建新的node进程
-
+        可以创建新的node进程
     方法
-            spawn(command[, args][a options])
-                    # command执行的命令
-                    # args参数列表
-                    # options 环境变量对象
-                    ## 包括7个属性 
-                    ### cwd 子进程当前工作目录
-                    ### env 环境变量键值对
-                    ### stdio 子进程stdio配置
-                    ### customFds 子进程stdio使用的文件标示符
-                    ### detached 进程组的主控制
-                    ### uid 用户进程id
-                    ### 进程组id
-                    var du = child.spawn('du', ['-sh', '/disk1']);
-                    du.stdout.on('data', function(data){})
-                    du.stderr.on('data', function(data){})
-                    du.on('exit', function(code){})
-            exec('')
-                    # 对spawn的友好封装, 增加了shell命令解析
-                    child.exec('cat *.js | ws', function(error, stdout, stderr){})
-            execFile(command[, args])
-                    # 执行可执行文件，不解析args,防止了exec参数注入的风险
-                    child.execFile('/bin/ls', ['-l', '.'], function(err, result){})
-            fork
-                    # 同spawn, 但建立父进程与子进程之间的通信管道
-                    var n = child.fork('./son.js');
-                    n.on('message', function(){
-                            console.log('Main listen: ', m);
-                    });
-                    n.send({hello: 'i am parent'});
-                    // son.js
-                    process.on('message', function(m){
-                            console.log('Son listen: ', m);
-                    });
-                    process.send({hello: 'i am child'});
+        spawn(command[, args][a options])
+            # command执行的命令
+            # args参数列表
+            # options 环境变量对象
+            ## 包括7个属性
+            ### cwd 子进程当前工作目录
+            ### env 环境变量键值对
+            ### stdio 子进程stdio配置
+            ### customFds 子进程stdio使用的文件标示符
+            ### detached 进程组的主控制
+            ### uid 用户进程id
+            ### 进程组id
+            var du = child.spawn('du', ['-sh', '/disk1']);
+            du.stdout.on('data', function(data){})
+            du.stderr.on('data', function(data){})
+            du.on('exit', function(code){})
+        exec('')
+            # 对spawn的友好封装, 增加了shell命令解析
+            child.exec('cat *.js | ws', function(error, stdout, stderr){})
+        execFile(command[, args])
+            # 执行可执行文件，不解析args,防止了exec参数注入的风险
+            child.execFile('/bin/ls', ['-l', '.'], function(err, result){})
+        fork
+            # 同spawn, 但建立父进程与子进程之间的通信管道
+            var n = child.fork('./son.js');
+            n.on('message', function(){
+                    console.log('Main listen: ', m);
+            });
+            n.send({hello: 'i am parent'});
+            // son.js
+            process.on('message', function(m){
+                    console.log('Son listen: ', m);
+            });
+            process.send({hello: 'i am child'});
     子进程对象方法
-            send
-                    # 发送消息和句柄，句柄可以是
-                    ## net.Socket, net.Server, net.Native(c++层面的tcp套接字或IPC管道), dgram.Socket, dgram.Native
-            kill
-                    # 向子进程发送SIGTERM信号
+        send
+            # 发送消息和句柄，句柄可以是
+            ## net.Socket, net.Server, net.Native(c++层面的tcp套接字或IPC管道), dgram.Socket, dgram.Native
+        kill
+            # 向子进程发送SIGTERM信号
     子进程事件
-            message
-            error
-            exit
-            close
-            disconnect
+        message
+        error
+        exit
+        close
+        disconnect
 
     o-> spawn
     var spawn = require('child_process').spawn

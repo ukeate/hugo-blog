@@ -1,8 +1,3 @@
----
-Categories: ["运维"]
-title: "Linux"
-date: 2018-10-11T18:47:57+08:00
----
 
 # 历史
     40年代：汇编语言
@@ -86,6 +81,20 @@ date: 2018-10-11T18:47:57+08:00
             # 文件名中S表示传递start参数(K表示stop), 999为启动级别
 ## fstab
     /dev/sda1 /home/outrun/sda1 ntfs-3g defaults 0 0
+## 日志
+    access-log      # http传输
+    acct和pacct     # 用户命令
+    aculog          # modem活动
+    btmp            # 失败记录
+    lastlog         # 最近成功登录、最后一次不成功登录
+    syslog          # 系统日志
+    messages        # syslog
+    sudolog         # sudo记录
+    sulog           # su记录
+    utmp            # 当前登录用户
+    wtmp            # 用户登录登出记录
+    xferlog         # ftp会话
+
 # 原理
 ## 约定
     权限
@@ -263,4 +272,5 @@ date: 2018-10-11T18:47:57+08:00
                 SigLevel = Never
                 Server = http://repo.archlinux.fr/$arch
         pacman -Sy base-devel yaourt
-
+    字体
+        wiki上找font configuration

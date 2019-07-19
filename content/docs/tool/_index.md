@@ -18,7 +18,16 @@ type: docs
         https://zhile.io/
 
     快捷键
-            alt + enter 改错
+        alt + enter     # 改错
+        shift shift     # 搜索跳转
+
+    编码
+        file -> settings -> appearence里use custom font设置中文字体
+        file -> settings -> editor -> file encodings 三处utf-8
+        idea安装目录/bin/idea.vmoptions和idea64.vmoptions,最后添加
+            -Dfile.encoding=UTF-8
+        .idea/encodings.xml里删除除了UTF-8的项
+
 ## webstorm
 ## pycharm
 ## goland

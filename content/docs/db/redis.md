@@ -1,72 +1,133 @@
----
-Categories : ["数据库"]
-title: "Redis"
-date: 2018-10-11T16:09:05+08:00
----
 
-# 特点
+# 基础
+    remote dictionary server
+    特点
+        no-sql, c编写
+        内存数据库       # 请求不经过parser和optimizer
+        key-value
         单线程
-                # emecache多线程
-        no-sql 
-        内存
-                # 请求不经过parser和optimizer(memcache也可以，但不支持排行榜和浮点数)
-        key-value 
-                # memcache只有字符串，append字符串, blacklist删除麻烦
-                # key的命令上一般用:来分隔命名空间
-                string
-                        整个或一部分操作
-                        整数、浮点数自增自减
-                list
-                        两边推入或弹出
-                        偏移量trim
-                        读单个多个元素
-                        值查找移除元素
-                set
-                        增删查单个元素
-                        单个元素是否存在
-                        交集、并集、差集
-                        随机取元素
-                hash
-                        增删查单个键值对
-                        获取所有键值对
-                zset
-                        # 有序集合, 排序根据score, score为双精度浮点数
-                        增删查单个元素
-                         根据range或成员获取元素
-        c 编写
-        复制
-        持久化
-                # memcache不能持久化
-                point-in-time dump
-                        # 指定时间段内有指定数量的写操作时执行
-                        dump-to-disk二条命令
-                append-only文件
-                        从不同步
-                        每秒同步一次
-                        一命令同步一次
-        客户端分片
-        不完全事务
+        可持久化
 
-# 应用
-        primary storage(主存储)
-        secondary storage(二级存储)
-# 命令
-    文件命令
+    与memcache区别
+        memcache全在内存，不能持久化，redis部分硬盘
+        memcache类型支持简单
+            # memcache类型只有字符串，append字符串, blacklist删除麻烦
+        emecache多线程, redis单线程
+        底层模型，与客户端通信协议不同，redis自己实现vm机制(冷热数据分离)
+        value, memcache只能存1MB, redis可存1GB
+        redis可设置expire, 支持排行榜, 浮点数
+    类型
+        string
+            整个或一部分操作
+            整数、浮点数自增自减
+        list
+            两边推入或弹出
+            偏移量trim
+            读单个多个元素
+            值查找移除元素
+        set
+            增删查单个元素
+            单个元素是否存在
+            交集、并集、差集
+            随机取元素
+        hash
+            增删查单个键值对
+            获取所有键值对
+        zset
+            # 有序集合, 排序根据score, score为双精度浮点数
+            增删查单个元素
+            根据range或成员获取元素
+    应用
+        会话缓存(session cache)
+        全面缓存(FPC)
+        队列
+        排行榜/计数器
+        发布/订阅
+    命令
+        文件命令
             redis-server
-                    # 端口为6379
-                    redis-server /etc/redis.conf  来加载配置文件
+                # 端口为6379
+                redis-server /etc/redis.conf  来加载配置文件
             redis-cli
             redis-benchmark
-                    # 性能测试工具
+                # 性能测试工具
 
-    redis-cli命令
+        redis-cli命令
             ping
-                    # 成功时返回 PONG
+                # 成功时返回 PONG
             shutdown
-                    # 关闭redis-server服务
-                    -p 端口号
+                # 关闭redis-server服务
+                -p 端口号
             quit
-## 数据    
+# 功能
+    性能高     # 100k次读写/s
+    数据类型丰富
+    所有操作有原子性
+    支持发布/订阅，通知，key过期
+
+
+    发布订阅
+            subscribe
+            psubscribe
+                    # 订阅给定模式匹配的所有频道
+            unsubscribe
+            punsubscribe
+            publish
+
+            sort
+                    # 列表、集合、有序集合排序，返回结果或生成存储
+
+    过期
+            persist
+                    # 移除键过期时间
+            ttl
+                    # 键距离过期时间还有多少秒
+            pttl
+                    # 多少毫秒
+            expire
+                    # 给定键指定数秒后过期
+            pexpire
+                    # 指定的毫秒后过期
+            expireat
+                    # unix时间戳过期
+            pexpireat
+                    # 毫秒unix时间戳
+
+    事务
+                    # 事务期其他客户端命令阻塞
+            multi
+                    # 创建事务队列，开始记录命令
+            exec
+                    # 提交事务队列
+            watch
+                    # 对键加锁
+            unwatch
+            discard
+                    # 取消事务
+    持久化
+            bgsave
+                    # fork线程创建快照, windows不支持
+            save
+                    # 停止响应创建快照
+            sync
+                    # 向主服务器要求复制时，主服务器bgsave，非刚bgsave过
+            bgrewriteaof
+                    # 重写aof文件使它缩小
+    复制
+            slaveof
+    客户端分片
+    不完全事务
+# 性能
+    内存数据库，需要预估内存，使用key过期节约
+    完整重同步占资源，可以部分重同步
+    重启数据加载慢
+
+    master内存快照时，save命令调rdbSave阻塞主线程
+    master AOF持久化，追加文件大时影响master重启恢复速度
+        用slave AOF
+    master调用BGREWRITEAOF重写AOF文件时，cpu和内存负载高
+    主从复制最好同局域网
+## 数据
     set mykey somvalue
     get mykey
     del mykey
@@ -162,60 +223,9 @@ date: 2018-10-11T16:09:05+08:00
     zrevrank
     zscore
             # 返回分值
-## 功能
-    发布订阅
-            subscribe
-            psubscribe
-                    # 订阅给定模式匹配的所有频道
-            unsubscribe
-            punsubscribe
-            publish
-            
-            sort
-                    # 列表、集合、有序集合排序，返回结果或生成存储
-
-    过期
-            persist
-                    # 移除键过期时间
-            ttl
-                    # 键距离过期时间还有多少秒
-            pttl                                
-                    # 多少毫秒
-            expire
-                    # 给定键指定数秒后过期
-            pexpire
-                    # 指定的毫秒后过期
-            expireat
-                    # unix时间戳过期
-            pexpireat
-                    # 毫秒unix时间戳
-
-    事务
-                    # 事务期其他客户端命令阻塞
-            multi
-                    # 创建事务队列，开始记录命令
-            exec
-                    # 提交事务队列
-            watch
-                    # 对键加锁
-            unwatch
-            discard        
-                    # 取消事务
-    持久化
-            bgsave
-                    # fork线程创建快照, windows不支持
-            save
-                    # 停止响应创建快照
-            sync
-                    # 向主服务器要求复制时，主服务器bgsave，非刚bgsave过
-            bgrewriteaof
-                    # 重写aof文件使它缩小
-    复制 
-            slaveof
-# java client
+# client
     jedis
-        介绍
-                支持redis sharding, 即ShardedJedis结合ShardedJedisPool
+        # java, 支持redis sharding, 即ShardedJedis结合ShardedJedisPool
 
         Jedis jedis = new Jedis("localhost");                        # 连接redis数据库
         jedis.set("name", "aa");                                                # 添加、覆盖
@@ -234,24 +244,41 @@ date: 2018-10-11T16:09:05+08:00
     codis
         # 豌豆荚开发的redis集群代理
 # 持久化
+    方式
+        无持久化
+        RDB
+            # 一段时间备份一个RDB文件，RDB文件很紧凑。用fork子进程的方式备份，恢复速度快
+            # 服务器故障时，会丢当前时段数据。数据集大时，fork耗时出现停止服务(毫秒至1秒)
+            point-in-time dump
+                dump-to-disk二条命令
+        AOF
+            # 记录写操作, AOF先于RDB
+            # fsync不fork在后台执行, 追加写文件，文件大时自动重写
+            # AOF文件结构不紧凑，AOF速度慢于RDB(关闭fsync一样快)
+            append-only文件
+            fsync策略
+                从不同步
+                每秒同步一次      # 只丢一秒数据
+                一命令同步一次
+    策略
     配置
-            save 60 1000
-                    # 60秒内有1000次写入时，自动save
-            stop-writes-on-bgsave-error no
-            rdbcompression yes
-            dbfilename dump.rdb
+        save 60 1000
+                # 60秒内有1000次写入时，自动save
+        stop-writes-on-bgsave-error no
+        rdbcompression yes
+        dbfilename dump.rdb
 
-            appendonly no
-                    # 打开AOF
-            appendfsync everysec
-                    always
-                            # 每个写命令都马上同步
-                    everysec
-                            # 每秒
-                    no
-                            # 操作系统决定
-            no-appendfsync-on-rewrite no
-            auto-aof-rewrite-percentage 100
-            auto-aof-rewrite-min-size 64mb
+        appendonly no
+                # 打开AOF
+        appendfsync everysec
+                always
+                        # 每个写命令都马上同步
+                everysec
+                        # 每秒
+                no
+                        # 操作系统决定
+        no-appendfsync-on-rewrite no
+        auto-aof-rewrite-percentage 100
+        auto-aof-rewrite-min-size 64mb
 
-            dir ./
+        dir ./

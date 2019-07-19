@@ -138,7 +138,7 @@ date: 2018-10-08T22:21:21+08:00
             O(1) < O(logn) < O(n) < O(nlogn) < O(n^2) < O(n^3)
         指数时间算法
             O(2^n) < O(n!) < O(n^n)
-![时间复杂度](/series/algorithm/p1.jpg)
+![时间复杂度](/docs/algorithm/p1.jpg)
 
     递归分析
         1. 如求factorial(阶乘)的简单for循环, 则为O(N)

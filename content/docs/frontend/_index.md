@@ -5,6 +5,48 @@ date: 2018-10-10T14:51:24+08:00
 type: docs
 ---
 
+# 基础
+    AJAX
+        # Asynchronous JavaScript and XML
+        特点
+            异步，提升了用户体验
+                局部刷新
+            优化传输，减少了数据和带宽
+            客户端运行，承担服务器压力
+        XMLHttpRequest
+            # IE5首次引入
+            readyState
+                0 未初始化, 1 正在加载, 2 已加载, 3 交互中, 4 完成
+            status      # 服务器http状态码
+            responseXML     # 响应结果，表示为xml
+            responseText    # 响应结果，表示为串
+            open("method", url)
+            send()
+            abort()     # 停止当前请求
+
+            创建
+                new ActiveXObject()     # IE
+                new XMLHttpRequest()        # firefox
+            callback种类
+                onSuccess
+                onFailure
+                onUninitialized
+                onLoading
+                onLoaded
+                onInteractive
+                onComplete
+                onException
+    jsonp
+        来源
+            js在浏览器有同源策略(Same-Origin Policy), 只访问同一域下文件
+            <script>标签没有同源策略限制
+        原理
+            编程时
+                客户端注册callback f(), 名字传给服务器
+                跨域服务器以文本方式写js函数, 并构造应传的json数据, 函数中调用f(json)
+            运行时
+                动态添加<script>标签, 请求跨域服务器的js函数
+
 # 套件
 ## 浏览器显示
     bootstrap
@@ -22,20 +64,28 @@ type: docs
     dojo
             # 语法较难用
     easy ui
-    dwz
-            # 国产较难用，卖文档
+        文件
+            jquery.js
+            easyui.js
+            easyui-lang-zh_CN.js
+            easyui.css
+            icon.css
+    mini ui
+        # 收费
     wijmo
-            # 收费
+        # 收费
+    dwz
+        # 卖文档
     vaadin
-            # apache webkit
+        # apache webkit
     foundation
-            # 响应式，移动优先
+        # 响应式，移动优先
     boilerplate
-            # h5模板
+        # h5模板
     meteor
-            # 融合前后端, 后端node
+        # 融合前后端, 后端node
     knockout
-            # mvvm, 利于单页应用
+        # mvvm, 利于单页应用
 ## 手机显示
     jingle
     ionic
@@ -49,9 +99,63 @@ type: docs
 ## 富应用
     react
     angular
+        # google开发, mvvm
+        ng(core module)包含的核心组件
+            directive   # 指令
+                ngClick
+                ngInclude
+                ngRepeat
+            service     # 服务, 依赖注入后使用
+                $compile
+                $http
+                $location
+            filter      # 过滤器，转换模板数据
+                filter
+                date
+                currency
+                lowercase
+            function    # 函数
+                angular.copy()
+                angular.equals()
+                angular.element()
+        组件
+            ngRoute     # url后#地址(hash) 来实现单面路由
+                使用
+                    引入angular-route.js
+                    依赖注入ngRoute模块
+                服务
+                    $routeParams    # 解析路由参数
+                    $route          # 构建url, view, controller的关系
+                    $routeProvider  # 配置
+                指令
+                    ngView      # 路由模板插入视图
+            ngAnimate   # 动画效果
+                使用
+                    引入angular-animate.js
+                    注入ngAnimate
+                服务
+                    $animate    # 触发
+                css动画   # 用nganimate结构定义，通过引用css到html模板触发
+                js动画    # 用module.animation注册，通过引用css到html模板触发
+            ngResource  # 动画
+            ngMock      # 动画
+            ngTouch     # 触摸
+            ngAria      # 帮助制作自定义模块
+            ngCookies
     riot
     ember
     vue
+        <div id="app">
+            {{ message }}
+        </div>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: "hi"
+            },
+            created: function () {}
+        })
     backbone
 ## 交互
     trhee.js
@@ -438,6 +542,9 @@ type: docs
 # 写法
     jquery
     prototype
+        $()     # 简写document.getElementById()
+        $F()    # 返回表单
+        $A()    # 参数转成数组对象
     mootools
             # 浏览器原生对象扩展
     underscore

@@ -159,9 +159,9 @@ date: 2018-10-11T18:47:57+08:00
         -f gbk -t utf-8 -c orig.txt -o tgt.txt
             # 转码
     tar xf
-        zcvf x.tar.gz x
+        cfzv x.tar.gz x
             # 压缩
-        zxvf x.tar.gz
+        xfzv x.tar.gz
             # 解压
         --exclude=/proc
     gzip x
@@ -179,6 +179,7 @@ date: 2018-10-11T18:47:57+08:00
         -d '+'
             # 分隔符
     nano
+    strings     # 打印可打印字符
 
 # kit
 ## 系统
@@ -398,23 +399,24 @@ date: 2018-10-11T18:47:57+08:00
 ## 进程
     pidstat
         # 进程使用资源的情况
-    ps ef
-        ps auxf
+    ps
+        aux     # 用在unix style中, BSD格式显示
+        ef      # 用在system v style中, 标准格式显示
     pstree
         # 进程关系
     pmap pid
         # 进程
 
     kill 1024
-        # kill - QUIT/3 1024 退出(同ctrl + \)
-        ## HUP/1 终端断线
-        ## INT/2 中断(同ctrl + c)
-        ## KILL/9 强制终止
-        ## TERM/15 终止
-        ## CONT/18 继续(与STOP相反, 同fg/bg)
-        ## STOP/19 暂停(同ctrl + z)
-    kill -l
-        # 列出所有信号名称和编号
+        -9
+            # 3 QUIT 退出(同ctrl + \)
+            # 1 HUP 终端断线
+            # 2 INT 中断(同ctrl + c)
+            # 9 KILL 强制终止
+            # 15 TERM 终止
+            # 18 CONT 继续(与STOP相反, 同fg/bg)
+            # 19 STOP 暂停(同ctrl + z)
+        -l      # 列出所有信号名称和编号
 
     pkill Xorg
         # kill 所有包含

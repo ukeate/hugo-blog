@@ -5,6 +5,10 @@ type: docs
 ---
 # 原理
     gc
+        为什么gc
+            减少编程工作量
+            减少内存泄露
+            安全性
         分类
             mark-and-sweep
             reference-counting
@@ -415,6 +419,8 @@ type: docs
     特点
         数据存储和处理
         数组运算(向量、矩阵运算强大)
+# D
+    # 并发
 # ruby
     工具
         gems

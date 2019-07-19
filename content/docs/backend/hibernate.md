@@ -1,77 +1,116 @@
----
-Categories : ["后端"]
-title: "Hibernate"
-date: 2018-10-11T11:47:56+08:00
----
 
-# 基本概念：
-        o-> hibernate 相当于dao层，层次划分中是访问层，解决增、删、改、查、批处理五个问题
-        o-> hibernate实现orm(对象关系映射标准，完全面向对象编程思想)
-                        DBUtils与i/mybatis 与hibernate 是同样的，同样实现的是orm标准
-                        它们的区别在于
-                                hibernate中不写sql语句
-                                ibatis中写少量sql语句
-                                DBUtils中写sql语句
-                        它们的另一个相同点是
-                                 底层全都是jdbc
-        o-> 结构对应 javabean中的 类，对象，属性
-                             数据库中的            表，记录，字段
-        o-> hql        hibernate query language，hibernate自己的sql语言，需要使用antlr jar包中的方法内部转换成sql语言才能使用
-        o-> 正向工程：JavaBean生成表，反向工程：表生成JavaBean
-# 优点
-        1.完全面向对象编程思想，无sql
-        2.减少代码
-        3.控制数据库访问，降低访问数据库的频率（第一次访问后，数据存储在内存的缓存中），提升效率
-        4.hibernate具有独立性（访问层随时可以更换）
-
-# 特性
+# 基础
+    优点
+        完全面向对象编程思想，无sql
+        减少代码
+        控制数据库访问，降低访问数据库的频率（第一次访问后，数据存储在内存的缓存中），提升效率
+        hibernate具有独立性（访问层随时可以更换）
+    特性
         不写hbm.xml映射文件，而是基于注解的验证
-        hibernate3.6之后可以基于注解对javaBean的数据进行验证（jsr303标准）
-
-# 目录
+        对象、集合、属性的延迟加载
+            dao层之外使用延迟对象时，由于连接已关闭, 会报Nosession异常
+    目录
         .                                        # hibernate程序包
         documentation                # 文档
         lib                                        # 所有依赖包
         project                                # 源码文件
-        
-# 加载顺序
+    加载顺序
         后面的覆盖前面的
-        hibernate.properties中的配置被覆盖        
-                # 因为该文件中的配置在new Configuration() 的时候就加载，而之后的xml配置文件是调用configuration.addResource()的方法加载的，新加载的配置覆盖了原来的配置
+        hibernate.properties中的配置被覆盖
+            # 因为该文件中的配置在new Configuration() 的时候就加载，而之后的xml配置文件是调用configuration.addResource()的方法加载的，新加载的配置覆盖了原来的配置   hibernate3.6之后可以基于注解对javaBean的数据进行验证（jsr303标准）
+    开发流程
+        加载配置: jdbc参数，数据库方言，hbm映射
+        创建SessionFactory    # 内有连接池
+        创建session
+        事务处理
+        关闭session
+        关闭连接池
+    对象状态
+        𣊬时态     # 没有OID(持久化标识), 没有关联session
+        持久态     # 有OID, 与session关联, 事务未提交
+        脱管态     # 有OID, 没有关联session
+    缓存机制
+        一级缓存(session)
+            事务级，事务结束缓存失效    # 请求同一对象，取得同一实例
+            总是打开
+        二级缓存
+            SessionFactory级别，session共享
+            缓存散装持久化实例, 有不同缓存策略
+            先设置策略，再设置过期时间与cache提供器
+        优点
+            提高速度、减小压力
+            缓存失效时，不立即查找，而是合并sql查找
+    查询方式
+        HQL
+        QBC(命名查询)
+        SQL
+    get与load
+        get立即加载，load延时加载
+        get先查一级缓存，再查二级缓存，再查数据库, load查一级缓存，没有时创建代理对象，需要时再查二级缓存和数据库
+            # 代理对象只存id
+        get没有时返回null, load抛异常
+    检索策略            # 取关联对象
+        立即检索        # 一次全加载, select多
+        延迟检索        # 访问游离状态代理类，需要在持久化状态时已被初始化
+        迫切左外连接检索 # 用外连接取代select，全加载
+# 优化
+    数据库设计调整
+    HQL优化
+    api正确使用
+    配置参数          # 日志、查询缓存，fetch_size, batch_size等
+    映射文件优化      # id生成策略，二级缓存，延迟加载，关联优化
+    一级缓存管理, 二级缓存策略
+    事务控制策略
+# 基本概念：
+    o-> hibernate 相当于dao层，层次划分中是访问层，解决增、删、改、查、批处理五个问题
+    o-> hibernate实现orm(对象关系映射标准，完全面向对象编程思想)
+        DBUtils与i/mybatis 与hibernate 是同样的，同样实现的是orm标准
+        它们的区别在于
+            hibernate中不写sql语句
+            ibatis中写少量sql语句
+            DBUtils中写sql语句
+        它们的另一个相同点是
+             底层全都是jdbc
+    o-> 结构对应 javabean中的 类，对象，属性
+             数据库中的            表，记录，字段
+    o-> hql        hibernate query language，hibernate自己的sql语言，需要使用antlr jar包中的方法内部转换成sql语言才能使用
+    o-> 正向工程：JavaBean生成表，反向工程：表生成JavaBean
+
+
 # 使用
     1.导入核心包(10 + 1个)
-            hibernate3.jar                                # 核心包
-            c3p0-0.9.1.jar
-            antlr-2.7.6.jar                                # 转换hql到sql
-            commons-collections-3.1.jar        # apache的集合增强包
-            dom4j-1.6.1.jar
-            javassist-3.9.0.GA.jar                # 动态代理
-            jta-1.1.jar                                        # java transaction api        处理事务用
-            slf4j-api-1.5.8.jar
-            log4j.jar
-            slf4j-log4j12.jar                        # 三个日志
-            +
-            mysql-connector-java-5.1.7.bin.jar
+        hibernate3.jar                                # 核心包
+        c3p0-0.9.1.jar
+        antlr-2.7.6.jar                                # 转换hql到sql
+        commons-collections-3.1.jar        # apache的集合增强包
+        dom4j-1.6.1.jar
+        javassist-3.9.0.GA.jar                # 动态代理
+        jta-1.1.jar                                        # java transaction api        处理事务用
+        slf4j-api-1.5.8.jar
+        log4j.jar
+        slf4j-log4j12.jar                        # 三个日志
+        +
+        mysql-connector-java-5.1.7.bin.jar
             
     2.建立目录
-            hibernate.dao
-                    demo.java
-            hibernate.db
-                    xx.sql
-            hibernate.domain
-                    xx.java
-            hibernate.util
-                    HibernateUtil.java
+        hibernate.dao
+                demo.java
+        hibernate.db
+                xx.sql
+        hibernate.domain
+                xx.java
+        hibernate.util
+                HibernateUtil.java
     3.创建映射文件
-            xx.java文件的同目录下，创建
-                    xx.hbm.xml
+        xx.java文件的同目录下，创建
+                xx.hbm.xml
     4.创建配置文件
-            src/hibernate.cfg.xml        (可变)
-            src/hibernate.properties
+        src/hibernate.cfg.xml        (可变)
+        src/hibernate.properties
     5.写提供hibernate session的工具类
-            HibernateUtil
+        HibernateUtil
     6.demo中用hibernate session创建事务进行数据库操作
-            demo.java
+        demo.java
 # session
     查询不需要事务，其它都需要事务
 
@@ -113,25 +152,25 @@ date: 2018-10-11T11:47:56+08:00
             
     session
         元素的状态
-                        # oid: object id,hibernate 的id值唯一并且与表中的数据一一对应
-                        ## hibernate中分辨数据只看oid
-                临时（new），无oid,不在session中.生成sql语句                
-                    持久化（persistence object）：session.save(hero),有oid,在session中;(saveOrUpdate(hero))
-                    游离：session.evict(hero),有oid,不在session中,session.update(hero)重新持久化
-                    删除：sesssion.delete(hero),有oid,不在session中,不可恢复,提交后可修改数据库
-                        # 隐含将po对象转成持久化状态，并生成delete语句。提交后成delete状态，执行语句
-                        ## 临时、持久、游离都可以调用
-                        ## 临时调用delete时会删除数据库中相应id的值 ，危险
+            # oid: object id,hibernate 的id值唯一并且与表中的数据一一对应
+            ## hibernate中分辨数据只看oid
+            临时（new），无oid,不在session中.生成sql语句
+                持久化（persistence object）：session.save(hero),有oid,在session中;(saveOrUpdate(hero))
+                游离：session.evict(hero),有oid,不在session中,session.update(hero)重新持久化
+                删除：sesssion.delete(hero),有oid,不在session中,不可恢复,提交后可修改数据库
+                    # 隐含将po对象转成持久化状态，并生成delete语句。提交后成delete状态，执行语句
+                    ## 临时、持久、游离都可以调用
+                    ## 临时调用delete时会删除数据库中相应id的值 ，危险
         函数
-                get 与 load
-                        session.get(hero.class,1),从数据库得到持久状态对象
-                            与数据库交互
-                            查到时返回po
-                            查不到时返回null
-                        session.load(hero.class,1)
-                            不与数据库交互,返回自己创建的po(只有id)
-                        访问非id值的时候，与数据库交互
-                session.clear() # session中的引用变量清空
+            get 与 load
+                session.get(hero.class,1),从数据库得到持久状态对象
+                    与数据库交互
+                    查到时返回po
+                    查不到时返回null
+                session.load(hero.class,1)
+                    不与数据库交互,返回自己创建的po(只有id)
+                访问非id值的时候，与数据库交互
+            session.clear() # session中的引用变量清空
             session.close() # clear() + 关闭session对象，回收资源，但session非空
             session.isOpen()
             session.flush() # 对session中的更改部分生成相应的sql语句,只在session中，不访问数据库

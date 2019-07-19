@@ -4,14 +4,15 @@ title: "VIM"
 date: 2018-10-11T18:31:16+08:00
 ---
 
-# 命令
-    vim -u NONE -N
-        # -u NONE 不加载配置文件和插件，并进入vi兼容模式, -N set nocompatible，不进入vi兼容模式
-        # -u code/essential.vim 加载指定配置文件
 # 编译
     --with-features=tiny
         # 只包含最基本功能。small, normal, big, huge
         # :h feature-list查看
+# 命令
+    vim -u NONE -N
+        # -u NONE 不加载配置文件和插件，并进入vi兼容模式, -N set nocompatible，不进入vi兼容模式
+        # -u code/essential.vim 加载指定配置文件
+        --version   # 可查看特性
 # mode
     普通模式
     插入模式
@@ -59,7 +60,7 @@ date: 2018-10-11T18:31:16+08:00
             # 当前字符的unicode码
     Ex command
         # 可视模式下选中行, : 时前面有'<,'> 表示对选中的行执行操作
-        :h e/:help e
+        :h e 或 :help e
             # 查看e的帮助
             # :h vimtutor 查看教程
             # :h operator 查看operator
@@ -281,7 +282,7 @@ date: 2018-10-11T18:31:16+08:00
                 ## 如!j, 自动进入命令模式, 选定了指定行进行!
                 # !!当前[count]行
         J
-                # 删除当前行与下一行之间的换行
+                # 与下行合并
         g
                 # :[range]global/{pattern}/{command}
                 ## global命令在[range]指定的文本范围内（缺省为整个文件）查找{pattern}，然后对匹配到的行执行命令{command}，如果希望对没匹配上的行执行命令，则使用global!或vglobal命令。

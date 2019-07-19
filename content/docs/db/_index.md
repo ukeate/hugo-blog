@@ -2,38 +2,811 @@
 title: 数据库
 type: docs
 ---
+# 基础
+    数据库类型
+        关系型数据库
+        模糊型数据库
+            # 存放模糊数据，提供函数
+            如模糊数，包括模糊区间数，模糊中心数，模糊集合数
+            隶属函数
+        统计数据库
+            # 管理统计数据
+            这类数据库包含有大量的数据记录，但其目的是向用户提供各种统计汇总信息，而不是提供单个记录的信息。
+        网状数据库(层次数据库)
+            # 处理以记录类型为结点的网状数据模型
+            处理方法是将网状结构分解成若干棵二级树结构，称为系。
+        演绎数据库
+            # 指具有演绎推理能力
+            实现
+                数据库管理系统
+                规则管理系统
+            外延数据库
+                将推理用的事实数据存放在数据库中
+            内涵数据库
+                用逻辑规则定义要导出的事实
+            主要研究内容: 如何有效地计算逻辑规则推理。
+                递归查询的优化
+                规则的一致性维护
 
-# sql
-## mysql
-## oracle
-## postgreSQL
+    其它数据存储方式
+        文件系统
+            版本控制
+        保存持久状态
+            CQRS(command query responsibility segregation)
+                查询(query)
+                命令(command)
+                领域模型(domain model)
+                领域事件(domain event)
+        对象数据库
+    趋势
+        分布式new sql  # tidb
+        Polyglot persistence (混合持久化)
+            # 将对不同数据库的操作封装成服务
+
+    事务隔离级别
+        读未提交（Read Uncommitted）  # 读其它事务未提交的数据
+            现象
+                不允许更新丢失
+                允许脏读(dirty read)               # 事务中读到不存在数据, 是其它事务修改中的数据
+            原理
+                可同时读
+                不同时写，多事务写
+            实现
+                排他写锁
+        读提交（Read Committed）                    # 读其它事务提交的数据
+            现象
+                不允许脏读
+                允许不可重复读(nonRepeatable read)   # 事务中前后查询不一致
+            原理
+                可同时读
+                单事务写
+            实现
+                瞬间共享读锁
+                排他写锁
+        可重复读（Repeatable Read）                  # 读到的数据加锁，解决不可重复读问题
+            现象
+                不允许脏读
+                不允许不可重复读
+                允许幻读(phantom read)               # 事务中存在未生效行，是其它事务的插入或删除
+            原理
+                读到的数据(加锁)不写
+                单事务写
+            实现      # 读涉及范围加锁
+                共享读锁
+                排他写锁
+        序列化（Serializable）       # 或叫串行化
+            原理
+                事务序列化执行
+            实现
+                读锁写锁互斥
+    事务特点(ACID)
+        原子性(atomicity)          # 什么都做或都不做
+        一致性(correspondence)     # 事务前后数据库状态一致, 事务中断时也不会有暂时状态
+        隔离性(isolation)          # 事务间不干扰
+        持久性(durability)         # 提交结果是永久的
+
+# rds(relational database service)
+    缺点
+        阻抗失谐    # 和内存中的模型存在差异
+    安全
+        sql注入   # 应该写符号编译sql
+    范式
+        # Normal Form 用于避免冗余数据
+        第一范式(1NF)
+            列不可再细分列(原子性)
+        第二范式(2NF)
+            必须有主键，允许联合主键
+            其它列依赖完整主键(不能只依赖一部分)
+        第三范式(3NF)
+            其它列直接依赖主键(非传递依赖，如A依赖B, B依赖主键)
+    实例
+        postgres
+        sqlserver
+        mysql
+        mariadb
+        percona
+                # mysql分支
+        drizzle
+                # mysql分支
+        oracle
+        sqlite
+        db2
+        oceandb
+        h2database
+        tidb
+## sql
+    语法
+        注释
+            --      # 单行注释
+            /**/    # 多行注释
+        单引号
+            字符串大小写敏感
+        双引号
+            转日期时, 双引号直接显示。to_char(sysdate,'yyyy "年" mm "月" dd "日" day')
+        
+        表别名不加as关键字, 有别名后原名无效
+
+        oracle
+            ||      # 管道符号
+                select ename || '的薪水是' || sal from emp;
+    定义(DDL, data definition language)
+        create database db1             # create or replace
+            default character set utf8          # 默认编码
+            collate utf8_general_ci;    # 校对规则(排序), ci(case insensitive)大小写不敏感, cs(case sensitive)大小写敏感
+        create table `tb1`(           # create or replace
+            `id` int unsigned unique not null auto_increment,
+                # `id` int unsigned not null primary key,
+            `id2` int unsigned,
+            `name` varchar(20),
+            `age` int,
+            `birthday` date,
+            primary key(`id`),          # 主键
+            key idx_tb1_name (`name`),   # 索引
+            foreign key(`id2`) references `tb2`(id) on delete cascade on update cascade     # 外键、级联删除、级联更新, 不要用
+            )character set utf8 collate utf8_general_ci
+            engine=innodb default charset=utf8;
+        create table person like student;           # 复制表结构
+        create table emp1 as select * from emp;     # 复制内容
+        create view tb1_v (a,b) as select a, b from tb1 #  create or replace
+        create synonym tb2 for tb1;     # 同义词
+
+        drop database db1;
+        drop table tb1
+            purge;              # 加purge不放入回收站
+        drop synonym tb1;
+
+        truncate table tbq;
+
+
+        alter database db1
+            character set gbk
+            collate gbk_chinese_ci;        # 更改数据库的编码
+        alter table tb1
+            add column sex char(1);
+        alter table tb1
+            add constraint pr_id primary key (id);   # 添加主键
+        alter table tb1
+            add constraint fk_id2 foreign key (st_id) references tb2(id);  # 添加外键
+        alter table tb1
+            rename to tb2;
+        alter table tb1
+            change sex gender char(1);      # 只能改名，但类型必须写
+        alter table tb1
+            modify birthday varchar(20);    # 只能改类型
+        alter table tb1
+            convert to character set utf8 collate utf8_general_ci;  # 转换表编码
+        alter table tb1
+            drop column name;
+        alter table field1
+            auto_increment = 5;             # 更改自增长初始值
+
+
+        rename table tb1 to tb2;
+
+        desc tb1;
+
+
+        mysql
+            use db1
+
+            source a.sql            # 批执行
+
+            show status [from schema_name];         # 服务器状态
+            show databases;
+            show create database db1;
+            show tables;
+            show create table tb1;
+            show processlist                        # 查看当前连接
+            show VARIABLES LIKE "general_log%"      # 查看变量　
+                "version"                           # 显示版本
+                "autocommit"                        # 事务开启状态 0 off 1 on, set autocommit=off 或 0
+            show character set                      # 显示所有字符集
+
+
+
+            select @@sql_mode                       # 查看变量
+            select @@tx_isolation                   # 查看事务隔离级别
+            select
+            select VERSION()                        # 显示版本
+
+            set sql_mode = ''                       # sql_mode定义支持的sql语法，数据校验。
+            set names 'gbk';                        # 设置终端编码, 等价character_set_client=gbk 与 character_set_results=gbk
+            set global general_log = 'ON'           # 设置记录所有sql
+
+        oracle
+            create table tb1 (
+                sex char(1) check(sex in (0, 1))        # check约束
+            show user                   # 显示用户名
+            show recyclebin             # 回收站
+            purge recyclebin            # 闪回文件
+            oracle表创建时自动添加伪列
+                rowid       # 唯一，指向当前记录
+                rownum      # 唯一，字段列名, 从1开始，永远连续。
+                    # 支持比较符号 <, <=(可以比较=1)。取别名后可以比较 >, =
+
+
+    操作(DML, data manipulation language)
+        # 和DQL, data query language, select、from、where
+        insert into tb1
+            values (3, 'a', null);
+        insert into tb1
+            select * from tb2;
+        insert into tb1(name)
+            values ('a'),('b');
+        insert into tb1(a, b)
+            select c, d from tb2
+
+        update tb1
+            set name='a'
+
+        delete from tb1
+
+
+        select * from outrun.employee;      # 限定数据库名
+        select field1 as f1 from tb1 as t1
+        select a, b into tb2 from tb1;
+        select distinct (a+b) as c from tb1
+            # select distinct sum(price) as s
+        子查询
+            # 要求数量和类型匹配
+            # 不能利用索引(join可以), 不形成笛卡尔积
+
+            where a < (select max(a) from tb2)
+                # 单行符号 =、<、>
+            where a in ()
+                # 多行符号 in、any、all
+                where a < any ()    # 小于一个就true
+                where a < all ()    # 小于所有才true
+
+
+
+        where a=1 and b=2                   # where后不能出现列的别名，可以出现表的别名
+            a=1 or b=2
+                # <>表示!=
+                # =可设置日期
+            a in (1,2)
+                # a not in (1,2)
+            a between 1 and 2
+                # a not between 1 and 2
+            a like 'a%'
+                # 不能用*
+                # % 匹配任意个字符
+                # _ 匹配一个字符
+                # \ 转义 _ 或 %
+            a regexp '^.*d.*$'
+                # 匹配正则
+            a is null
+        order by    # null看作最大值
+            a asc   # 升序
+            a desc  # 降序
+        group by
+            select a, count(b), avg(c) from tb1     # group by的select元素都是聚合函数
+                where b > 0
+                group by a
+                having count(b) > 2                 # having使用聚合函数条件
+            select a from tb1                       # 子查询
+                where b in (select b from tb2 where c='c')
+                group by a
+                having count(distinct b) = (select count(*) from tb2 where c='c')
+
+
+        select执行过程
+            # 每步都产生虚拟表
+            from 组装数据
+                join
+                on
+            where 筛选
+            group by 划分
+            # with,  with是sql server的语法
+            计算聚合函数
+            having 筛选
+            计算表达式
+            select 字段
+                distinct
+            order by 排序
+            top
+
+        oracle
+            insert into tb1 values(&id, '&s')                   # &是占位符，字符型数据加''
+            alter table tb1 rename column field1 to field2
+
+        常用
+            分页
+                select * from tb1 limit 0,1         # mysql, 从0开始，查找1条
+
+
+                select * from                       # oracle
+                    (select rownum r, a from tb1 where rownum<=20)
+                where r > 10
+
+                select * from                       # oracle,  效率低
+                    (select  rownum rn, a from tb1)
+                where rn between 21 and 40
+
+
+                select rownum,emp.* from emp        # oracle, 效率低
+                    where rownum <=4
+                minus
+                select rownum,emp.* from emp
+                    where rownum <=2;
+
+    控制(DCL data control language)
+
+        grant all privileges on db1.tb1         # 授权
+            # grant insert,delete,update,select,create on db1.tb1
+            to 'user1'@'host1'          # localhost本地 , %代表远程
+            identified by 'pwd1'
+            with grant option;          # 有授权权限
+        grant select any table      # oracle
+            to user1
+        revoke select any table     # oracle
+            from user1
+
+        revoke privilege ON db1.tb1 from 'user1'@'host1';       # 撤销权限
+        flush privileges;        # 提交授权修改, oracle不用flush直接生效
+
+
+        oracle
+            alter user user1 account unlock             # 解锁用户
+            alter user user1 identified by user1        # 改密码
+            conn / as sysdba                            # 换角色
+
+    事务
+        start transaction;
+        savepoint a;
+        rollback to [savepoint] a;
+        rollback;
+        commit;
+
+    聚合函数
+        avg()
+        count()
+        max()
+        min()
+        sum()
+
+
+    连接(join)
+        内连接(inner)
+            # 带条件的交叉连接
+            # 只查出符合条件的记录
+            select * from tb1 a         # 显示
+                inner join tb2 b
+                on a.c_id=b.c_id
+            select * from tb1 a, tb2 b  # 隐示
+                where a.c_id=b.c_id
+            自连接     # 表中有层次关系。自连接无中间表, 效率快
+                select a.c, b.d from course as a, course as b
+                    where a.c=b.d
+        外连接(outer)
+            # 以一表为基准，查另一表
+            # 可查出不符合条件的记录(另一表无对应值，标记成null)
+            左外连接
+                # 以左为基准
+                select * from tb1 as a
+                    left [outer] join tb2 as b
+                    on a.c_id=b.c_id
+
+                select a.c_id       # oracle
+                from tb1 a, tb2 b
+                where a.c_id = b.c_id(+)
+            右外连接
+                    right [outer] join
+            全外连接
+                # full [outer] join, 只oracle支持
+                # 先左连接再右连接，取的是交集
+                select * from a
+                    full join b
+                    on a.c_id=b.c_id
+        交叉连接(cross)     # 笛卡尔积
+            # 有where条件时，会先生成where查出的两个表
+            select * from tb1 a
+                [cross] join tb2 b
+                where a.c_id = b.c_id;
+        自然连接(natural)
+            # 自动检查相同名称的列，类型会隐式转换，不能指定显示列(或用*)、不能用on语句
+            # 每种连接名称前加natural都是自然连接
+            select * from tb1 a
+                natural innter join tb2 b
+    集合
+        # 数量,类型匹配
+        # 前语句别名可用,后语句别名不可用
+        select a, b from tb1
+            union [all] select a, b from tb2    # 并集, all 允许重复
+                # intersect 交集
+                # minus 差集
+
+    约束(constraint)
+        not null
+        unique
+        primary key
+            primary key unique, not null auto_increment
+            primary key(col1, col2)     # 联合主键
+        foreign key
+            constraint fk_id2
+                foreign key(id2) references tb2(id)
+                    # 被引用的列要建索引
+                    # 被引用的记录不可删除
+                    # 被引用的值要级联修改
+                on update cascade
+                on delete cascade
+                    # 级联约束
+        检查约束    # oracle支持
+## 存储过程
+    优势
+        高效, 首次运行进行预编译
+        模块化
+        更快执行，大量sql时，比sql快
+        减少网络流量
+        安全机制
+            针对过程授权
+            调用时看不到语句信息和数据
+            避免sql注入     # 参数视为文字
+            可对过程加密
+    劣势
+        不可移植
+        需要专人维护
+        逻辑变更时修改不灵活
+## 触发器
+    用途
+        表级联更改
+        实现比check约束复杂的逻辑
+        强制执行业务规则
+        评估修改后表状态，执行操作
+    基础
+        同一表不能建立2个相同类型触发器
+## 视图
+    特点
+        优点
+            简化查询
+            提供独立访问
+            限制访问
+        查看时，生成sql查看, 有即时性
+        更新视图表级联
+            不能更新的视图包含元素
+                组函数
+                distinct
+                group by
+                rownum
+        grant可授权
+        不能与表名重名
+        mysql保存在information_schema.views中
+        删除不放回收站
+
+        CREATE [OR REPLACE] [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]       # TEMPTABLE是临时表，不能更新
+            VIEW view_name [(column_list)]
+            AS select_statement
+            [WITH [CASCADED | LOCAL] CHECK OPTION]                      # 通过该视图更改的数据，可再通过该视图查看到(满足视图的限制)
+        o->
+        CREATE VIEW test.v AS SELECT * FROM t;
+        o->
+        CREATE VIEW v AS SELECT qty, price, qty*price AS value FROM t;                # 可以计算
+        o->
+        CREATE VIEW v AS SELECT CHARSET(CHAR(65)), COLLATION(CHAR(65));                # 可以联合
+        o->
+        CREATE ALGORITHM = MERGE VIEW v_merge (vc1, vc2)
+            AS SELECT c1, c2 FROM t1 WHERE c3 > 100
+
+            查询解释
+                SELECT * FROM v_merge WHERE vc1 < 100; 会执行
+                SELECT c1, c2 FROM t WHERE (c3 > 100) AND (c1 < 100);
+
+
+        ALTER [ALGORITHM = {UNDEFINED | MERGE | TEMPTABLE}]
+            VIEW view_name [(column_list)]
+            AS select_statement
+            [WITH [CASCADED | LOCAL] CHECK OPTION]              # CASCADED 忽略主外键关系
+
+        DROP VIEW [IF EXISTS]
+            view_name [, view_name] ...
+            [RESTRICT | CASCADE]
+
+        SHOW CREATE VIEW view_name
+## 索引
+    特点
+        第一次查询时创建
+        加快查询的速度，表删除时索引自动删除
+        primary key 与 unique 自动建立
+    命中
+        where 中添加对应索引的条件， 只能从前向后命中
+    是否使用
+        使用
+            分布广
+            经常在where中出现
+            表经常访问
+        不使用
+            表小
+            不经常出现的列
+            经常更新的字段
+    类型
+        index
+        unique
+        primary key
+
+    CREATE INDEX index_name ON table_name (column_list)         # 创建索引，primary key已有索引
+    CREATE UNIQUE INDEX index_name ON table_name (column_list)
+
+    ALTER TABLE table_name ADD INDEX index_name (column_list) # 创建索引，列名逗号分隔。index_name缺省时，根据第一个索引列取名
+    ALTER TABLE table_name ADD UNIQUE (column_list)
+    ALTER TABLE table_name ADD PRIMARY KEY (column_list)
+
+    DROP INDEX index_name ON talbe_name
+    ALTER TABLE table_name DROP INDEX index_name        # 等价于前一个
+    ALTER TABLE table_name DROP PRIMARY KEY
+
+    show index from tb1;
+    show keys from tb1;
+        Table         # 表的名称。
+        Non_unique    # 如果索引不能包括重复词，则为0。如果可以，则为1。
+        Key_name      # 索引的名称。
+        Seq_in_index  # 索引中的列序列号，从1开始。
+        Column_name   # 列名称。
+        Collation     # 列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。
+        Cardinality   # 索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机会就越大。
+        Sub_part      # 如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。
+        Packed        # 指示关键字如何被压缩。如果没有被压缩，则为NULL。
+        Null          # 如果列含有NULL，则含有YES。如果没有，则该列含有NO。
+        Index_type    # 用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）。
+        Comment       # 更多评注。
+## 序列
+    # 共享对象唯一的数值，不一定连续
+    create sequence tb1_seq
+        INCREMENT BY 10              # 步长是10
+        START WITH 120               # 从120开始
+        MAXVALUE 9999                # 最大到9999
+        NOCACHE                      # 不缓存序列的值（缓存是先创建很多再取出，不缓存则是什么时候取，什么时候创建）
+        NOCYCLE;                     # 到最大值的时候是否循环
+
+    select seq.nextval from dual                # nextval下一个序列 currval当前序列  第一次使用必须是nextval
+    insert into emp(id) vallues(seq.nextval);   # 使用
+    alter sequence tb1_seq increment by 10;
+        start with 100;                         # 错误 ，不能变更启动序列，只能在创建序列时指定
+    drop sequence seq
+
+# 性能优化
+    设计
+        查询优化，避免全表扫描
+        列尽量not null
+        where与order by涉及列建索引
+        where中不做null判断            # 会放弃使用索引
+        字段值大量重复时，索引作用不大
+        索引降低insert与update效率
+        尽量多建unique索引
+        少更新索引数据列            # 数据列为表存储方式，更新会调整整表存储
+        尽量用数字类型
+        varchar代替char           # 存储空间小，较小字段搜索快
+        用表变量代替临时表
+        表变量数据大时，只有主键索引
+        大量重复引用大型表或常用表数据时，可创建临时表。一次性事件，最好导出表
+        临时表时数据大时, 用select into代替create table, 避免log过多
+        临时表最后要先truncate, 再drop, 避免表较长时间锁定
+    语句
+        不利索引的符号
+            in
+            not in
+            is null
+            is not null
+            <>
+        where中用or时，引擎放弃索引
+        like '%a'模糊开头，引擎放弃索引
+        where使用参数，会全盘扫描       # sql运行时解析局部变量，访问计划在编译时进行
+            select id from t where num=@num 改为
+            select id from t with(index(索引名)) where num=@num    # 强制使用索引
+        where =左边函数，表达式运行,引擎放弃索引
+            where num/2=100 改为
+            where num = 100*2
+
+            where year(admin_time)>2014 改为
+            where admin_time>'2014-01-01'
+        where对字段函数操作，引擎放弃索引
+            where substring(name,1,3)='abc' 改为
+            where name like 'abc%'
+        不要写无意义查询
+            select a into #t from t where 1=1 改为
+            create table #t
+        exists代替in
+            select num from a where num in(selct num from b)    改为
+            select num from a where exists(select 1 from b where num=a.num)
+        不要select *
+        不要用游标，游标效率差
+        避免返回大量数据
+        避免大事务
+        多表联合查询拆分多个query     # 容易锁表和阻塞
+        join时，小结果驱动大结果      # left join小表在左
+            优化前
+                select * from admin
+                left join log on admin.admin_id = log.admin_id
+                where log.admin_id>10
+            优化后
+                select * from
+                    (select * from admin where admin_id>10) T1
+                left join log on T1.admin_id = log.admin_id
+    mysql
+        引擎选择
+        limit 1
+            只查一条时，加limit 1, 引擎会找到一条马上返回
+        limit基数大用between, 分页时要找到id
+            优化前
+                select * from admin order by id limit 10000,10
+            优化后
+                select * from admin where id between 10000 and 10010 order by id
 # nosql
-## 键值
-### redis
-## 列簇
-### cassandra
-### hbase
-### riak
-## 文档
-### mongodb
-### couchdb
+    介绍
+        aggregate-oriented (面向聚合)
+            键值
+            文档
+            列族
+        relationship-oriented (面向关系)
+            图
+    特点
+        少约束(schemaless)
+        应用程序数据库（作为微服务的数据库来解耦）
+        聚合(aggregate)
+            # 领域驱动设计中提出
+            # 图除外
+        图支持事务
+        牺牲一部分一致性和持久性
+    问题
+        存在不一致窗口
+        会话一致性问题
+    兼容
+        物化视图来处理更新
+        实时BI, 来更新中间关系聚合
+        一致性
+            锁
+            条件更新(更新前检查)
+                版本戳
+                    # http 中的etag
+            写入仲裁与读取仲裁
+                复制因子大于某值时认为写入完成
+                读取多于某值个节点数据并相同时，认为读到最新数据
+            用zookeeper等外部“事务”程序库同步读写操作
 ## 图
+    介绍
+        领域
+        关系是一等公民
+        大部分不支持分布式
+        Gremlin，Cypher 查询语言
+    适用
+        互联数据
+        运输等基于位置的服务
+        推荐引擎
+    不适用
+        经常更新
+    工具
+        neo4j
+        flockDB
+                # 仅支持单深度关系及邻接表
+        hyperGraphDB
+        infiniteGraph
+        allegroGraph
+        orientdb
 ### neo4j
     # 介绍
-            使用zookeeper
+        使用zookeeper
     # 特点
-            完全兼容ACID
-            主从复制
-            副本从节点
-                    从节点写数据，先同步到主节点, 再由主节点分发
+        完全兼容ACID
+        主从复制
+        副本从节点
+            从节点写数据，先同步到主节点, 再由主节点分发
     # 配置
         dbms.connector.bolt.enabled=true
         dbms.connector.bolt.listen_address=0.0.0.0:7687
         dbms.connector.http.enabled=true
         dbms.connector.http.listen_address=0.0.0.0:7474
-                # 远程访问
-# 分布式
+            # 远程访问
+## 列族
+    特点
+        键空间
+    适用
+        事件记录
+            # 事件id为行
+        内容管理
+        计数器
+        带过期的列
+    不适用
+        ACID事务
+        多行数据聚合
+    工具
+        cassandra
+        hbase
+        amazon simpleDB
+        hypertable
+        bigtable
+### cassandra
+    特点
+        良好的分布式扩展性
+        功能比key-value丰富，不如mongo
+        写快于读
+        不稳定
+        没有主节点，所有节点平等
+        查询语言CQL
+        列TTL(秒)
+    命令
+        use aaa
+            # 用aaa键空间
+### hbase
+    特点
+        hdfs存储，分布式，面向列
+        可利用map reduce
+    特点
+        多版本
+        列权限控制
+        多个列划分为列族，可设置保留多少版本
+        多行划分为region
+        空列不占空间，可稀疏存储
+        无类型，所有类型都是字符串
+        行一致性，一行数据在一个server
+        查询方式有限：rowkey, rowkey的range, 全表扫描
+        协处理器coprocessors
+            观察者observer（监听器）
+            终端endpoint（rpc调用代码）
+## 文档
+    适用
+        事件记录
+        内容管理
+        网站分析与实时分析数据
+        电子商务中产品或订单
+    不适用
+        事务
+        持续变化的数据
+    工具
+        couchDB
+        orientDB
+        ravenDB
+        terrastore
+        xml数据库
+        mongoDB
+        memDB
+            # 带事务的mongo
+        tokumx
+### couchDB
+    特点
+        apache托管,  alang语言开发的，面向文档的分布式数据库
+        json结构，易于存储cms, 电话本，地址本等半结构化数据。存储类似于lucene的index
+        易添加，不易修改
+        主主双向复制
+## 键值
+    适用
+        session
+        用户配置信息
+        购物车
+    不适用
+        数据间关系
+        多项操作的事务
+        模糊键查询
+        对集合关键字操作
+    工具
+        redis
+        riak
+            # 类cassandra
+        berkeleyDB
+        levelDB
+            # google
+        memcached
+        project voldemort
+        tokyo cabinet
+        rocksDB
+# newsql
+    工具
+        分布式
+            google spanner
+            voltdb
+            clustrix
+            nuodb
+            tidb
+        h-store
+        foundationDB
+        scalebase
+        dbshards
+        scalearc
+        tokudb
+        memsql
 ## tidb
+# 流式数据库
+    piplelineDB
+        # 依赖zeromq, 记录时间段内的事件
+# proxy
 ## mycat
     # 目录结构
             bin

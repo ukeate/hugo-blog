@@ -21,6 +21,9 @@ type: docs
     dmesg
     journalctl
 
+    快捷键
+        ctrl alt f1/f2/...
+
 # 系统配置
     bin
         # 系统需要
@@ -92,7 +95,6 @@ type: docs
         robomongo
         emacs
         neoclipse
-        wps
 
         # 数据库
         elasticsearch
@@ -128,6 +130,8 @@ type: docs
         ~/.openvpn
         ~/.ssh
         ~/.tmux.conf
+        ~/.config/awesome
+        ~/.config/VirtualBox/VirtualBox.xml
         /opt/env
         /opt/svc
         /etc/resolv.conf
@@ -135,7 +139,15 @@ type: docs
         /db/mongo
         /srv/ftp
         /srv/http
-# vim常用
+
+        # log
+        ~/VBoxSVC.log
+        ~/VirtualBox VMs/machinename/Logs
+        ~/.config/VirtualBox/selectorwindow.log
+# vim
+    命令
+        vim
+            --version   # 查看插件
     可视模式
         o   # 切换头尾
         gv  # 重选上次
@@ -187,6 +199,7 @@ type: docs
         <C - d>/u   # 滚半屏
         <C - f>/b   # 滚一屏
         <C - i>/o   # 下个/上个跳动位置
+        <C X>   # 当前单词大小写转换
     text-object
         i"  # 中间内容
             # ' ` ( ) [ ] < > { }
@@ -201,7 +214,8 @@ type: docs
             "-  # 行内删除
             "a  # a - z, A - Z
             "=  # 只读，用于执行表达式命令
-            "*  # clipboard
+            "*  # clipboard，针对选中部分(selection)
+            "+  # clipboard, windows下与*同，linux X11下针对复制或剪切部分(cut buffer)
             "_  # black hole
             "/  # 最近的搜索模式
     宏
@@ -222,21 +236,112 @@ type: docs
         <C - w> s
         <C - w> v
 
+# intellij
+    shift shift
 
-# awesome常用
-    帮助
-        <M - w>
-    client
-        <M - 回车>
-        <M - c>
-            # 自定义chromium
-        <M - f>
-            # 全屏
-        <M - shift - c>
-            # 关闭
-        <M - 数字>
-        <M - j> <M - k>
-        <M - 空格>
-            # 变布局
+# awesome
+    快捷键
+        独立
+            <M - s>             # 帮助
+            <M - w>             # 菜单
+        client
+            <M - 回车>            # 终端
+            <M - ctrl - r>       # reload
+            <M - c>              # 自定义chromium
+            <M - f>              # 全屏
+            <M - shift - c>      # 关闭
+            <M - 数字>            # 切换到tag
+            <M - j> <M - k>      # 本tag切换client
+            <M - 空格>            # 变布局
+
+    ~/.config/awesome/rc.lua
+        # 默认在/etc/xdg/awesome/rc.lua
+
+        -- Table of layouts to cover with awful.layout.inc, order matters.
+        awful.layout.layouts = {
+            -- awful.layout.suit.floating,
+            awful.layout.suit.max,
+            -- awful.layout.suit.max.fullscreen,
+            awful.layout.suit.tile.bottom,
+            awful.layout.suit.tile,
+            -- awful.layout.suit.tile.left,
+            -- awful.layout.suit.tile.top,
+            -- awful.layout.suit.fair,
+            -- awful.layout.suit.fair.horizontal,
+            awful.layout.suit.magnifier,
+            awful.layout.suit.corner.nw,
+            -- awful.layout.suit.corner.ne,
+            -- awful.layout.suit.corner.sw,
+            -- awful.layout.suit.corner.se,
+            awful.layout.suit.spiral,
+            -- awful.layout.suit.spiral.dwindle,
+        }
+        -- }}}
+
+        
+        -- {{{ Menu
+        mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+            { "chromium", "chromium" },
+            { "open terminal", terminal }
+          }
+        })
+
+
+        -- {{{ Key bindings
+        -- Standard program
+            awful.key({ modkey,           }, "c", function () awful.spawn("chromium") end,
+                {description = "open a chromium", group = "launcher"}),
+
+
+        -- {{{ Rules
+        -- Floating clients.
+        {
+        rule = { class = "VirtualBox"},
+        properties = { screen = "DP2-1", tag = "1"}
+        },
+
+        {
+        rule = { class = "MyBase"},
+        properties = { screen = "DP2-1", tag = "2"}
+        },
+
+
+        {
+        rule = { class = "jetbrains-goland"},
+        properties = { screen = "HDMI1", tag = "1"}
+        },
+
+        {
+        rule = { class = "Code"},
+        properties = { screen = "HDMI1", tag = "2"}
+        },
+
+        {
+        rule = { class = "jetbrains-webstorm"},
+        properties = { screen = "HDMI1", tag = "3"}
+        },
+
+
+        -- {{{ diy auto run
+        awful.util.spawn_with_shell("~/.config/awesome/autorun.sh")
+        -- }}}
+
+    ~/.config/awesome/autorun.sh
+        #!/usr/bin/env bash
+
+        # nothing to use
+        function run {
+            if ! pgrep $1 ; then
+                $@&
+            fi
+        }
+
+        if xrandr | grep -q 'eDP1 connected' ; then
+            run xrandr --output VIRTUAL1 --off --output eDP1 --mode 1920x1080 --pos 0x720 --rotate normal --output DP1 --off --output DP2-1 --mode 2560x1080 --pos 3360x720 --rotate normal --output DP2-2 --off --output DP2-3 --off --output HDMI2 --off --output HDMI1 --primary --mode 2560x1440 --pos 1920x0 --rotate left --output DP2 --off
+        fi
+
+        run ibus-daemon --xim
+        run nm-applet
+
 # tmux
 

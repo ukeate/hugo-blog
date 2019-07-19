@@ -5,8 +5,15 @@ date: 2018-10-09T16:10:44+08:00
 ---
 
 # 特点
-    原生支持并发，编译执行的类脚本语言
-    不支持动态库，不支持重载，不支持泛型，有怪异的正则
+    不支持动态库，不支持重载，不支持泛型
+    一进程可支撑上百万例程
+    O(1)的调度
+    5kib/goroutine的开销
+    编译为本地机器码
+    gc
+# 编译
+    CGO_ENABLED=0
+        # 静态链接，不跨平台
 # 命令
     godoc
         -http=:6060
@@ -165,6 +172,8 @@ date: 2018-10-09T16:10:44+08:00
     bytes
     net
         http
+        poolServer(epoll/kqueue/iocp)
+            # 支持多核大量并发连接fd
     time
     template
     regexp
@@ -176,6 +185,7 @@ date: 2018-10-09T16:10:44+08:00
     testing
     log
     reflect
+    encoding/gob
 # 测试
     规则
         文件名以_test.go结尾

@@ -32,35 +32,6 @@ type: docs
     comparison-based sorting        基于比较的排序
     transposition table
             # 置换表
-# 加密
-    签名
-        公钥
-            dsa
-            ecdsa
-            rsa
-
-# 资源
-    token bucket
-        # 令牌桶
-        通过多少流量，删除多少令牌
-        突发流量
-            丢弃
-            排队
-            特殊标记发送，网络过载时丢弃加标记的包
-        过程
-            产生令牌
-            消耗令牌
-            判断数据包是否通过
-        作用
-            限制平均传输速率，允许突发传输
-    leaky bucket
-        # 漏桶
-        作用
-            强行限制数据传输速率
-    max-min fairness
-        # 加权分配资源
-        dominant resource fairness (DRF)
-            # 一种 max-min fairness实现，可以多资源分配
 
 # NP问题
     介绍
@@ -69,11 +40,6 @@ type: docs
         non-deterministic polynomial hard problem(np-hard, np-hard问题)很难找到多项式时间算法的问题
         non-deterministic polynomial complete problem(npc，np完全问题)很难找到多项式时间算法的np问题, 包含np-hard
 
-# hash
-    介绍
-        将任意长度二进制值映射到较短固定长度二进制值。改一个值会生成不同的哈希
-        同一个哈希(散列)的二进制值是不存在的
-        常见的有: md5, sha, sha1, sha256, sha512, RSA-SHA
 
 # 排序
 ## 插入排序
@@ -103,3 +69,38 @@ type: docs
 
 ## 快速排序
     最坏时间复杂度为O(nlogn)
+
+# hash
+    介绍
+        将任意长度二进制值映射到较短固定长度二进制值。改一个值会生成不同的哈希
+        同一个哈希(散列)的二进制值是不存在的
+        常见的有: md5, sha, sha1, sha256, sha512, RSA-SHA
+
+# 加密
+    签名
+        公钥
+            dsa
+            ecdsa
+            rsa
+# 资源
+    token bucket
+        # 令牌桶
+        通过多少流量，删除多少令牌
+        突发流量
+            丢弃
+            排队
+            特殊标记发送，网络过载时丢弃加标记的包
+        过程
+            产生令牌
+            消耗令牌
+            判断数据包是否通过
+        作用
+            限制平均传输速率，允许突发传输
+    leaky bucket
+        # 漏桶
+        作用
+            强行限制数据传输速率
+    max-min fairness
+        # 加权分配资源
+        dominant resource fairness (DRF)
+            # 一种 max-min fairness实现，可以多资源分配
