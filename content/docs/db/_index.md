@@ -138,7 +138,7 @@ type: docs
                 # `id` int unsigned not null primary key,
             `id2` int unsigned,
             `name` varchar(20),
-            `age` int,
+            `age` int unsigned,
             `birthday` date,
             primary key(`id`),          # 主键
             key idx_tb1_name (`name`),   # 索引

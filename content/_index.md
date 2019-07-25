@@ -18,4 +18,7 @@ type: docs
 
 因此这里的很多东西是面向个人的。
 
+# 原则
+1. 写为什么
+1. 第一原理(first principles)
 

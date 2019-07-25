@@ -3,119 +3,6 @@ title: 工具
 type: docs
 ---
 
-# 开发
-## vim
-## intellij idea
-    注意
-        Project 相当于workspace, module 相当于工程
-    注册
-        服务器
-            # 发布网站 http://idea.lanyus.com
-            http://idea.qinxi1992.cn
-            http://idea.lianghongbo.com/licens
-            http://im.js.cn:8888
-    javaagent
-        https://zhile.io/
-
-    快捷键
-        alt + enter     # 改错
-        shift shift     # 搜索跳转
-
-    编码
-        file -> settings -> appearence里use custom font设置中文字体
-        file -> settings -> editor -> file encodings 三处utf-8
-        idea安装目录/bin/idea.vmoptions和idea64.vmoptions,最后添加
-            -Dfile.encoding=UTF-8
-        .idea/encodings.xml里删除除了UTF-8的项
-
-## webstorm
-## pycharm
-## goland
-## clion
-## phpCharm
-## sublime
-    功能
-        显示风格好
-        缩略图
-        热加载(不改变原文件)
-        插件
-        多文件夹查找
-        多视窗
-        命令模糊搜索下拉菜单
-        柜形选择
-        V8插件，js运行控制台
-        js校验
-        vi 操作设置
-        修改配色方案
-    快捷键
-        批量修改
-## idle
-    # python tkinter开发的python ide
-## lighttable
-    # clojure
-## hbuilder
-        # h5
-## komodo edit
-    # 免费跨平台，多pl
-## vscode
-## source insight
-## gerrit
-        # 查看代码
-
-# 设计
-## sketch
-    # mac下轻量ui设计工具
-## rose
-        # ibm uml工具
-
-# 客户端
-## datastudio
-        # ibm数据库连接工具
-## plsql
-## oracle sql developer
-## navicat
-        # ios的数据库操作gui
-
-# 网络
-## teamviewer
-    # 远程桌面
-## wireshark
-    # 抓包
-## charlet
-    # 抓包
-## chrome
-    介绍
-        webkit: chrome firefox safari的内核，来源于kde的khtml与kjs
-    f12调试模式
-        js调试
-            sources-> js文件打断点调试
-                    # “{}”按钮是格式化代码，右边按钮单步调试，依次为执行， 跳过进入方法，进入方法，跳出方法，开启／停止调试，暂停
-            //# sourceURL=base.js
-        console
-            可以查看js常量，如THREE.VERSION
-    设置页
-        about:about                                 # 进入查看所有设置页
-        chrome:extensions
-        chrome:flags                                # 可以开启硬件加速解码
-    集成抓包工具
-        chrome://net-internals/#events
-    插件
-        ARC Welder  # android模拟器
-## firefox
-    代理设置
-        “编辑”→“首选项”→“高级”→“网络”→“设置”→“手动配置代理”
-    mozvr
-        介绍
-            mozilla vr 虚拟现实
-            购买Oculus Rift头盔来看它的网页
-
-
-# 数据
-## paraview
-    # 数据可视化
-## finreport
-    # 数据可视化
-
 # 系统
 ## windows
     # 方案
@@ -293,3 +180,116 @@ type: docs
         Xmanager                # 可运行图形界面如vnc
         teamViewer                # 可图形界面
         cmder          # windows命令行工具
+
+# 网络
+## teamviewer
+    # 远程桌面
+## wireshark
+    # 抓包
+## charlet
+    # 抓包
+## chrome
+    介绍
+        webkit: chrome firefox safari的内核，来源于kde的khtml与kjs
+    f12调试模式
+        js调试
+            sources-> js文件打断点调试
+                    # “{}”按钮是格式化代码，右边按钮单步调试，依次为执行， 跳过进入方法，进入方法，跳出方法，开启／停止调试，暂停
+            //# sourceURL=base.js
+        console
+            可以查看js常量，如THREE.VERSION
+    设置页
+        about:about                                 # 进入查看所有设置页
+        chrome:extensions
+        chrome:flags                                # 可以开启硬件加速解码
+    集成抓包工具
+        chrome://net-internals/#events
+    插件
+        ARC Welder  # android模拟器
+## firefox
+    代理设置
+        “编辑”→“首选项”→“高级”→“网络”→“设置”→“手动配置代理”
+    mozvr
+        介绍
+            mozilla vr 虚拟现实
+            购买Oculus Rift头盔来看它的网页
+
+
+# 数据分析
+## paraview
+    # 数据可视化
+## finreport
+    # 数据可视化
+# 设计
+## sketch
+    # mac下轻量ui设计工具
+## rose
+        # ibm uml工具
+
+# 开发
+## vim
+## intellij idea
+    注意
+        Project 相当于workspace, module 相当于工程
+    注册
+        服务器
+            # 发布网站 http://idea.lanyus.com
+            http://idea.qinxi1992.cn
+            http://idea.lianghongbo.com/licens
+            http://im.js.cn:8888
+    javaagent
+        https://zhile.io/
+
+    快捷键
+        alt + enter     # 改错
+        shift shift     # 搜索跳转
+
+    编码
+        file -> settings -> appearence里use custom font设置中文字体
+        file -> settings -> editor -> file encodings 三处utf-8
+        idea安装目录/bin/idea.vmoptions和idea64.vmoptions,最后添加
+            -Dfile.encoding=UTF-8
+        .idea/encodings.xml里删除除了UTF-8的项
+
+## webstorm
+## pycharm
+## goland
+## clion
+## phpCharm
+## sublime
+    功能
+        显示风格好
+        缩略图
+        热加载(不改变原文件)
+        插件
+        多文件夹查找
+        多视窗
+        命令模糊搜索下拉菜单
+        柜形选择
+        V8插件，js运行控制台
+        js校验
+        vi 操作设置
+        修改配色方案
+    快捷键
+        批量修改
+## idle
+    # python tkinter开发的python ide
+## lighttable
+    # clojure
+## hbuilder
+        # h5
+## komodo edit
+    # 免费跨平台，多pl
+## vscode
+## source insight
+## gerrit
+        # 查看代码
+
+# 客户端
+## datastudio
+        # ibm数据库连接工具
+## plsql
+## oracle sql developer
+## navicat
+        # ios的数据库操作gui
+

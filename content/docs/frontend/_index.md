@@ -47,8 +47,41 @@ type: docs
             运行时
                 动态添加<script>标签, 请求跨域服务器的js函数
 
+# 写法
+    jquery
+    prototype
+        $()     # 简写document.getElementById()
+        $F()    # 返回表单
+        $A()    # 参数转成数组对象
+    mootools
+        # 浏览器原生对象扩展
+    underscore
+        # 函数式
+    underscore-contrib
+        # 扩展underscore
+    ramda
+        # 函数式，较正确
+    lodash
+        # 函数式
+    functional javascript
+    bilby
+        # 函数式库，包含dispatch, 蹦床, monadic, validator等
+    allong.es
+        # 提供函数组合子
+    sweet
+        # 支持宏
+    zepto
+        # 小型jquery
+    kissy
+        # 小型jquery
+    rxjs
+        # 微软开发，将异步流捕获成值的库
+    tangram
+        # 百度前端工具集
+    qwrap
+        # 360前端工具集
 # 套件
-## 浏览器显示
+## 显示
     bootstrap
     extjs
         介绍
@@ -86,16 +119,19 @@ type: docs
         # 融合前后端, 后端node
     knockout
         # mvvm, 利于单页应用
-## 手机显示
+
     jingle
+        # 手机
     ionic
-            # angular手机框架
+        # angular手机框架
     framework7
-            # ios(兼容android)组件
+        # ios(兼容android)组件
     mui
+        # 手机
     zui
-            # 类bootstrap 移动端
+        # 手机，类bootstrap
     frozenui
+        # 手机
 ## 富应用
     react
     angular
@@ -157,33 +193,33 @@ type: docs
             created: function () {}
         })
     backbone
-## 交互
-    trhee.js
+## 效果
+    three.js
 ### createjs
     # easeljs
         介绍
-                处理canvas
+            处理canvas
         使用
-                var stage = new createjs.Stage("canvasName");
-                stage.x = 100;
-                stage.y = 100;
-                var text = new createjs.Text("Hello", "36px Arial", "#777");
-                stage.addChild(text);
-                stage.update();
+            var stage = new createjs.Stage("canvasName");
+            stage.x = 100;
+            stage.y = 100;
+            var text = new createjs.Text("Hello", "36px Arial", "#777");
+            stage.addChild(text);
+            stage.update();
     # tweenjs
         介绍
-                处理动画调整和js属性
+            处理动画调整和js属性
         使用
-                var circle = new createjs.Shape();
-                circle.graphics.beginFill("#FF0000").drawCircle(0, 0, 50);
-                stage.addChild(circle);
-                createjs.Tween.get(circle, {loop: true})
-                        .wait(1000)
-                        .to({scaleX: 0.2, scaleY: 0.2})
-                        .wait(1000)
-                        .to({scaleX:1, scaleY:1}, 1000, createjs.Ease.bounceInOut)
-                createjs.Ticker.setFPS(20);
-                createjs.Ticker.addEventListener("tick", stage);
+            var circle = new createjs.Shape();
+            circle.graphics.beginFill("#FF0000").drawCircle(0, 0, 50);
+            stage.addChild(circle);
+            createjs.Tween.get(circle, {loop: true})
+                .wait(1000)
+                .to({scaleX: 0.2, scaleY: 0.2})
+                .wait(1000)
+                .to({scaleX:1, scaleY:1}, 1000, createjs.Ease.bounceInOut)
+            createjs.Ticker.setFPS(20);
+            createjs.Ticker.addEventListener("tick", stage);
     # soundjs
         介绍
             简化处理音频
@@ -197,154 +233,37 @@ type: docs
             displayStatus.innerHTML = "Waiting for load to complete";
 
             function playSound(event){
-                    soundIntance = createjs.Sound.play(event.src);
-                    displayStatus.innerHTML = "Playing source: " + event.src;
+                soundIntance = createjs.Sound.play(event.src);
+                displayStatus.innerHTML = "Playing source: " + event.src;
             }
 
     # preloadjs
         介绍
-                协调程序加载项的类库
+            协调程序加载项的类库
         使用
-                var preload = new createjs.LoadQueue(false, "assets/");
-                var plugin= {
-                        getPreloadHandlers: function(){
-                                return{
-                                        types: ["image"],
-                                        callback: function(src){
-                                                var id = src.toLowerCase().split("/").pop().split(".")[0];
-                                                var img = document.getElementById(id);
-                                                return {tag: img};
-                                        }
-                                }
+            var preload = new createjs.LoadQueue(false, "assets/");
+            var plugin= {
+                getPreloadHandlers: function(){
+                    return{
+                        types: ["image"],
+                        callback: function(src){
+                            var id = src.toLowerCase().split("/").pop().split(".")[0];
+                            var img = document.getElementById(id);
+                            return {tag: img};
                         }
+                    }
                 }
-                preload.installPlugin(plugin);
-                preload.loadManifest([
-                        "Autumn.png",
-                        "BlueBird.png",
-                        "Nepal.jpg",
-                        "Texas.jpg"
-                ]);
+            }
+            preload.installPlugin(plugin);
+            preload.loadManifest([
+                "Autumn.png",
+                "BlueBird.png",
+                "Nepal.jpg",
+                "Texas.jpg"
+            ]);
 # 组件
-## 操作
-    touch.js
-    move.js
-## 加载
-    mod.js
-            # 百度模块化开发工具
-    curl.js
-            # amd load
-    sea.js
-    when
-            # amd 加载
-### bigpipe
-    介绍
-        facebook的页面异步加载框架
-        不同于ajax的http调用，需要更多的网线连接。bigpipe与当前页面共用http连接
 
-    使用
-        前端
-            <script src="jquery.js"></script>
-            <script src="underscore.js"></script>
-            <script src="bigpipe.js"></script>
-            <div id="body"></div>
-            <script type="text/template" id="tpl_body">
-                    <div><%=articles%></div>
-            </script>
-            <script>
-            var bigpipe = new Bigpipe()
-            bigpipe.ready('articles', function(data) {
-                    $('#body').html(_.render($('#tpl_body').html(), {articles: data}))
-            })
-            </script>
-
-        服务器端
-            app.get('/profile', function (req, res) {
-                    if (!cache[layout]) {
-                            cache[layout] = fs.readFileSync(path.join(VIEW_FOLDER, layout), 'utf8')
-                    }
-                    res.writeHead(200, {'Content-Type': 'text/html'})
-                    res.write(render(complie(cache[layout])))
-                    ep.all('users', 'articles', function () {
-                            res.end()
-                    })
-                    ep.fail(function(err) {
-                            res.end()
-                    })
-                    db.getData('sql1', function (err, data) {
-                            data = err ? {} : data
-                            res.write('<script>bigpipe.set("articles", ' + JSON.stringify(data) + ');</script>')
-                    })
-            })
-
-        nodejs使用
-            'use strict'
-            var BigPipe = require('bigpipe');
-            var bigpipe = BigPipe.createServer(8080, {
-                    pagelets: __dirname + '/pagelets',
-                            # 页面路径
-                    dist: __dirname + '/dist'
-                            # 静态资源路径
-            });
-            o-> 开启https
-            var bigpipe = BigPipe.createServer(443, {
-                    key: fs.readFileSync(__dirname + '/ssl.key', 'utf-8'),
-                    cert: fs.readFileSync(__dirname + '/ssl.cert', 'utf-8')
-            });
-            o-> 嫁接
-            var server = require('http').createServer(),
-                    BigPipe = require('bigpipe');
-            var bigpipe = new BIgPipe(server, {options});
-            bigpipe.listen(8080, function listening(){
-                    console.log('listening on port 8080.');
-            });
-
-            bigpipe.define('../pagelets', function done(err){
-            });        # 合并pagelets, 结束后调用done
-            o-> AMD 方式define，与链式编程
-            bigpipe.define([Pagelet1, Pagelet2, Pagelet3], function done(err){
-            }).define('../more/pagelets', function done(err){});
-            # bigpipe.before来添加中间件, remove来删除中间件, disable、enable来跳过和重新启用中间件
-            # bigpipe.use来引用插件
-    api
-        BigPipe所有组件继承EventEmitter interface
-    功能
-        pagelets
-            var Pagelet = require('bigpipe').Pagelet;
-                    # var Pagelet = require('pagelet');
-            Pagelet.extend({
-                    js: 'client.js',
-                    css: 'sidebar.styl',
-                    view: 'templ.jade',
-                    name: 'sidebar‘,            // 唯一路由路径
-                    get: function get(){
-                            // 接收get请求时的业务逻辑
-                    }
-            }).on(module);
-                    # 自动写 module.export部分来导出
-            # traverse方法自动调用来递归找additional child pagelets, 要手动指定名称时手动调用
-
-## 效果
-    swiper
-            # 滑动效果
-
-    cordova
-            # 访问原生设备，如摄像头、麦克风等
-    egret.js
-            # 使用TypeScript的HTML5开发引擎, 一套完整的HTML5游戏开发解决方案
-    tweenMax
-            # 扩展TweenLite, 用于制作html5动画
-    juliusjs
-            # 语音识别
-    babylon
-            # microsoft webgl框架
-    cubicVR
-            # 高性能webgl框架, paladin游戏引擎的一部分
-    scenejs
-            # webgl模型
-    glge
-            # webgl框架
-## 图表
+## 显示
     highcharts
     nvd3.js
             # svg报表
@@ -462,25 +381,49 @@ type: docs
             geom
             // 行为
             behavior
+## 效果
+    touch.js
+        # 触摸
+    move.js
+        # div运动
+    swiper
+        # 滑动效果
+
+    cordova
+        # 访问原生设备，如摄像头、麦克风等
+    egret.js
+        # 使用TypeScript的HTML5开发引擎, 一套完整的HTML5游戏开发解决方案
+    tweenMax
+        # 扩展TweenLite, 用于制作html5动画
+    juliusjs
+        # 语音识别
+    babylon
+        # microsoft webgl框架
+    cubicVR
+        # 高性能webgl框架, paladin游戏引擎的一部分
+    scenejs
+        # webgl模型
+    glge
+        # webgl框架
 ## 模板
     介绍
-            引擎的一个优点就是可以直接把数据渲染到js中使用
+        引擎的一个优点就是可以直接把数据渲染到js中使用
     优点
-            可以把动态页面的模板缓存起来，第一次请求之后，只需要更新数据
-                    # 应该可以后端nginx缓存静态模板来提高性能
+        可以把动态页面的模板缓存起来，第一次请求之后，只需要更新数据
+            # 应该可以后端nginx缓存静态模板来提高性能
 
     velocity
-            # java模板
+        # java模板
     ejs
     hogan.js
     handlebars
-            # 写法类似anglarjs模板
+        # 写法类似anglarjs模板
     jstl
-            # java模板
+        # java模板
     less
-            # css模板
+        # css模板
     stylus
-            # css模板
+        # css模板
 ### swig
     {% autoescape true %} {{ myvar }} {% endautoescape %}
 
@@ -538,49 +481,109 @@ type: docs
     {% endspaceless %}                                # 除去空白
 ## 格式
     uglifyjs2
-            # 序列化
-# 写法
-    jquery
-    prototype
-        $()     # 简写document.getElementById()
-        $F()    # 返回表单
-        $A()    # 参数转成数组对象
-    mootools
-            # 浏览器原生对象扩展
-    underscore
-            # 函数式
-    underscore-contrib
-            # 扩展underscore
-    ramda
-            # 函数式，较正确
-    lodash
-            # 函数式
-    functional javascript
-    bilby
-            # 函数式库，包含dispatch, 蹦床, monadic, validator等
-    allong.es
-            # 提供函数组合子
-    sweet
-            # 支持宏
-    zepto
-            # 小型jquery
-    kissy
-            # 小型jquery
-    rxjs
-            # 微软开发，将异步流捕获成值的库
-    tangram
-            # 百度前端工具集
-    qwrap
-            # 360前端工具集
-
+        # 序列化
 # 工具
+## 模块化
     bower
     browserify
+    require.js
+    mod.js
+            # 百度模块化开发工具
+    curl.js
+            # amd load
+    sea.js
+    when
+            # amd 加载
+### bigpipe
+    介绍
+        facebook的页面异步加载框架
+        不同于ajax的http调用，需要更多的网线连接。bigpipe与当前页面共用http连接
+
+    使用
+        前端
+            <script src="jquery.js"></script>
+            <script src="underscore.js"></script>
+            <script src="bigpipe.js"></script>
+            <div id="body"></div>
+            <script type="text/template" id="tpl_body">
+                    <div><%=articles%></div>
+            </script>
+            <script>
+            var bigpipe = new Bigpipe()
+            bigpipe.ready('articles', function(data) {
+                    $('#body').html(_.render($('#tpl_body').html(), {articles: data}))
+            })
+            </script>
+
+        服务器端
+            app.get('/profile', function (req, res) {
+                if (!cache[layout]) {
+                        cache[layout] = fs.readFileSync(path.join(VIEW_FOLDER, layout), 'utf8')
+                }
+                res.writeHead(200, {'Content-Type': 'text/html'})
+                res.write(render(complie(cache[layout])))
+                ep.all('users', 'articles', function () {
+                        res.end()
+                })
+                ep.fail(function(err) {
+                        res.end()
+                })
+                db.getData('sql1', function (err, data) {
+                        data = err ? {} : data
+                        res.write('<script>bigpipe.set("articles", ' + JSON.stringify(data) + ');</script>')
+                })
+            })
+
+        nodejs使用
+            'use strict'
+            var BigPipe = require('bigpipe');
+            var bigpipe = BigPipe.createServer(8080, {
+                pagelets: __dirname + '/pagelets',
+                    # 页面路径
+                dist: __dirname + '/dist'
+                    # 静态资源路径
+            });
+            o-> 开启https
+            var bigpipe = BigPipe.createServer(443, {
+                key: fs.readFileSync(__dirname + '/ssl.key', 'utf-8'),
+                cert: fs.readFileSync(__dirname + '/ssl.cert', 'utf-8')
+            });
+            o-> 嫁接
+            var server = require('http').createServer(),
+                BigPipe = require('bigpipe');
+            var bigpipe = new BIgPipe(server, {options});
+            bigpipe.listen(8080, function listening(){
+                console.log('listening on port 8080.');
+            });
+
+            bigpipe.define('../pagelets', function done(err){
+            });        # 合并pagelets, 结束后调用done
+            o-> AMD 方式define，与链式编程
+            bigpipe.define([Pagelet1, Pagelet2, Pagelet3], function done(err){
+            }).define('../more/pagelets', function done(err){});
+            # bigpipe.before来添加中间件, remove来删除中间件, disable、enable来跳过和重新启用中间件
+            # bigpipe.use来引用插件
+    api
+        BigPipe所有组件继承EventEmitter interface
+    功能
+        pagelets
+            var Pagelet = require('bigpipe').Pagelet;
+                    # var Pagelet = require('pagelet');
+            Pagelet.extend({
+                    js: 'client.js',
+                    css: 'sidebar.styl',
+                    view: 'templ.jade',
+                    name: 'sidebar‘,            // 唯一路由路径
+                    get: function get(){
+                            // 接收get请求时的业务逻辑
+                    }
+            }).on(module);
+                    # 自动写 module.export部分来导出
+            # traverse方法自动调用来递归找additional child pagelets, 要手动指定名称时手动调用
+## 脚手架
     yeoman
             # google和外部贡献团队合作开发，通过grunt和bower包装一个易用的工作流。由yo(脚手架), grunt(构建), bower(包管理)三部分组成
-    require.js
-
-## webpack
+### webpack
     # 介绍
             模块打包
 
@@ -701,7 +704,7 @@ type: docs
                 bannerPlugin
         htmlWebpackPlugin
         hotModuleReplacement
-## grunt
+### grunt
     介绍
             压缩js代码
             合并js文件
@@ -777,7 +780,7 @@ type: docs
                 grunt.registerTask('dev', ['jshint', 'concat'])
                 grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify', 'replace'])
         }
-## gulp
+### gulp
     介绍
             自动化构建项目工具
     使用
@@ -817,7 +820,7 @@ type: docs
         gulp-minify-css
         gulp-rev-append
         gulp-uglify
-## fis
+### fis
     介绍
             npm的形式发布
             百度前端工具框架，为前端开发提供底层架构
@@ -892,7 +895,6 @@ type: docs
                             # 'modules.parser.less'表示后缀名less的文件，'less'表示用fis-parser-less编译
                     fis.config.set('roadmap.ext.less', css)
                             # 将less文件编译为css
-
 # 终端
 ## 跨终端
     cocos2dx

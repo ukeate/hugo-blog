@@ -174,9 +174,6 @@ type: docs
         # 基于node.js + mongodb的网站开发平台，把这个基础构架延伸到浏览器端, 本地和远程数据通过DDP(Distributed Data Protocol)协议传输
     restify
         # 基于nodejs的rest应用框架，去掉express中的 template, render等功能, 提供DTrace功能，方便调试
-    connect
-    express
-    koa
     ssh
         # java
     spring site
@@ -218,6 +215,314 @@ type: docs
         # php
     codelgniter
         # php
+### connect
+    介绍
+        nodejs处理http中req、res的中间件框架
+        中间件分类
+            pre-request用来改写request原始数据
+            request/response功能各异
+            post-response全局异常处理，改写response数据等
+    内置中间件介绍
+        logger
+        csrf
+        compress             # gzip压缩
+        basicAuth            # basic认证
+        body parser          # 请求内容解析
+        json
+        urlencoded           # application/x-www-form-urlencode请求解析
+        multipart            # multipart/form-data请求解析
+        timeout
+        cookieParser
+        session
+        cookieSession
+        methodOverride       # http伪造
+        responseTime         # 计算响应时间
+        staticCache          # 缓存
+        directory            # 目录列表
+        vhost                # 虚拟二级域名映射
+        favicon
+        limit                # 请求内容大小限制
+        query                # url解析
+        errorHandler         # 错误处理
+    使用
+        var connect = require('connect');
+        var app = connect()
+            .use(connect.logger('dev'))
+            .use(function(req, res){
+                res.end('hello world\n');
+            })
+            .listen(3000);
+### express
+    安装
+        npm install -g express-generator
+        npm install express -d                        # g代表安装到NODE_PATH的lib里面, d代表关联套件一起安装
+    cookie-parser
+        使用
+            var cookieParser = require('cookie-parser');
+            app.use(cookieParser());
+
+            JSON.stringify(req.cookies);
+            req.cookies.yourCookie
+    cookie-session
+        使用
+            var cookieSession = require('cookie-session');
+            app.use(cookieSession())
+            req.session = null
+
+    express-session
+        options可选参数
+            name                        # 表示cookie中保存session的字段名称，默认为connect.sid
+            store                        # session的存储方式，默认存放在内存中，也有redis、mongodb、等模块支持
+            secret                        # 设置secrect来计算hash放在cookie中产生signedCookie，来防篡改
+            genid                        # 规定产生一个新的session_id时所用的函数，默认用uid2这个包
+            rolling                        # 每个请求都重新设置一个cookie，默认为false
+            resave                        # 即使session没有被修改，也保存session的值
+        使用
+            var session = require('express-session');
+            app.use(session(options));
+
+    connect-redis
+        使用
+            var express = require('express');
+            var session = require('express-session');
+            var redisStore = require('connect-redis')(session);
+
+            app.use(session({
+                store: new redisStore(),
+                secret: 'somesecrettoken'
+            }));
+    serve-static
+        # 静态文件
+    passport
+        介绍
+            登录验证中间件
+            支持connect express sails等web框架
+            支持Basic, Digest, OAuth(1.0和2.0的三种实现), Bearer等
+        安装
+            npm i passport
+            npm i passport-local
+        o-> 配置
+        var express = require('express');
+        var cookieParser = require('cookie-parser');
+        var session = require('express-session');
+        var flash = require('express-flash');
+        var passport = require('passport');
+
+        ...
+
+        app.use(cookieParser());
+        app.use(session({...}));
+        app.use(passport.initialize());
+        app.use(passport.session());
+        app.use(flash())
+
+        passport.serializeUser(function (user, done) {
+                done(null, user.id)
+        })
+        passport.deserializeUser(function (id, done) {
+                User.findById(id, function (err, user) {
+                        done(err, user)
+                })
+        })
+
+        app.post('/login', passport.authenticate('local', {
+                # passport.authenticate是个登录中间件，通过就走后面回调，否则返回401
+                # local是自定义的名称
+                successRedirect: '/',
+                failureRedirect: '/login',
+                failureFlash: true,
+        }, function (req, res) {
+                res.redirect('/users/' + req.user.username)
+        }))
+
+        app.post('/login', passport.authenticate('local', function(err, user, info) {
+                if (err) return next(err)
+                if (!user) {
+                        req.flash('errors', {msg: info.message})
+                        return res.redirect('/login')
+                }
+                req.logIn(user, function (err) {})
+        })(req, res, next))
+        app.get('/logout', function(req, res) {
+                req.logout()
+                res.redirect('/')
+        })
+        app.get('/user', isAuthenticated, getUser)
+        var isAuthenticated = function (req, res, next) {
+                if (req.isAuthenticated()) {
+                        return next()
+                }
+                res.redirect('/login')
+        }
+
+
+        o-> local验证
+        var LocalStrategy = require('passport-local').Strategy
+        passport.use(new LocalStrategy(
+                function(username, password, done) {
+                        User.findOne({username: username}, function(err, user) {
+                                if (err) {return done (err)}
+                                if (!user) {return done(null, false, {message: 'no user'})}
+                                if (!user.validPassword(password)) {...}
+                                return done(null, user)
+                        })
+                }
+        ))
+
+        o-> usernameField
+        passport.use(new LocalStrategy({
+                usernameField: 'email',
+                passwordField: 'passwd'
+        }, function (username, password, done) {...}
+        ))
+
+        o-> OAuth
+        介绍
+            第三方登录协议
+            三个步骤
+                1. 获取未授权的request token
+                2. 获取用户授权的request token
+                3. 用授权的request token换取access token
+        使用
+            网页上申请开发github应用
+            npm install passport-github
+                # 安装passport的github扩展
+            // app.js
+            passport.use(new GithubStrategy({        // 增加github认证策略
+                clientID: 'XXXX',
+                clientSecret: 'YYYY',        // 已从github上申请
+                callbackURL: 'http://localhost:3000/auth/github/callback'
+            }, function(accessToken, refreshToken, profile, done){
+                done(null, profile);
+            }));
+            // 定义路由
+            app.all('/github', isLoggedIn);
+            app.get('/github', user.github);
+            app.get('/auth/github', passport.authenticate('github', {scope: 'email'}));
+            app.get('/auth/github/callback', passport.authenticate('github', {
+                successRedirect: '/github',
+                failureRedirect: '/'
+            }));
+    kraken
+        介绍
+            基于express之上的基于设置结构化代码工具
+        功能
+            post请求_csrf验证
+
+        基本用法
+            'use strict'
+            var express = require('express'),
+                kraken = require('kraken-js');
+            var app = express();
+            app.use(kraken());
+            app.listen(8000);
+### koa
+    介绍
+        express原班人马打造的，更小，更健壮，更有表现力的web框架
+        免除重复繁琐的回调函数嵌套，提高错误处理效率
+        不绑定任何中间件，只是提供一个轻量优雅的函数库
+        >=node0.11.16
+    配置
+        app.name              # 应用名称
+        app.env                  # 执行环境，默认是NODE_ENV 或 'development'
+        app.proxy              # 决定哪些proxy header被加到信任列表中
+        app.subdomainOffset      # 被忽略的.subdomains列表
+        app.jsonSpaces          # 输出json时是否填充空格
+        app.outputErrors        # 是否输出错误堆栈(err.stack)到stderr(app.env是'test'时，此值为false)
+
+    使用
+        $ npm install koa
+        $ node --harmony app.js                        # 必需使用harmony模式运行程序
+        var koa = require('koa');
+        var app = koa();
+        app.use(function *(){
+            this.body = 'Hello World';
+        });        # function*  声明的generator function支持yield
+                   ## yield是ES6定义的新语法
+        app.listen(3000);
+    使用(downstream & upstream)
+        var koa = require('koa');
+        var app = koa();
+
+        // x-response-time
+        app.use(function *(next){
+        // (1) 进入路由
+        var start = new Date;
+        yield next;
+        // (5) 再次进入 x-response-time 中间件，记录2次通过此中间件「穿越」的时间
+        var ms = new Date - start;
+        this.set('X-Response-Time', ms + 'ms');
+        // (6) 返回 this.body
+        });
+
+        // logger
+        app.use(function *(next){
+        // (2) 进入 logger 中间件
+        var start = new Date;
+        yield next;
+        // (4) 再次进入 logger 中间件，记录2次通过此中间件「穿越」的时间
+        var ms = new Date - start;
+        console.log('%s %s - %s', this.method, this.url, ms);
+        });
+
+        // response
+        app.use(function *(){
+        // (3) 进入 response 中间件，没有捕获到下一个符合条件的中间件，传递到 upstream
+        this.body = 'Hello World';
+        });
+
+        app.listen(3000);
+
+        this
+            request
+                header
+                headers
+                url
+                accepts
+            response
+                header
+                headers
+                status
+            cookies
+                set('name', 'tobi', {signed: true})
+                    signed
+                    expires
+                    path
+                    domain
+                    secure
+                    httpOnly
+                get
+            type
+            length
+            path
+            method
+            state
+            throw
+            assert
+        app
+            use
+            listen
+            callback
+            keys
+            context
+                db
+    中间件
+        koa-router
+        trie-router
+        route
+        basic-auth
+        etag
+        compose
+        static
+        static-cache
+        session
+        compress
+        csrf
+        logger
+        mount
+        send
+        error
+
 ## 实时
     sockjs
             # node websock

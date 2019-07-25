@@ -24,7 +24,7 @@ draft: true
 
 
 # 期望从事
-1. 后端研发
+1. 研发/技术经理
 2. 系统架构师
 3. 前端研发(webgl方向)
 
@@ -49,14 +49,14 @@ draft: true
 ## 了解
 * 工具: eclipse、vscode、maven、npm、pm2、openvpn、kibana、jira、confluence、grafana等
 * 技能: java、python、canvas、css等
-* 框架: vue、java ssh、springmvc、lucene、shiro、mybatis、birt、koa、socket.io、swig、tornado、django、open tracing、jquery、fis、bootstrap、webpack、gulp、angluar1、three.js、sim.js等
+* 框架: vue、java ssh、springmvc、springboot, lucene、shiro、mybatis、birt、koa、socket.io、swig、tornado、django、open tracing、jquery、fis、bootstrap、webpack、gulp、angluar1、three.js、sim.js等
 * 服务: redis、docker、nginx、jenkins、tidb、pgsql、oracle、rabbitmq、nsq、kafka、neo4j、tomcat等
 
 
 # 履历
 ## 2017.4 － 2018.7 北京美洽(乘法云)
-### 职务：架构师
-### 主要应用技术: golang
+### 职务：技术负责人
+### 主要应用技术: golang, grpc
 ### 主要项目
 1. 搜索服务
 2. 海服务
@@ -66,7 +66,7 @@ draft: true
 
 ### 工作介绍
     美洽是国内领先的在线客服服务提供商，公司为了横向扩展转型为对标salesforce的erp云平台，目前在打造基于paas的saas服务。现该平台独立取名为“乘法云”。
-    主要应用技术为golang、grpc、tidb、docker、k8s。我主要对其中复杂业务服务负责，参与所有产品设计到后期功能迭代。
+    主要应用技术为golang、grpc、tidb、docker、k8s。我主要对其中复杂业务服务负责，参与所有产品设计，研发，集成，测试到功能迭代。
     期间对系统与架构设计有了较多实践，对微服务有了一定的理解与实践，对go有了较深入的实践。tidb和k8s只是简单的使用。
 
 ## 2015.10 - 2017.4 北京朱李叶健康科技
@@ -96,7 +96,7 @@ draft: true
     期间接触到很多前辈，认识和实践了互联网公司的工作方式。学习到一些百度对node.js的使用方案和其fis框架的东西。
 
 ## 2013.11 - 2015.2 瑞银信信息技术济南分公司
-### 职务：研发工程师；架构师
+### 职务：研发工程师
 ### 主要应用技术: java、lucene、node.js
 ### 主要项目
 1. 基础组件研发：数据库框架（组装和拆分sql语句）、权限框架
@@ -110,7 +110,7 @@ draft: true
     期间对java有很多实践（工作前我对java和java web、数据库、linux等技能有过系统的学习），上司对我的帮助很大。
 
 
-## 2009 － 2013 吉林大学软件学院
+## 2009 － 2013 吉林大学 软件工程
 
 
 ## 2006 - 2009 山东省实验中学

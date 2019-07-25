@@ -26,38 +26,70 @@
     # 托管在apache的开源、高可用、高扩展性的云计算平台
     # 支持主流hypervisors
     # 一个开源云计算解决方案，可以加速iaaS的部署、管理、配置
-## kubernetes
-    # google开源的，在docker技术上，为容器化应用提供:
-    作用
-        资源调度
-        部署运行
-        服务发现
-        扩容缩容
 ## cloudfoundry
     # 根据应用模板，动态生成很多tomcat, mysql, nosql, 动态控制这些实例的启停。
 ## openstack
     # 云操作系统，管理虚拟资源
+# 分布式服务
+|特性             |dubbo                      |spring cloud                        |k8s|
+|:----------------|:--------------------------|:-----------------------------------|:--|
+|配置管理          |-                          |config                              |k8s configMap|
+|服务发现          |zookeeper                  |eureka, consul, zookeeper           |k8s services
+|负载均衡          |自带                        |ribbon                              |k8s services
+|网关              |-                          |zuul                                |k8s services
+|分布式追踪        |-                          |spring cloud sleuth                 |open tracing
+|容错              |不完善                     |hystrix                             |k8s health check
+|通信方式          |rpc                        |http, message                       |
+|安全模块          |-                          |spring cloud security               |-
+|分布式日志        |                           |ELK                                 |EFK
+|任务管理          |                           |spring batch                        |k8s jobs
 ## hsf
-    # high-speed service framework
+    # high-speed service framework, 阿里出品， socket直连
     特点
         不增加中间点(稳定，高度可伸缩)
     结构
         注册服务信息，推送服务地址
         基于osgi
-
-
-# rpc
-    # 远程过程调用 remote procedure call
-## hsf
-    # 高速服务框架 (socket直连)
-## thrift
+## kubernetes
+    # google开源的，borg的发展，在docker技术上，管理容器化应用
+    特点
+        自主管理容器
+            为了让apache一直服务， 自动监控、重启、新建等
+            规划器找到服务合适的位置
+        pod运行容器
+    架构
+        cluster
+            master
+                api server              # 对外接口
+                scheduler               # 内部资源调度
+                controller manager      # 管理控制器
+                etcd                    # 配置
+            多个node
+                pod                     # 基本操作单元，代表一个运行进程，内部封装一个(或多个紧密相关的)容器
+                    service             # 一组提供相同服务pod的对外接口
+                docker                  # 创建容器
+                kubelet                 # 监视它所在node上的pod, 创建、修改、监控、删除
+                kube-proxy              # 为pod提供代理
+                fluentd                 # 日志收集、存储、查询
+                kube-dns                # 服务dns解析
+    作用
+        资源调度
+        部署运行
+        服务发现
+        扩容缩容
 ## Dubbo
-    模块
-        registry
-        consumer
-        provider
-        monitor
-        container
+    介绍
+        阿里开源，分布式服务框架，rpc方案，soa治理
+    功能
+        远程通讯    # 多协议，多种长连接nio框架封装
+        集群容错    # 负载均衡，容错，地址路由，动态配置
+        自动发现    # 注册中心
+    节点
+        container   # 容器
+        provider    # 提供者
+        registry    # 注册中心
+        consumer    # 消费者
+        monitor     # 监控中心
         调用关系
             容器启动提供者
             提供者注册
@@ -96,7 +128,18 @@
                 timeout=”10000000” />
     注册中心
         zookeeper
+## spring cloud
 
+# soa
+    # 面向服务架构 service oriented architecture
+## eai
+        # Enterprise Application Integration 建立底层结构将异构应用集成
+## esb
+        # Enterprise Service Bus 企业服务总线， 是连接中枢
+
+# rpc
+    # 远程过程调用 remote procedure call
+## thrift
 ## cxf
     常识
         自己内部整合spring(但是不耦合)
@@ -145,8 +188,6 @@
                   <servlet-name>springWS
                   <url-pattern>/ws/*
         o-> web.xml中配置spring监听器
-
-## spring cloud
 ## grpc
 ## protobuf
     # 通信协议
@@ -162,7 +203,6 @@
         protoc-gen-grpc-gateway
             # http服务
 
-
 # rmi
     # java远程调用 remote method invocation
 ## hessian
@@ -173,16 +213,6 @@
     # spring提供的协议，必须用spring
 ## web service
     # soap通讯
-
-
-
-# soa
-    # 面向服务架构 service oriented architecture
-## eai
-        # Enterprise Application Integration 建立底层结构将异构应用集成
-## esb
-        # Enterprise Service Bus 企业服务总线， 是连接中枢
-
 
 # 粘合层
 ## zookeeper

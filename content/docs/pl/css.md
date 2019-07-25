@@ -39,11 +39,11 @@ date: 2018-10-09T16:27:24+08:00
         </style>
     引用式
          <link href="css.css" rel="stylesheet" type="text/css" />
-@
-    @charset "UTF-8"
-        # 默认UTF-8, 在import前
-    @import "styles.css"
-        # 静态引用, 效率比<link>标签慢
+    @
+        @charset "UTF-8"
+            # 默认UTF-8, 在import前
+        @import "styles.css"
+            # 静态引用, 效率比<link>标签慢
 # 颜色表示
     名称, 如silver, gray
     0xffffff

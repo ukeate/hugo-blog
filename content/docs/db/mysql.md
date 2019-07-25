@@ -26,11 +26,12 @@
             mysql utilities        # 提供一组命令行工具用于维护和管理 MySQL 服务器
     连接参数
         root:123456@tcp(abcdefg:3306)/meiqia?
-        charset=utf8mb4,utf8&
-        loc=UTC&
-        interpolateParams=true&
-        time_zone=%27%2B00%3A00%27&
-        sql_mode=%27NO_ENGINE_SUBSTITUTION%2CSTRICT_TRANS_TABLES%27
+            charset=utf8mb4,utf8&
+            characterEncoding=UTF-8&
+            loc=UTC&
+            interpolateParams=true&
+            time_zone=%27%2B00%3A00%27&
+            sql_mode=%27NO_ENGINE_SUBSTITUTION%2CSTRICT_TRANS_TABLES%27
     数据类型
         int         # int(5) zerofill
         varchar(20)     # null不占空间
@@ -157,17 +158,20 @@
     curdate()+ 3                                # 当前日期 + 3 天
     date(str)                                        # 提取日期时间表达字符串中的日期部分
     date('1997-11-12','1997-11-11')                # 前面减后面 得到天数
-# 数据字典
-    information_schema
-        # 默认内置元信息数据库
-        INNODE_TRX
-            # 当前开启的事务
-    mysql
-        # 内置安全设置数据库
-    selectperson
-        # 点名系统
-    test
-        # 内置测试数据库
+# 系统库/数据字典
+    系统库
+        information_schema
+            # 默认内置元信息数据库
+            INNODE_TRX
+                # 当前开启的事务
+        mysql
+            # 内置安全设置数据库
+        performance_schema
+            # 资源消耗，资源等待等情况
+        sys
+            # 5.7后，数据来源performance_schema, 降低复杂度
+        test
+            # 5.7移除，内置测试数据库
 # 触发器(trigger)
     new与old
         # 指代新数据

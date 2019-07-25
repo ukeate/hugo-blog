@@ -3,35 +3,28 @@ title: 算法
 type: docs
 ---
 # 名词
-    graph        图
-    TSP        traveling salesman problem        旅行商问题
-    graph-coloring-problem        图填色问题
-    combinatorial problems        组合问题
-    geometric algorithm        几何问题
-    closest-pair problem        最近对时间
-    convex-hull problem        凸包问题
-    numerical problem        数值问题
-    lexicographic order        字典序
-    on-line algorithm                联机算法
-    ADT abstract data type        抽象数据类型
-    activation record        活动记录
-            # 递归栈所存的信息
-    stack frame        栈桢
-            # 同 activation record
-    circular array        循环数组
-    amoritzed        摊还
-    biased deletion        偏删除
-            # 二叉树删除节点引起平衡不足问题的删除
-    symbol table        符号表
-            # 编译器用
-    tranposition table        变换表
-            # 游戏用
-    tick        滴答
-            # 模拟的一份时间
-    external sorting        外部排序
+    graph                           图
+    TSP                             traveling salesman problem 旅行商问题
+    graph-coloring-problem          图填色问题
+    combinatorial problems          组合问题
+    geometric algorithm             几何问题
+    closest-pair problem            最近对时间
+    convex-hull problem             凸包问题
+    numerical problem               数值问题
+    lexicographic order             字典序
+    on-line algorithm               联机算法
+    ADT abstract data type          抽象数据类型
+    activation record               活动记录, 递归栈所存的信息
+    stack frame                     栈桢, 同 activation record
+    circular array                  循环数组
+    amoritzed                       摊还
+    biased deletion                 偏删除, 二叉树删除节点引起平衡不足问题的删除
+    symbol table                    符号表, 编译器用
+    tranposition table              变换表, 游戏用
+    tick                            滴答, 模拟的一份时间
+    external sorting                外部排序
     comparison-based sorting        基于比较的排序
-    transposition table
-            # 置换表
+    transposition table             置换表
 
 # NP问题
     介绍
@@ -49,23 +42,23 @@ type: docs
 ## 选择排序
 
 ## 希尔排序
+    # shellsort
     概念
-            shellsort
-            diminishing increment sort(缩减增量排序)
-            increment sequence(增量序列)
+        diminishing increment sort(缩减增量排序)
+        increment sequence(增量序列)
 
 ## 桶排序
+    # bucket sort
     介绍
-            bucket sort
-            将数据分到有限数量的桶子里，每个桶分别排序(可能再使用别的排序办法)
-            当数据均匀分配时，时间复杂度是O(n), 不受O(nlogn)下限的影响
-            适用于小范围、独立均匀分布的整数数据。可以计算数据量大，符合线性期望时间的排序
+        将数据分到有限数量的桶子里，每个桶分别排序(可能再使用别的排序办法)
+        当数据均匀分配时，时间复杂度是O(n), 不受O(nlogn)下限的影响
+        适用于小范围、独立均匀分布的整数数据。可以计算数据量大，符合线性期望时间的排序
     步骤
-            # 排序7, 36, 65, 56, 33, 60, 110, 42, 42, 94, 59, 22, 83, 84, 63, 77, 67, 101
-            1. 设置5个桶, 找到最大值110, 最小值7, 每个桶范围是(110 - 7 + 1)/5 = 20.8
-            2. 遍历原始数据，以链表结构分组放入桶中，公式为: 桶编号n = floor((a - 7) / 20.8)
-            3. 桶第二次插入数据时，进行插入排序的一次插入
-            4. 拼接5个桶
+        # 排序7, 36, 65, 56, 33, 60, 110, 42, 42, 94, 59, 22, 83, 84, 63, 77, 67, 101
+        设置5个桶, 找到最大值110, 最小值7, 每个桶范围是(110 - 7 + 1)/5 = 20.8
+        遍历原始数据，以链表结构分组放入桶中，公式为: 桶编号n = floor((a - 7) / 20.8)
+        桶第二次插入数据时，进行插入排序的一次插入
+        拼接5个桶
 
 ## 快速排序
     最坏时间复杂度为O(nlogn)

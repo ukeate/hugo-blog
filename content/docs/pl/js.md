@@ -3,96 +3,40 @@ Categories: ["语言"]
 title: "JS"
 date: 2018-10-09T10:31:30+08:00
 ---
+# 基础
+    特性
+        面向对象
+        动态语言(已超出脚本语言的范畴)
 
-# commonJs规范下的javascript
-    node.js
-    mongoDB
-    ringojs
-# 特性
-    面向对象
-    动态语言(已超出脚本语言的范畴)
+        first-class function的思想来自Scheme语言
+        prototype-based的思想来自Self语言
+    机制
+        弱类型，变量都是var
+        解释器有自己的内存管理机制(garbage collection)
+        自由数据类型转换    # 产生了==, ===的判断相等的不同定义
+    commonJs规范下的javascript
+        node.js
+        mongoDB
+        ringojs
+    v8引擎
+        直接生成机器码
+        分代式GC
+        java jvm工程师参数了优化
 
-    语法源自java
-    first-class function的思想来自Scheme语言
-    prototype-based的思想来自Self语言
-# 机制
-    弱类型，变量都是var
-    解释器有自己的内存管理机制(garbage collection)
-    自由数据类型转换    # 产生了==, ===的判断相等的不同定义
-# 历史
-    Netscape(现Mozilla)创建JavaScript, 但JavaScript是Sun(现Oracle)的注册商标
-    作为标准提交给ECMA(欧洲计算机制造协会), 改名为ECMAScript
-    # ECMAScript 3(ES3) 作为标准广泛使用
-    ## ECMAScript 5(ES5) 定义了新的语言标准
-    # JavaScript1.5是Mozilla的版本号, 相当于ES3,包含一些非标准语言扩展
-    ## JavaScript1.8
-    # JavaScript解释器或引擎(engine)也有版本号, Google的叫做V8(现在是4.0)
-    微软改动并取名Jscript
-# v8引擎 
-    直接生成机器码
-    分代式GC
-    java jvm工程师参数了优化
-
-# 语法
-    api不包括输入输出功能
-        # 输入输出由宿主环境提供, 如web浏览器或node.js调用工具的控制台
-    html中js执行顺序
-            当页面载入时，会执行位于 body 部分的 JavaScript。
-            当被调用时，位于 head 部分的 JavaScript 才会被执行。
-    对象参数
-        arguments                    # 当前函数的所有参数数组
-        arguments.callee                 # 调用当前执行的函数
-    数组
-    一维
-        var ar = new Array(2);
-        var ar =["a","b"];
-    二维
-        var ar2 = new Array(2); 
-        for( var i = 0; i < ar2.length; i++){
-        ar2[i] = new Array(2);
-        }
-    this关键字
-        代表本function, 可以用this.Xxx给function加属性
-    运算符
-        === 与 ==
-            不同类型间比较，==之比较“转化成同一类型后的值”看“值”是否相等，===如果类型不同，其结果就是不等
-        ||
-            this.x = x || 0;                    # 如果x=null或undefine时，this.x = 0
-        <-=
-            小于不等于
-    异常捕获    
-        try{ 
-            throw "Err1"
-        } catch(er){
-            if(er=="Err1") 
-            alert("Error! The value is too high")
-        }
-    正则表达式
-        var bool = /^[a-z]+$/.text(str);                # ^代表开头, $是结尾
-    保留字
-        typeof                        # 返回一个对象的类型描述字符串，如,typeof param == "string"用来判断param是否是"string"类型
-            typeof handle === 'function'            # 判断handle的类型是否函数
-
-        with(Obj){}                    # with内直接调用Obj的方法
-                                # 特点
-                                ## 1. with包围var xxx = function(){}中可以生效
-                                ## 2. with包围function xxx(){}中不生效
-                                ## 3. with中调用 xx();不生效
-## 词法
-    基础
-        js是unicode字符集编写的
-            # unicode转义如, 'café'表示为 'caf\u00e9'
-            ## 'é' 也可以表示为'e\u0301', e后面跟一个语调符
-        区分大小写
-            # html中不区分大小写, 其要调用的函数在js中一律小写
-        注释如//, /**/
+# 词法
+    js是unicode字符集编写的
+        # unicode转义如, 'café'表示为 'caf\u00e9'
+        ## 'é' 也可以表示为'e\u0301', e后面跟一个语调符
+    区分大小写
+        # html中不区分大小写, 其要调用的函数在js中一律小写
+    注释如//, /**/
     标识符和保留字
         要求
             开头以字母、下划线、dollar符。
             后续可以加数字
             可以出现unicode字符集中的Mn类、Mc类、Pc类，如
                 # Mn表示非间距字符，Mc表示影响基字符标志位的间距字符, Pc是连接两个字符的连接符或标点符号。
-                é, π, 
+                é, π,
         保留字
             break, delete, function, return, typeof, case, do, if, switch, var, catch, else, in, this, void, continue, false, instanceof, throw, while, debugger, finally, new, true, with, default, for, null, try
         未被使用的名保留字
@@ -106,7 +50,7 @@ date: 2018-10-09T10:31:30+08:00
         ECMAScript3将所有java关键字列为保留字
         全局属性和对象和函数
     自定义全局对象和函数列表
-### 直接量
+## 直接量
     直接量(numeric literal)
         1
         1.2
@@ -158,7 +102,7 @@ date: 2018-10-09T10:31:30+08:00
             var name = 'Bob';
             `hello ${name}
             how are you`
-### 分号                
+# 语法
     可省略的分号
         通用规则: 独占一行，并与下一行不能整体解析时
             # var a = f
@@ -180,21 +124,21 @@ date: 2018-10-09T10:31:30+08:00
         ### 非声明的全局变量是可配置的(可delete)，而var声明的全局变量不可配置
         var x;
         x = 1;
-    let a = 10
-        # 支持了直接用{}的块级作用域
-        # 只在块级作用域有效
-        ## for(let i = 0; ...; ...)
-        # 无变量提升
-        # 暂时性死区
-        ## 死区中使用该变量会直接报错
-        # 重复声明报错
-        # 声明的全局变量不再是全局对象的属性, 同样机制的还有const, class
-    const PI = 3.1415
-        # 只能在声明时赋值一次
-        # 其他同let
-        # export const A = 1;
-        ## import * as constants from './constants'
-        ## constants.A
+        let a = 10
+            # 支持了直接用{}的块级作用域
+            # 只在块级作用域有效
+            ## for(let i = 0; ...; ...)
+            # 无变量提升
+            # 暂时性死区
+            ## 死区中使用该变量会直接报错
+            # 重复声明报错
+            # 声明的全局变量不再是全局对象的属性, 同样机制的还有const, class
+        const PI = 3.1415
+            # 只能在声明时赋值一次
+            # 其他同let
+            # export const A = 1;
+            ## import * as constants from './constants'
+            ## constants.A
     分类1
         原始类型(primitive type)
         对象类型(object type)或引用类型，如
@@ -270,104 +214,104 @@ date: 2018-10-09T10:31:30+08:00
         "0" == false
 
 ### 类型
-#### 数字
-    基础
-        所有数字用二进制浮点数表示(64位, 如java中的double)
-            # IEEE-754标准
-            ## 整数范围 -2^53 ~ 2^53(大约900亿亿)
-        实际的操作(数组索引, 位操作符)基于32位整数
-        负号是一元运算符，并不是数字直接量语法的组成部分
-        0与-0唯一差别
-            1/zero !== 1/-0    # 正无穷大和负无穷大不等
-    实数近似表示(几乎所有现代编程语言都存在, 因为都是IEEE-754标准)
-        浮点数表示褛的个数为18 437 736 874 454 810 627个
-        IEEE-754标准精确表示1/2, 1/8, 1/1024，但不精确表示1/10, 1/00。
-            # 建议用大整数进行重要计算(如元, 角, 分各用整数表示)
-            所以js只能近似表示0.1
-            var x = .3 - .2 
-            var y = .2 - .1
-            x == y        // => false
-            x == .1    // => false
-            y == .1    // => true
-#### 字符串
-    基础
-        从0开始
-        没有如c语言中的字符型
-        采用UTF-16编码的Unicode字符集。
-            是一组无符号16位值组成的序列。
-                # 用16位内码表示, 表示一个单个字符
-                ## 不能16位Unicode表示的遵循UTF-16编码规则，两个16位值来表示一个(代理项对)
-                ### 长度为2的字符串可能表示一个Unicode字符,如var e ="\ud835\udc52"; e.length // => 2
-            字符串的操作不对代理项对单独处理
-            不对字符串做标准代加工
-                所以不能保证字符串是剑的UTF-16格式
-    运算
-        +            # 字符串连接
-    unicode
-        允许采用\uxxxx表示\u0000 到 \uFFFF之间的字符
-        超出范围时用4字节表示, 如 \uD842\uDFB7
-        '\u20BB7' 会被解释成 '\u20BB' + '7'
-        '\u{20BB7}' 会正确解释
-        多种表示法
-            '\z'
-            '\172'
-            '\x7A'
-            '\u007A'
-            '\u{7A}'
-    转义
-        十六进制数表示Latin-1或Unicode中的任意字码, 由两位十六进制数指定
-            '\xA9'        // => ©
-        \u表示4个十六进制数指定的Unicode字符
-            '\u03c0'    // => 
-        \n
-        \'
-        \0            # 同\u0000, 表示空字符串
-        \b            # 同\u0008, 表示退格符
-        \t            # 同\u0009, 表示tab
-        \v            # \u000B, 垂直制表符
-        \f            # \u000C, 换页符
-        \r            # \u000D, 回车
-#### 布尔
-    转换
-        # 所有值都可以转换为布尔值
-        false
-            undefined
-            null
-            0
-            -0
-            NaN
-            ""
-        true
-            除以上，全部为true
-    api
-        toString()        # 转换成"true"或"false"
-#### null undefined
-    介绍
-        都是js的全局属性
-    类型
-        null为object
-            # 但可以表示数字类型、字符串类型
-        undefined为"undefined", 是一个单独类型
-    比较
-        null == undefined        // => true
-        null === undefined        // => false
-    api
-        无
-            # .和[]取成员会产生类型错误
-    bug
-        undefined在ECMAScript可读/写，可赋任意值
-    结论
-        undefined表示系统级类似错误的空缺
-        null表示程序级的，正常出现的空缺
-#### 对象
-#### Symbol
-    介绍
-        原始数据类型，因为不是对象，所以不能new, 不能添加属性
-        不参与类型转换, 但可以toString
-            # 可以String(s)得到 'Symbol(a)', Boolean(s)得到true, !s 得到false
-            ## Number(s)会报错
-        可以做属性名a[sym1] = 1, 不能用点运算符赋值或取值
-        常用于设置常量结构体来switch，以消除魔术字符串
+    数字
+        基础
+            所有数字用二进制浮点数表示(64位, 如java中的double)
+                # IEEE-754标准
+                ## 整数范围 -2^53 ~ 2^53(大约900亿亿)
+            实际的操作(数组索引, 位操作符)基于32位整数
+            负号是一元运算符，并不是数字直接量语法的组成部分
+            0与-0唯一差别
+                1/zero !== 1/-0    # 正无穷大和负无穷大不等
+        实数近似表示(几乎所有现代编程语言都存在, 因为都是IEEE-754标准)
+            浮点数表示褛的个数为18 437 736 874 454 810 627个
+            IEEE-754标准精确表示1/2, 1/8, 1/1024，但不精确表示1/10, 1/00。
+                # 建议用大整数进行重要计算(如元, 角, 分各用整数表示)
+                所以js只能近似表示0.1
+                var x = .3 - .2
+                var y = .2 - .1
+                x == y        // => false
+                x == .1    // => false
+                y == .1    // => true
+    字符串
+        基础
+            从0开始
+            没有如c语言中的字符型
+            采用UTF-16编码的Unicode字符集。
+                是一组无符号16位值组成的序列。
+                    # 用16位内码表示, 表示一个单个字符
+                    ## 不能16位Unicode表示的遵循UTF-16编码规则，两个16位值来表示一个(代理项对)
+                    ### 长度为2的字符串可能表示一个Unicode字符,如var e ="\ud835\udc52"; e.length // => 2
+                字符串的操作不对代理项对单独处理
+                不对字符串做标准代加工
+                    所以不能保证字符串是剑的UTF-16格式
+        运算
+            +            # 字符串连接
+        unicode
+            允许采用\uxxxx表示\u0000 到 \uFFFF之间的字符
+            超出范围时用4字节表示, 如 \uD842\uDFB7
+            '\u20BB7' 会被解释成 '\u20BB' + '7'
+            '\u{20BB7}' 会正确解释
+            多种表示法
+                '\z'
+                '\172'
+                '\x7A'
+                '\u007A'
+                '\u{7A}'
+        转义
+            十六进制数表示Latin-1或Unicode中的任意字码, 由两位十六进制数指定
+                '\xA9'        // => ©
+            \u表示4个十六进制数指定的Unicode字符
+                '\u03c0'    // =>
+            \n
+            \'
+            \0            # 同\u0000, 表示空字符串
+            \b            # 同\u0008, 表示退格符
+            \t            # 同\u0009, 表示tab
+            \v            # \u000B, 垂直制表符
+            \f            # \u000C, 换页符
+            \r            # \u000D, 回车
+    布尔
+        转换
+            # 所有值都可以转换为布尔值
+            false
+                undefined
+                null
+                0
+                -0
+                NaN
+                ""
+            true
+                除以上，全部为true
+        api
+            toString()        # 转换成"true"或"false"
+    null undefined
+        介绍
+            都是js的全局属性
+        类型
+            null为object
+                # 但可以表示数字类型、字符串类型
+            undefined为"undefined", 是一个单独类型
+        比较
+            null == undefined        // => true
+            null === undefined        // => false
+        api
+            无
+                # .和[]取成员会产生类型错误
+        bug
+            undefined在ECMAScript可读/写，可赋任意值
+        结论
+            undefined表示系统级类似错误的空缺
+            null表示程序级的，正常出现的空缺
+
+    Symbol
+        介绍
+            原始数据类型，因为不是对象，所以不能new, 不能添加属性
+            不参与类型转换, 但可以toString
+                # 可以String(s)得到 'Symbol(a)', Boolean(s)得到true, !s 得到false
+                ## Number(s)会报错
+            可以做属性名a[sym1] = 1, 不能用点运算符赋值或取值
+            常用于设置常量结构体来switch，以消除魔术字符串
 ### 作用域
     全局变量
     就是定义顶级对象的属性
@@ -466,37 +410,35 @@ date: 2018-10-09T10:31:30+08:00
     注意
         1.在函数add创建时，它的作用域链中会填入全局对象
         2.执行此函数时会创建一个称为“运行期上下文(execution context)”的内部对象
-                # 运行期上下文定义了函数执行时的环境。
-                ## 每个运行期上下文都有自己的作用域链，其作用域链初始化为当前运行函数的[[Scope]]所包含的对象。
+            # 运行期上下文定义了函数执行时的环境。
+            ## 每个运行期上下文都有自己的作用域链，其作用域链初始化为当前运行函数的[[Scope]]所包含的对象。
         3.函数中的值按照它们出现在函数中的顺序被复制到运行期上下文的作用域链中。
             它们共同组成了一个新的对象，叫“活动对象(activation object)”
-                # 该对象包含了函数的所有局部变量、命名参数、参数集合以及this
-                ## 此对象会被推入作用域链的前端
-                ## 运行期上下文被销毁，活动对象也随之销毁     
+            # 该对象包含了函数的所有局部变量、命名参数、参数集合以及this
+            ## 此对象会被推入作用域链的前端
+            ## 运行期上下文被销毁，活动对象也随之销毁
         4.在函数执行过程中，每遇到一个变量，都会经历一次标识符解析过程以决定从哪里获取和存储数据。
-                # 该过程从作用域链头部，也就是从活动对象开始搜索
-                ## 如果没找到继续搜索作用域链中的下一个对象，如果搜索完所有对象都未找到，则认为该标识符未定义
+            # 该过程从作用域链头部，也就是从活动对象开始搜索
+            ## 如果没找到继续搜索作用域链中的下一个对象，如果搜索完所有对象都未找到，则认为该标识符未定义
         5.其作用域链只会被 with 语句和 catch 语句影响。
         优化代码：
             1.因为全局变量总是存在于运行期上下文作用域链的最末端，因此在标识符解析的时候，查找全局变量是最慢的。
                 所以，在编写代码的时候应尽量少使用全局变量，尽可能使用局部变量
             2.一个好的经验法则是：如果一个跨作用域的对象被引用了一次以上，则先把它存储到局部变量里再使用。
             3.优化with() try-catch
-                with(document){
-                    }        # 使用width语句来避免多次书写document，看上去更高效，实际上产生了性能问题。
+                with(document){ }   # 使用width语句来避免多次书写document，看上去更高效，实际上产生了性能问题。
                                     # 代码运行到with语句时，运行期上下文的作用域链临时被改变了。一个新的可变对象被创建，它包含了参数指定的对象的所有属性。这个对象将被推入作用域链的头部
                                     ## ，这意味着函数的所有局部变量现在处于第二个作用域链对象中，因此访问代价更高了。
-                                    
                 try{
-                doSomething();
+                    doSomething();
                 }catch(ex){
-                alert(ex.message); //作用域链在此处改变
+                    alert(ex.message); //作用域链在此处改变
                 }            # 同理，catch语句使效率下降。你可以通过优化代码来减少catch语句对性能的影响。
                 try{
-                doSomething();
+                    doSomething();
                 }catch(ex){
-                handleError(ex); //委托给处理器方法
-                }            # 优化后的代码，handleError方法是catch子句中唯一执行的代码。该函数接收异常对象作为参数，这样你可以更加灵活和统一的处理错误。
+                    handleError(ex); //委托给处理器方法
+                }           # 优化后的代码，handleError方法是catch子句中唯一执行的代码。该函数接收异常对象作为参数，这样你可以更加灵活和统一的处理错误。
                             ## 由于只执行一条语句，且没有局部变量的访问，作用域链的临时改变就不会影响代码性能了。
 
 ## 表达式
@@ -595,6 +537,7 @@ date: 2018-10-09T10:31:30+08:00
                 o instanceof f
                     计算f.prototype, 然后在o原型链中查找f, 找到则返回true
         typeof 运算符
+            # 返回一个对象的类型描述字符串
             typeof value == "string" ? "'" + value + "'" : value
             typeof(value)        # 可以写作函数的形式
             返回值
@@ -660,6 +603,8 @@ date: 2018-10-09T10:31:30+08:00
                 数字==字符串, 字符串转换为数字比较, true转换成1比较
                 "1"==true    # 同时转换为数字比较
                 对象根据另一个值的类型转换
+            === 与 ==
+                不同类型间比较，==之比较“转化成同一类型后的值”看“值”是否相等，===如果类型不同，其结果就是不等
         !=, !==是==, ===的求反
     比较运算符
         <, >, <=, >=
@@ -1819,19 +1764,19 @@ date: 2018-10-09T10:31:30+08:00
             ## 继承的对象有setter方法且是accessor属性时，修改属性时会由当前对象(非原型对象)调用setter方法。
             ### 由当前对象调用，所以还是不会修改原型链
             ### setter方法如setTitle()
-##### inherit(p)函数
-    function inherit(p){
-        if(p == null) throw TypeError();
-        if(Object.create) return Object.create(p);
-        var t = typeof p;
-        if(t !== "object" && t !== "function") throw TypeError();
-        function f(){};
-        f.prototype = p;
-        return new f();
-    }
-    var o = {x: "don't change this value"};
-    library_function(inherit(o));
-        # 可以防止对o的意外修改
+    inherit(p)函数
+        function inherit(p){
+            if(p == null) throw TypeError();
+            if(Object.create) return Object.create(p);
+            var t = typeof p;
+            if(t !== "object" && t !== "function") throw TypeError();
+            function f(){};
+            f.prototype = p;
+            return new f();
+        }
+        var o = {x: "don't change this value"};
+        library_function(inherit(o));
+            # 可以防止对o的意外修改
 
 ### 数组
     介绍
@@ -2134,6 +2079,15 @@ date: 2018-10-09T10:31:30+08:00
             ＃es6中引用加载机制保证even, odd函数能加载，所以可执行。而CommonJS中循环引用，even和odd函数都不会加载
 
 ## 标准
+    Netscape(现Mozilla)创建JavaScript, 但JavaScript是Sun(现Oracle)的注册商标
+    作为标准提交给ECMA(欧洲计算机制造协会), 改名为ECMAScript
+        ECMAScript 3(ES3) 作为标准广泛使用
+        ECMAScript 5(ES5) 定义了新的语言标准
+        JavaScript1.5是Mozilla的版本号, 相当于ES3,包含一些非标准语言扩展
+            JavaScript1.8 在实现es7
+        JavaScript解释器或引擎(engine)也有版本号
+            Google的叫做V8(现在是4.0)
+    微软改动并取名Jscript
 ### ECMAScript 6
     介绍
         目标使JavaScript可以写复杂的应用程序、函数库、代码自动自成器(code generator)
@@ -2271,6 +2225,8 @@ date: 2018-10-09T10:31:30+08:00
 ## 正则
     基本字符
         会精确匹配一段字符，如hi。这段字符可以出现多次
+    字面量
+        /^[a-z]+$/.text(str);        # ^代表开头, $是结尾
     转义
         \
     元字符
@@ -2544,7 +2500,10 @@ date: 2018-10-09T10:31:30+08:00
     (?(exp)yes|no)                    # 把exp当作零宽正向先行断言，如果能匹配，使用yes作为此组表达式，否则使用no
                                     ## (?(exp)yes) 只使用空表达式为no
                                     ## (?(name)yes|no) 命名为name的组捕获到内容，使用yes
-
+# 浏览器
+    js执行顺序
+        当页面载入时，会执行位于 body 部分的 JavaScript。
+        当被调用时，位于 head 部分的 JavaScript 才会被执行。
 # api
 ## 全局
     属性

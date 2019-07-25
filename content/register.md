@@ -253,7 +253,8 @@ type: docs
             <M - 数字>            # 切换到tag
             <M - j> <M - k>      # 本tag切换client
             <M - 空格>            # 变布局
-
+    ~/.xinitrc
+        exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
     ~/.config/awesome/rc.lua
         # 默认在/etc/xdg/awesome/rc.lua
 

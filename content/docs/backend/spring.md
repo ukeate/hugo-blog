@@ -746,7 +746,7 @@
 # spring security
     Subject: 主体数据结构, 如用户
     SecurityManager: 安全管理器, 管理所有subject
-# struts2
+# spring struts2
     原理
         tomcat启动日志：没有整合时不能加载struts-plugin.xml（spring-struts-plugin.jar包中的配置文件 ）
         struts中struts-default中常量配置加载com.opensymphony.xword2.ObjectFactory类作为默认struts创建action的类
@@ -776,4 +776,156 @@
             SysStaffActionID ->
             struts.xml配置中的<action class="SysStaffActionID">
         最后给Dao中的方法加入事务
+# spring boot
+    介绍
+        减少配置, 习惯大于配置
+    基础文件
+        XxxApplication                  # 程序入口
+            @SpringBootApplication      # 类，组合@Configuration, @EnableAutoConfiguration, @ComponentScan
+                @EnableAutoConfiguration根据jar包依赖自动配置
+                扫描该注解同级下级包的Bean
+        XxxApplicationTests             # 空junit测试
+        application.properties          # 或application.yml, 放在src/main/resources或config目录下
+            server.port=8080                        # 默认8080
+            server.servlet.context-path=/hello      # uri前缀
+            xxx: 1                                  # 自定义value
+                配置文件中用"${xxx}"引用
+                类中用@Value("${xxx}")注入到属性
+            xx.yy: 1                                # 可用properties类管理属性
+                @Component
+                @ConfigurationProperties(prefix = "xx")
+                public class XxProperties {
+                    private String yy;
+                    ...getter和setter...
+                }
 
+
+        pom.xml
+            <parent>
+                <artifactId>spring-boot-starter-parent</artifactId>             # 此父级依赖提供了spring boot的功能, 提供maven依赖, 常用包不用再设置version
+            </parent>
+
+    热部署
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <optional>true</optional>                                       # 热部署
+            </dependency>
+        application.yml
+            spring:
+              devtools:
+                restart:
+                  enabled: true
+                  additional-paths: src/main/java
+    注解
+        控制器
+            @RestController             # 类, 组合@Controller与@responseBody
+            @RequestMapping("/index")   # 方法, url
+        组件
+            @Component
+            @ConfigurationProperties    # 注入properties对应名称的属性
+        属性
+            @Value("${xxx}")
+            @Autowired                  # 装载bean
+    jsp
+        pom.xml
+            <!-- servlet依赖. -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+            </dependency>
+
+            <!-- tomcat的支持.-->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-jasper</artifactId>
+                <scope>provided</scope>
+            </dependency>
+        application.yml
+            spring:
+              mvc:
+                view:
+                  prefix: /WEB-INF/views/
+                  suffix: .jsp
+        controller类
+            @Controller
+            public class XxxController {
+                @RequestMapping("/xxx")
+                public String xxx(Model m) {
+                    m.addAttribute("a", 1);
+                    return "view1";
+                }
+            }
+        src/main/webapp/WEB-INF/views/view1.jsp
+            <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+            jsp ${a}
+    mybatis
+        pom.xml
+            <!-- mybatis -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <!-- mysql -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.21</version>
+            </dependency>
+        application.yml
+           spring:
+              datasource:
+                url: jdbc:mysql://127.0.0.1:3306/outrun?characterEncoding=UTF-8
+                username: root
+                password: asdf
+                driver-class-name: com.mysql.jdbc.Driver
+              jpa:
+                hibernate:
+                  ddl-auto: update  # 新建连接必要
+        pojo/User
+            public class User {
+                private Integer id;
+                private String telephone;
+                ...getter, setter...
+            }
+        mapper/UserMapper
+            @Mapper
+            public interface UserMapper {
+                @Select("select * from user")
+                List<User> findAll();
+            }
+        controller/UserController
+            @Controller
+            public class UserController {
+                @Autowired
+                UserMapper userMapper;
+
+                @RequestMapping("/listUser")
+                public String listUser(Model model) {
+                    List<User> users = userMapper.findAll();
+                    model.addAttribute("users", users);
+                    return "listUser";
+                }
+            }
+        webapp/WEB-INF/views/listUser.jsp
+            <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+            <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+            <table align='center' border='1' cellspacing='0'>
+                <tr>
+                    <td>id</td>
+                    <td>name</td>
+                </tr>
+                <c:forEach items="${users}" var="s" varStatus="st">
+                    <tr>
+                        <td>${s.id}</td>
+                        <td>${s.telephone}</td>
+                    </tr>
+                </c:forEach>
+            </table>

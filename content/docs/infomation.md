@@ -4,26 +4,34 @@ title: "Infomation"
 date: 2018-10-10T20:56:27+08:00
 ---
 
-# 信息公布
-    infoq
-    hackernews
-    v2ex
-    quora
-    freebuf
-    http://www.123cha.com/alexa/
-        # 网站排名查询
-# 做题
-    http://www.codewars.com/
-        # haskell等语言在线做题
-    https://leetcode.com/problemset/algorithms/
-        # leetcode
-    codility.com
-# 自学
-    公众号
+# 工具
+    http://lpaste.net/
+        # 粘代码
+    https://pastee.org/
+        # 粘贴代码
+    http://editor.method.ac/
+        # 在线ps
+    https://www.processon.com/
+        # 在线思维导图, uml等
+    https://www.gliffy.com/go/html5/launch
+        # 在线画图
+    etherpad.org
+        # 在线协作无缝编辑
+    www.webpagetest.org
+        # web test
+    http://www.lmgtfy.com/?q=Linux#seen
+        # let me google this for you
+    http://tool.lu/coderunner/
+        # 在线repl
+    http://bird.so
+        # 程序信息搜索
+    zeplin
+        # 设计和前端协同工具
+# 更新学习
     大前端
     http://a.haskellcn.org/study
         # haskell书目录
-    liaoxuefeng        
+    liaoxuefeng
         # 廖雪峰blog
     http://blogjava.net/
         # blog java
@@ -42,13 +50,48 @@ date: 2018-10-10T20:56:27+08:00
         # js动画博客
     http://calvin1978.blogcn.com/articles/javabookshelf.html
         # 江南白衣的书架
-    http://www.cnblogs.com/iamzhanglei/        
+    http://www.cnblogs.com/iamzhanglei/
         # 当耐特的博客
     http://jm-blog.aliapp.com/
         # 阿里中间件博客
     https://softwarefoundations.cis.upenn.edu/
         # pl基础
+# 留查
+    vim实用技巧
+    算法设计与分析基础
+    代码之髓
+    阿里巴巴Java开发手册
+    黑马程序员面试宝典
+    http://matt.might.net/articles/by-example-continuation-passing-style/
+        # cps js
+    http://cio.it168.com/a2014/0412/1612/000001612669.shtml
+        # 腾讯实时计算平台
+    http://netsmell.com/post/pathfinding.html
+        # 路径搜索算法演示
+    http://cnfeat.com/blog/2014/05/10/how-to-build-a-blog/
+        # github blog
+    http://deerchao.net/tutorials/regex/regex.htm
+        # js 正则30分钟入门
+    http://users.cis.fiu.edu/~weiss/dsaajava3/code/
+        # 数据结构与算法java实现
+    http://baike.baidu.com/link?url=6vYdLr4ghh7mktVyhgBNtGvENIacWTmPJdj-LRFRhUd8HIdbUPDtDl4fDBpvhPUmohesqtv2ekSMvYc17Xcb2a
+        # 社会生活十大法则
+    http://www.ecma-international.org/
+        # ecma标准
+    http://blog.csdn.net/carpinter/article/details/6975740
+        # 标准缩写
+    https://www.elastic.co/blog/great-mapping-refactoring#conflicting-mappings
+        # es 字段名字冲突
+    http://blog.csdn.net/napoay/article/details/53907921
+        # es ik pinyin
+    https://github.com/avelino/awesome-go
+        # awesome go
+    https://segmentfault.com/a/1190000000437463
+        # Go并发模式：管道和取消
+    http://tutorials.jenkov.com/java-concurrency/index.html
 # 资源
+    java1234.com
+        # pdf书籍资源
     堆糖
     gitter.im
         # 社区成长问答区
@@ -64,8 +107,6 @@ date: 2018-10-10T20:56:27+08:00
         # 乌云网，白帽
     http://www.iconfont.cn/plus
         # 在线图标
-    https://sukebei.nyaa.se/
-            nt browse
     http://www.k8sec.com/forum.php
         # 社工库
     http://www.blendswap.com/
@@ -75,7 +116,21 @@ date: 2018-10-10T20:56:27+08:00
     ftp1.linuxidc.com
         # linux书ftp
         ftp1.linuxidc.com http://www.linuxidc.com
-# 漂亮
+# 做题
+    http://www.codewars.com/
+        # haskell等语言在线做题
+    https://leetcode.com/problemset/algorithms/
+        # leetcode
+    codility.com
+# 信息公布
+    infoq
+    hackernews
+    v2ex
+    quora
+    freebuf
+    http://www.123cha.com/alexa/
+        # 网站排名查询
+# 效果
     http://graphicnovel-hybrid4.peugeot.com/start.html
     http://wildflower.resn.co.nz/
     http://acko.net/blog/making-love-to-webkit/
@@ -131,63 +186,7 @@ date: 2018-10-10T20:56:27+08:00
         # canvas视频破碎
     http://www.html5tricks.com/demo/html5-cool-fire-effect/index.html
         # 火焰
-# 留查
-    vim实用技巧
-    算法设计与分析基础
-    代码之髓
-    阿里巴巴Java开发手册
-    黑马程序员面试宝典
-    http://matt.might.net/articles/by-example-continuation-passing-style/
-        # cps js
-    http://cio.it168.com/a2014/0412/1612/000001612669.shtml
-        # 腾讯实时计算平台
-    http://netsmell.com/post/pathfinding.html
-        # 路径搜索算法演示
-    http://cnfeat.com/blog/2014/05/10/how-to-build-a-blog/
-        # github blog
-    http://deerchao.net/tutorials/regex/regex.htm
-        # js 正则30分钟入门
-    http://users.cis.fiu.edu/~weiss/dsaajava3/code/
-        # 数据结构与算法java实现
-    http://baike.baidu.com/link?url=6vYdLr4ghh7mktVyhgBNtGvENIacWTmPJdj-LRFRhUd8HIdbUPDtDl4fDBpvhPUmohesqtv2ekSMvYc17Xcb2a
-        # 社会生活十大法则
-    http://www.ecma-international.org/
-        # ecma标准
-    http://blog.csdn.net/carpinter/article/details/6975740
-        # 标准缩写
-    https://www.elastic.co/blog/great-mapping-refactoring#conflicting-mappings
-        # es 字段名字冲突
-    http://blog.csdn.net/napoay/article/details/53907921
-        # es ik pinyin
-    https://github.com/avelino/awesome-go
-        # awesome go
-    https://segmentfault.com/a/1190000000437463
-        # Go并发模式：管道和取消
-    http://tutorials.jenkov.com/java-concurrency/index.html
         # java并发指南
-# 工具
-    http://lpaste.net/
-        # 粘代码
-    https://pastee.org/
-        # 粘贴代码
-    http://editor.method.ac/
-        # 在线ps
-    https://www.processon.com/
-        # 在线思维导图, uml等
-    https://www.gliffy.com/go/html5/launch
-        # 在线画图
-    etherpad.org
-        # 在线协作无缝编辑
-    www.webpagetest.org
-        # web test
-    http://www.lmgtfy.com/?q=Linux#seen
-        # let me google this for you
-    http://tool.lu/coderunner/
-        # 在线repl
-    http://bird.so
-        # 程序信息搜索
-    zeplin
-        # 设计和前端协同工具
 # 招聘
     100offer
     36氪
