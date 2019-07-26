@@ -3,8 +3,10 @@
     Alb        automaticLoopBack 自动回环，虚拟接口
     sdn        software defined network 软件定义网络
 
-# mesh
+# service mesh
     # 服务网格
+## service fabric
+    # 微软
 ## lstio
     #google IBM, lyft开源，基于envoy
     组成
@@ -12,6 +14,8 @@
         控制面板
 ## linkerd
     # buoyant出品
+## conduit
+    # 面向k8s轻量化mesh
 ## fingle
     # twitter出品
 ## envoy
@@ -30,7 +34,7 @@
     # 根据应用模板，动态生成很多tomcat, mysql, nosql, 动态控制这些实例的启停。
 ## openstack
     # 云操作系统，管理虚拟资源
-# 分布式服务
+# 分布式服务(容器调度编排)
 |特性             |dubbo                      |spring cloud                        |k8s|
 |:----------------|:--------------------------|:-----------------------------------|:--|
 |配置管理          |-                          |config                              |k8s configMap|
@@ -43,13 +47,6 @@
 |安全模块          |-                          |spring cloud security               |-
 |分布式日志        |                           |ELK                                 |EFK
 |任务管理          |                           |spring batch                        |k8s jobs
-## hsf
-    # high-speed service framework, 阿里出品， socket直连
-    特点
-        不增加中间点(稳定，高度可伸缩)
-    结构
-        注册服务信息，推送服务地址
-        基于osgi
 ## kubernetes
     # google开源的，borg的发展，在docker技术上，管理容器化应用
     特点
@@ -57,6 +54,11 @@
             为了让apache一直服务， 自动监控、重启、新建等
             规划器找到服务合适的位置
         pod运行容器
+    作用
+        资源调度
+        部署运行
+        服务发现
+        扩容缩容
     架构
         cluster
             master
@@ -72,11 +74,32 @@
                 kube-proxy              # 为pod提供代理
                 fluentd                 # 日志收集、存储、查询
                 kube-dns                # 服务dns解析
-    作用
-        资源调度
-        部署运行
+## spring cloud
+    介绍
+        spring boot基础上构建，快速构建分布式系统
+        面向云环境架构(云原生)    # 适合在docker和paas部署
+    功能
+        配置管理
         服务发现
-        扩容缩容
+        熔断
+        智能路由
+        微代理
+        控制总线
+        分布式会话
+        集群状态管理
+    子项目
+        spring cloud netflix    # 对netflix oss套件整合
+            eureka     # 服务治理(注册、发现)
+            hystrix    # 容错管理
+            ribbon     # 软负载均衡(客户端)
+            feign      # 基于hystrix和ribbon，服务调用组件
+            zuul       # 网关，智能路由、访问过滤
+            archaius   # 配置
+        spring cloud config     # 应用配置外部化, 推送客户端配置
+        spring cloud bus        # 消息总线，传播集群状态变化来触发动作
+        spring cloud security   # 应用安全控制
+        spring cloud consul     # 封装consul(服务发现与配置, 与docker无缝)
+        spring cloud sleuth     # 跟踪
 ## Dubbo
     介绍
         阿里开源，分布式服务框架，rpc方案，soa治理
@@ -85,11 +108,11 @@
         集群容错    # 负载均衡，容错，地址路由，动态配置
         自动发现    # 注册中心
     节点
-        container   # 容器
-        provider    # 提供者
-        registry    # 注册中心
-        consumer    # 消费者
-        monitor     # 监控中心
+        容器(container)
+        提供者(provider)
+        消费者(consumer)
+        注册中心(registry)
+        监控中心(monitor)
         调用关系
             容器启动提供者
             提供者注册
@@ -128,7 +151,21 @@
                 timeout=”10000000” />
     注册中心
         zookeeper
-## spring cloud
+## orleans
+    # .NET
+## hsf
+    # high-speed service framework, 阿里出品， socket直连
+    特点
+        不增加中间点(稳定，高度可伸缩)
+    结构
+        注册服务信息，推送服务地址
+        基于osgi
+    组件
+        服务提供者
+        消费者
+        地址服务器
+        配置服务器               # 分布式配置
+        规则服务(diamond)       # 设置(黑白名单，认证，权重，限流)与推送
 
 # soa
     # 面向服务架构 service oriented architecture

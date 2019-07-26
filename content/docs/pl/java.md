@@ -1963,17 +1963,8 @@ date: 2018-10-09T08:48:07+08:00
         类型
             is_xxx  unsigned tinyint    # 1是0否
             唯一索引名 uk_字段名，普通索引idx_字段名        # unique key, index
-            小数类型decimal，不用float double
-                # float和double存储的时候，存在精度损失的问题
-                # 长度超过decimal范围，拆成整数和小数分开存
-            字符串长度几乎相等，使用char定长字符串类型
-            varchar变长字符串，不预先分配空间，长度不要超过5000。大于5000存text,独立出表用主键对应，避免影响其它字段索引效率
-            合适的字符长度，不但节约表空间，节约索引存储，更提升检索速度
-                unsigned tinyint    0到255
-                unsigned smallint    0到65535
-                unsigned int    0到42.9亿
-                unsigned bigint    0到10的19次方
         表名、字段名
+            库名与应用名尽量一致
             小写与数字
             不数字开头
             不能下划线间仅有数字
@@ -1986,54 +1977,7 @@ date: 2018-10-09T08:48:07+08:00
                 gmt_modified date_time
             表名 业务名称_表的作用，如tiger_task, mpp_config
             字段含义修改或追加状态时，及时更新注释
-            字段可冗余，为了提高性能，但要考虑同步。不能是频繁修改的字段，不是varchar和text
-        库名与应用名尽量一致
-            单表行数超过500万或意表容量超过2GB，才分库分表
-        索引
-            有唯一特性，都建唯一索引
-                # insert速度损耗可以忽略，但明显提高查找速度
-                # 不建唯一索引，总会有脏数据产生
-            禁止三表join
-                join的字段类型要一致
-                被关联的字段需要有索引
-                注意sql性能
-            varchar建索引，要指定索引长度
-                一般字符串数据，长度为20的索引，区分度高达90%以上
-                count(distinct left(列名，索引长度)) / count(*)来计算
-            严禁左模糊或全模糊
-            order by注意利用索引的有序性，order by最后的字段是组合索引的最后，避免file_sort
-                如 where a=? and b=? order by c; 索引 a_b_c
-                有范围查找时，有序性无法利用，如 where a>10 order by b
-            用覆盖索引来变相加快查询，如explain的结果，命中时出现using index
-            多分页场景利用延迟关联或子查询     ＃ 避免offset之前全查的问题
-                SELECT a.* from 表1 a, (select id from 表1 where 条件 LIMIT 100000,20) b where a.id=b.id
-                    # 先快速定位id
-            sql优化至少到range级别
-                # explain结果，type=index，索引物理文件全扫描，几乎相当于全表扫描
-                consts 单表中最多有一个匹配行(主键或唯一索引), 在优化阶段即可读取到数据
-                ref 使用普通的索引
-                range 对索引进行范围检索
-            建组合索引时，区分度最高的在左边
-                where a=? and b=? ，a列几乎接近唯一值，只需要建idx_a索引
-                非等号和等号混合时，等号是最左边，如where a>? and b=?, 那么b在索引最前列
-        sql
-            使用count(*)统计行数
-                count(distinct col1, col2)来计算不重复
-            sum(col)会返回null，如下解决
-                SELECT IF(ISNULL(SUM(g)), 0, SUM(g)) FROM table1
-            使用ISNULL()来判断NULL
-                # NULL与任何值比较都为NULL
-            分页时count为0直接返回
-            不使用外键与级联
-            不使用存储过程     # 难调试和扩展，没有移植性
-            修改数据时，先select，避免误删除和修改
-            in操作尽量避免，要仔细评价in后边元素数量，控制在1000内
-            全球化用utf-8，要使用表情，用utfmb4
-                SELECT LENGTH("轻松工作") 返回 12
-                SELECT CHARACTER_LENGTH("轻松工作") 返回4
-            TRUNCATE快，但无事务不触发trigger, 不要在开发代码中使用
         orm
-            不要*查询       # 增加查询分析器解析成本，增减字段容易与resultMap不一致
             boolean属性POJO不加is, 数据库前缀is_
                 # mybatis generator生成的代码中需要修改
             不能返回resultClass, HashMap, Hashtable

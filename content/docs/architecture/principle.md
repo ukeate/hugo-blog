@@ -7,49 +7,13 @@ date: 2018-10-10T15:25:12+08:00
 # 基础
     CAP定理
         # 当面临分区的时候，必须在一致性和可用性之间权衡
-        Consistency(一致性)
-        Availability(可用性)
-        Partition tolerance(分区容错性)
-
-# 模块
-    服务
-        注册
-        发现
-    性能/ha
-        区域感知load balance
-        故障切换
-        故障注入
-        熔断
-        健康检查
-        流量拆分和推出
-    策略
-        quota
-            网络数据
-            api调用
-        服务准入条件
-        路由规则
-        容错
-        访问策略
-    安全
-        服务间认证(auth)
-        tls
-        细粒度权限控制
-    配置
-        啮合层
-            # 服务与网络间加入透明层，用来功能配置
-    查看
-        服务网可视化
-        monitor
-        log
-        tracing
-    迭代
-        部署
-        版本控制
-    平台支持
-        # 如aws, k8s, mesos
-    通讯能力
-        # http/1.1 http/2 grpc tcp
-
+        一致性Consistency
+        可用性Availability
+        分区容错性Partition tolerance
+    BASE    # 解决CAP
+        基本可用(basic available)
+        软状态(soft state)
+        最终一致性(eventually consistent)
 # cpu
     介绍
         单cpu串行工作，前任务完成，后任务才开始
@@ -93,7 +57,6 @@ date: 2018-10-10T15:25:12+08:00
         MIMD
                 多处理机
                 多计算机
-
 ## 进程调度
     等级
         高级调度(High-Level Scheduling)
@@ -719,19 +682,53 @@ date: 2018-10-10T15:25:12+08:00
         computer telecommunication integration
             计算机技术应用到电话系统中，识别信令信息进行处理，传送预定录音文件
             转接来话，处理传真，电子邮件等
-# 高可用(high available)
-## 负载均衡与反向代理
-## 隔离
-## 限流
-## 降级
-## 超时与重试
-## 回滚
-## 压测
-# 高并发(high concurrency)
-## 应用级缓存
-## http缓存
-## 多级缓存
-## 连接池线程池
-## 异步并发
-## 扩容
-## 队列
+
+# 分布式服务
+    架构
+        服务网格
+        容器调度编排
+        容器runtime
+        基础设施
+                # 云服务器
+    分层
+        服务
+            对外网关
+            服务容器    # 如aws, k8s, mesos
+                通讯能力    # http/1.1 http/2 grpc tcp
+            配置(分布式)
+                部署
+                版本控制
+            网关
+                访问策略/认证(auth)
+                    细粒度权限控制
+                智能路由
+            服务治理(注册,发现)
+                区域感知、load balance
+                容错: 故障切换、熔断、故障注入测试
+                流量拆分和推出
+        监控
+            metrics(api统计, cpu、内存、时长、平均、缓存命中等)
+            调用链跟踪(tracing)
+            日志
+            健康检查和告警
+            服务网可视化
+        对外
+            授权(OAuth2)
+            安全传输协议(tls)
+            限流(quota)   # 网络数据、api调用
+## 高可用(high available)
+### 负载均衡与反向代理
+### 隔离
+### 限流
+### 降级
+### 超时与重试
+### 回滚
+### 压测
+## 高并发(high concurrency)
+### 应用级缓存
+### http缓存
+### 多级缓存
+### 连接池线程池
+### 异步并发
+### 扩容
+### 队列

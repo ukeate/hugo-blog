@@ -97,3 +97,47 @@ type: docs
         # 加权分配资源
         dominant resource fairness (DRF)
             # 一种 max-min fairness实现，可以多资源分配
+# 分布式算法
+    特点
+        分布性，并发性
+    一致性hash
+        取余hash
+            服务器号 % 节点数      # 容错性和扩展性不好
+        一致性hash
+            建立环坐标, hash每个ip到坐标, 称为节点
+            hash每个请求到坐标，顺序向后找第一个节点处理
+        均匀一致性hash
+            设置虚拟节点, 使请求分配尽量均匀
+        虚拟槽     # redis
+            建固定数个槽, 节点负责多个槽，请求映射到槽
+    paxos
+        # 共识(consensus)算法
+        角色
+            proposer        # 提案发起者
+            acceptor        # 提案投票者
+            learner         # 提案chosen后，同步到其它acceptor
+        第一阶段
+            proposer向超过半数acceptor发送prepare(带编号和value)
+            acceptor收到prepare, 编号最大时回复promise(带上之前最大value), 小则不理会
+        第二阶段
+            proposer收到超过半数promise, 选取最大value, 发送accept
+            acceptor收到accept, 编号同自身时更新value, 回复accepted
+    raft
+        # 共识算法
+        角色
+            leader      # 接受请求，向follower同步请求日志并通知提交日志
+            follower
+            candidate   # leader选举中的临时角色
+        过程
+            开始一个leader,其它follower
+            leader挂掉，一个follower timeout变为candidate, 发送选举请求(RequestVote)
+            超一半同意，该节点变leader, 并发送heartbeat持续刷新timeout
+            两个candidate未过半，等timeout后重试
+            旧leader重连，选举编号小，自动变follower
+    BFT(拜占庭算法)
+        # 在部分捣乱中达成一致
+        总数大于3m, 背叛m，可达成一致
+    PBFT(实用拜占庭算法)
+        pre-prepare
+        prepare
+        commit

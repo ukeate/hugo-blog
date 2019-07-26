@@ -565,71 +565,136 @@ type: docs
 
 # 性能优化
     设计
-        查询优化，避免全表扫描
-        列尽量not null
-        where与order by涉及列建索引
-        where中不做null判断            # 会放弃使用索引
-        字段值大量重复时，索引作用不大
-        索引降低insert与update效率
-        尽量多建unique索引
-        少更新索引数据列            # 数据列为表存储方式，更新会调整整表存储
-        尽量用数字类型
-        varchar代替char           # 存储空间小，较小字段搜索快
-        用表变量代替临时表
-        表变量数据大时，只有主键索引
-        大量重复引用大型表或常用表数据时，可创建临时表。一次性事件，最好导出表
-        临时表时数据大时, 用select into代替create table, 避免log过多
-        临时表最后要先truncate, 再drop, 避免表较长时间锁定
-    语句
-        不利索引的符号
-            in
-            not in
-            is null
-            is not null
-            <>
-        where中用or时，引擎放弃索引
-        like '%a'模糊开头，引擎放弃索引
-        where使用参数，会全盘扫描       # sql运行时解析局部变量，访问计划在编译时进行
-            select id from t where num=@num 改为
-            select id from t with(index(索引名)) where num=@num    # 强制使用索引
-        where =左边函数，表达式运行,引擎放弃索引
-            where num/2=100 改为
-            where num = 100*2
+        表
+            不要代价高的关系(外键、级联)
+            字段可冗余，为了提高性能，但要考虑同步。不能是频繁修改的字段，不是varchar和text
+            单表行数超过500万或意表容量超过2GB，才分库分表
 
-            where year(admin_time)>2014 改为
-            where admin_time>'2014-01-01'
-        where对字段函数操作，引擎放弃索引
-            where substring(name,1,3)='abc' 改为
-            where name like 'abc%'
-        不要写无意义查询
-            select a into #t from t where 1=1 改为
-            create table #t
-        exists代替in
-            select num from a where num in(selct num from b)    改为
-            select num from a where exists(select 1 from b where num=a.num)
-        不要select *
-        不要用游标，游标效率差
-        避免返回大量数据
-        避免大事务
-        多表联合查询拆分多个query     # 容易锁表和阻塞
-        join时，小结果驱动大结果      # left join小表在左
-            优化前
-                select * from admin
-                left join log on admin.admin_id = log.admin_id
-                where log.admin_id>10
-            优化后
-                select * from
-                    (select * from admin where admin_id>10) T1
-                left join log on T1.admin_id = log.admin_id
+            用表变量代替临时表
+            表变量数据大时，只有主键索引
+            大量重复引用大型表或常用表数据时，可创建临时表。一次性事件，最好导出表
+            临时表时数据大时, 用select into代替create table, 避免log过多
+            临时表最后要先truncate, 再drop, 避免表较长时间锁定
+        类型
+            尽量not null
+            数字类型尽量用
+            char存几乎定长字符串类型
+            varchar变长字符串，不预先分配空间，长度不要超过5000
+            text存大于5000,独立出表用主键对应，避免影响其它字段索引效率
+            bool用unsigned tinyint
+            小数类型用decimal，不用float double
+                # float和double存储的时候，存在精度损失的问题
+                # 长度超过decimal范围，拆成整数和小数分开存
+            合适的字符长度，不但节约表空间，节约索引存储，更提升检索速度
+                unsigned tinyint    0到255
+                unsigned smallint    0到65535
+                unsigned int    0到42.9亿
+                unsigned bigint    0到10的19次方
+        索引
+            有唯一特性，都建唯一索引
+                # insert速度损耗可以忽略，但明显提高查找速度
+                # 不建唯一索引，总会有脏数据产生
+            where与order by涉及的列建索引
+            建组合索引时，区分度最高的在左边
+                where a=? and b=? ，a列几乎接近唯一值，只需要建idx_a索引
+                非等号和等号混合时，等号是最左边，如where a>? and b=?, 那么b在索引最前列
+            字段值大量重复时，索引作用不大
+            索引降低insert与update效率
+            索引数据列少更新           # 数据列为表存储方式，更新会调整整表存储
+            varchar建索引，要指定索引长度
+                一般字符串数据，长度为20的索引，区分度高达90%以上
+                count(distinct left(列名，索引长度)) / count(*)来计算
+    语句
+        where放弃索引，全盘扫描
+            比较符
+                in      # in元素尽量控制在1000内
+                not in
+                # exists代替in
+                    select num from a where num in(selct num from b)    改为
+                    select num from a where exists(select 1 from b where num=a.num)
+                is null
+                is not null
+                <>
+                or
+                like '%a'模糊开头
+
+            where对字段用表达式或运行函数
+                where num/2=100 改为
+                where num = 100*2
+
+                where year(admin_time)>2014 改为
+                where admin_time>'2014-01-01'
+            where使用参数       # 因为运行时解析局部变量，访问计划在编译时进行
+                select id from t where num=@num 改为
+                select id from t with(index(索引名)) where num=@num    # 强制使用索引
+        select
+            不要写无意义查询
+                select a into #t from t where 1=1 改为
+                create table #t
+            不要select *             # 增加查询分析器解析成本，增减字段容易与resultMap不一致
+            不select for update      # 长期锁定行(游标默认都用)
+                不要用游标
+        函数
+            使用count(*)统计行数
+                用count(distinct col1, col2)来计算不重复
+            sum(col)会返回null，如下解决
+                SELECT IF(ISNULL(SUM(g)), 0, SUM(g)) FROM table1
+            使用ISNULL()来判断NULL
+                # NULL与任何值比较都为NULL
+    业务
+        sql优化至少到range级别
+            # explain结果type=
+            # all 全表扫描
+            # index 扫描整个索引表，几乎相当于全表扫描
+            # range 用索引选择范围
+            # ref 非唯一索引扫描
+            # eq_ref 唯一索引扫描
+            # consts 索引一下就找到，单表中最多有一个匹配行(主键或唯一索引), 在优化阶段即可读取到数据
+            # system 表只有一行
+        库
+            不在数据库写逻辑           # 不使用存储过程, 难调试和扩展，没有移植性
+            正确锁类型                # 隐式锁、显式锁、行锁、页锁、范围锁、表锁、数据库锁
+            全球化用utf-8，要使用表情，用utfmb4
+                SELECT LENGTH("轻松工作") 返回 12
+                SELECT CHARACTER_LENGTH("轻松工作") 返回4
+        事务
+            不要多阶段提交             # 更好的拆分表，而不多阶段提交延长单一数据库生命
+            避免大事务
+        crud
+            TRUNCATE快，但无事务不触发trigger, 不要在开发代码中使用
+            修改数据时，先select，避免误删除和修改
+            分页时count为0直接返回
+            用覆盖索引来变相加快查询，如explain的结果，命中时出现using index
+            避免返回大量数据
+            order by注意利用索引的有序性，order by最后的字段是组合索引的最后，避免file_sort
+                如 where a=? and b=? order by c; 索引 a_b_c
+                有范围查找时，有序性无法利用，如 where a>10 order by b
+        联合
+            多表联合查询拆分多个query     # 容易锁表和阻塞
+            禁止三表join
+                join的字段类型要一致
+                被关联的字段需要有索引
+                注意sql性能
+            join时，小结果驱动大结果      # left join小表在左
+                优化前
+                    select * from admin
+                    left join log on admin.admin_id = log.admin_id
+                    where log.admin_id>10
+                优化后
+                    select * from
+                        (select * from admin where admin_id>10) T1
+                    left join log on T1.admin_id = log.admin_id
     mysql
         引擎选择
         limit 1
             只查一条时，加limit 1, 引擎会找到一条马上返回
-        limit基数大用between, 分页时要找到id
+        limit基数大用between, 分页时要找到id, 避免offset之前全查的问题
             优化前
                 select * from admin order by id limit 10000,10
             优化后
                 select * from admin where id between 10000 and 10010 order by id
+            子查询id
+                select a.* from 表1 a, (select id from 表1 where 条件 limit 100000,20) b where a.id=b.id
 # nosql
     介绍
         aggregate-oriented (面向聚合)
