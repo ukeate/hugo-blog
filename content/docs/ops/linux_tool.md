@@ -462,10 +462,20 @@ date: 2018-10-11T18:47:57+08:00
             --list-all
             --set-default-zone=public
     wget
-            -i filelist.txt
-                # 下载一个文件中的所有url
-            -np -m -l 5
-                # 不下载本站所链接的其它站点内容，5级目录结构
+        -i filelist.txt
+            # 下载一个文件中的所有url
+        -x  # 强制创建目录
+        -P  # 目录prefix
+        -r  # 递归下载
+        -l  # 最大递归深度, inf或0代表无限制
+        -k  # 修改链接，指向本地文件
+        -p  # 下载所有用于显示页面的资源, 如图片
+        -L  # 只跟踪relative链接
+        -N  # 只获取比本地新的文件
+        -np # 不追踪父目录
+        -m  # 缩写-N -r -l inf --no-remove-listing
+        --no-remove-listing         # 不删除listing文件
+
     ping
     telnet
     nmblookup -A ip

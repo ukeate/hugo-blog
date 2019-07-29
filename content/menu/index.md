@@ -11,6 +11,7 @@ headless: true
   - [代码](/docs/design/code)
   - [项目](/docs/design/project)
 - [**程序语言**] (/docs/pl)
+  - [原理](/docs/pl/principle)
   - [go](/docs/pl/go)
   - [js](/docs/pl/js)
   - [java](/docs/pl/java)

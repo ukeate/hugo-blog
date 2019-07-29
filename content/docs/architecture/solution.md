@@ -154,6 +154,17 @@ date: 2018-10-10T16:49:27+08:00
     node.js + mongodb
     tornado + celery + rabbitmq + 优先级
     quartz
+## 消息
+    功能
+        好友
+        单聊, 群聊
+        语音, 视频
+        im      # 浏览器聊天(tcp, 不https)
+    协议
+        XMPP        # 基于xml
+        MQTT        # 简单，但自己实现好友、群组
+        SIP         # 复杂
+        私有协议     # 工作量大，扩展性差
 ## go高并发实时消息推送
     问题
         长连接             # 支持多种协议(http、tcp)

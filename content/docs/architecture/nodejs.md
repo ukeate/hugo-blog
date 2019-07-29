@@ -5,7 +5,7 @@ date: 2018-10-11T10:33:48+08:00
 ---
 # 基础
     特点
-        commonJs规范      # 用于构建模块
+        commonJS规范
         javascript书写(v8引擎)
             js设计之初就可以运行在后端
             v8
@@ -13,10 +13,9 @@ date: 2018-10-11T10:33:48+08:00
                 没有i/o库, 没有历史包袱
                 v8性能好
         单线程
-        非阻塞io(non-blocking i/o model)
-            io与数据处理分离（所以必须异步）
-            线程池结合event-driven实现
-        事件驱动(event-driven)
+            不用在意多线程状态同步(没有死锁, 没有上下文切换)
+            无法利用多核, 错误时应用退出，计算密集时无法调度   # child_process解决
+        事件驱动(event-driven), 回调
             event loop
                 [while(true)] -> watcher -> handles
                 watcher产生事件后, event loop取到并执行其handle(回调函数)
@@ -28,22 +27,52 @@ date: 2018-10-11T10:33:48+08:00
                 windows: IOCP
                 Linux: epoll
                 Mac:kqueue
-        异步操作
+        非阻塞io(non-blocking i/o model)
+            io与数据处理分离（所以必须异步）
+            线程池结合event-driven实现
+        异步io
             go语言有协程(coroutine)而node.js没有，协程可以同步式编程
                 # 有第三方协程模块
             promise(commonJs的规范, 其实现有whenJs, Q)
                 # 书写难度降低
             eventProxy      # 朴灵
             async/step
+    commonJS
+        模块
+            var math = require('math')  # 缓存优先，核心模块优先。依次找.js, .node, .json
+            exports.add = function(){}
+        二进制
+        Buffer
+        字符集编码
+        I/O流
+        进程环境
+        文件
+        套接字
+        单元测试
+        web网关
+        包管理
+            package.json
+            bin
+            lib
+            doc
+            test
     实现技术
         libev的windows与linux接口实现
         c++扩展
+    事件循环    # 生产者消费者模型
+        执行一次称为Tick
+        询问观察者(文件、网络等)是否有待处理事件, 有关联回调执行回调
+            # 观察者先idle, 再io, 再check
+            通过请求对象实现，绑定回调、运行参数、执行标志
     层次
         javascript
         v8
         node
         libuv
         *nix/ windows                # 分别编译
+    应用
+        I/O密集服务
+        cpu密集用c/c++扩展，用子进程
 
 # 工具
     node --v8-options | grep harmony
@@ -51,7 +80,17 @@ date: 2018-10-11T10:33:48+08:00
     npm
         介绍
             cnpm是一个alibaba开发维护的，提供私有npm注册服务
-        搭建cnpm服务器
+        -v      # 版本
+        install     # 安装，会执行package.json中scripts的勾子命令
+            -g
+        uninstall
+        config
+            list    # 查看项目的默认设置。registry属性指向npm官方资源位置
+            set registry http://192.168.1.20:7001
+                # 设置源
+        test        # package.json中scripts的test
+
+        o-> 搭建cnpm服务器
             git clone https://github.com/cnpm/cnpmjs.org.git
             cd cnpmjs.org
             npm install npm -g
@@ -61,36 +100,25 @@ date: 2018-10-11T10:33:48+08:00
             config/index.js中注释bindingHost来对外网开放
             node --harmony_generators dispatch.js
                 # 启动了两个端口, 7001用于npm注册服务, 7002用于web访问
-        使用私有库
+        o-> 使用私有库
             npm install ape-algorithm --registry=http://192.168.1.20:7001
                 # 如果私有库中没有，cnpm会到npm中同步一个到cnpm, 再传给客户端一份
 
-        项目设置私有库
-            npm config list
-                # 查看项目的默认设置。registry属性指向npm官方资源位置
-            npm config set registry http://192.168.1.20:7001
-        用户设置私有库
-            // ~/.npmrc
-            registry=http://192.168.1.20:7001
-                # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
-        cnpm客户端
-            npm install cnpm
-                # 可以像使用npm一样使用
-            cnpm sync gulp
-                # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
-
-            调试
-                o-> 代码中插入断点
-                    debugger;
-                o-> 以debug模式运行
-                    # debug模式运行时, help查看可用命令
-                    node debug app.js
+        设置
+             ~/.npmrc
+                registry=http://192.168.1.20:7001
+                    # 淘宝翻墙库 https://registry.npm.taobao.org/
     n
-    node-gyp
+    node-gyp    # 编译c/c++模块
     nvm
     cnpm
         介绍
             cnpm是一个alibaba开发维护的，提供私有npm注册服务
+        安装
+            npm install cnpm
+                # 可以像使用npm一样使用
+            cnpm sync gulp
+                # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
         搭建cnpm服务器
             git clone https://github.com/cnpm/cnpmjs.org.git
             cd cnpmjs.org
@@ -112,13 +140,42 @@ date: 2018-10-11T10:33:48+08:00
             // ~/.npmrc
             registry=http://192.168.1.20:7001
                 # 另外，淘宝翻墙库 https://registry.npm.taobao.org/
-        cnpm客户端
-            npm install cnpm
-                # 可以像使用npm一样使用
-            cnpm sync gulp
-                # npm 中发布的包在cnpm中有延时，可以用这个命令来手动同步
+    调试
+        o-> 代码中插入断点
+            debugger;
+        o-> 以debug模式运行
+            # debug模式运行时, help查看可用命令
+            node debug app.js
 # 配置
     package.json
+        name                # 包名
+        description         # 简介
+        version             # 版本
+        keywords            # 搜索关键词
+        maintainers         # 维护者
+        contributors        # 代码贡献者
+        bugs                # 反馈bug的地址
+        licenses            # 许可证
+        repositories        # 托管代码地址
+        dependencies        # 依赖包
+        homepage            # 该包网站
+        os                  # 操作系统支持列表
+        cpu                 # cpu架构支持列表
+        engine              # 支持的js引擎, 如ejs
+        builtin             # 内建在底层系统的哪些组件上
+        directories         # 目录说明
+        implements          # 实现了commonJS哪些规范
+        scripts             # 脚本命令
+            preinstall
+            install
+            uninstall
+            test
+        author              # 包作者
+        bin                 # 全局安装时，命令安装的位置
+        main                # require()包时入口，默认找index
+        devDependencies     # 开发时需要的依赖
+
+        o->
         {
             "name": "test",
             "version": "0.1.0",
@@ -148,19 +205,17 @@ date: 2018-10-11T10:33:48+08:00
                 "node": "5.0.0"
             }
         }
-        contributors
-        bugs
-        licenses
-        repositories
-        homepage
-        cpu
-        builtin
-                # 内建在底层系统的哪些组件上
-        directories
-        implements
-        bin
-                # 全局安装bin命令的位置
 # api
+## 异步api
+    I/O操作api
+    setTimeout() setInterval()
+        定时器插入观察者的红黑树中, tick时迭代定时器，如果超时就形成事件
+            # 如果前一个tick耗时大，定时会拖后
+            # 比较浪费性能
+    process.nextTick()
+        回调放入队列，下tick全部执行, 位于idle观察者
+    setImmediate()
+        回调放入链表, 每tick执行一个，位于check观察者，晚于idle
 ## 宿主对象
     global      #全局对象
         root    # 指向自己
@@ -620,8 +675,8 @@ date: 2018-10-11T10:33:48+08:00
     execFile(command[, args])
         # 执行可执行文件，不解析args,防止了exec参数注入的风险
         child.execFile('/bin/ls', ['-l', '.'], function(err, result){})
-    fork
-        # 同spawn, 但建立父进程与子进程之间的通信管道
+    fork()
+        # 同spawn, 但建立ipc(进程通信, inter-process communication)
         var n = child.fork('./son.js');
         n.on('message', function(){
             console.log('Main listen: ', m);
@@ -632,18 +687,30 @@ date: 2018-10-11T10:33:48+08:00
             console.log('Son listen: ', m);
         });
         process.send({hello: 'i am child'});
-    子进程对象方法
-        send
+    子进程对象
+        send()
             # 发送消息和句柄，句柄可以是
             ## net.Socket, net.Server, net.Native(c++层面的tcp套接字或IPC管道), dgram.Socket, dgram.Native
-        kill
+        kill()
             # 向子进程发送SIGTERM信号
-    子进程事件
-        message
-        error
-        exit
-        close
-        disconnect
+        事件
+            message
+            error
+            exit
+            close
+            disconnect
+
+    o-> cpu核数worker
+        o-> master.js
+        var fork = require('child_process').fork
+        var cpus = require('os').cpus()
+        for (var i = 0; i < cpus.length; i++){
+            fork('./worker.js')
+        }
+
+        o-> worker.js
+        var http = require('http')
+        http.createServer(function(req, res){...}).listen(Math.round((1+Math.random()) * 1000), '127.0.0.1')
 
     o-> spawn
     var spawn = require('child_process').spawn
@@ -719,6 +786,33 @@ date: 2018-10-11T10:33:48+08:00
             })
         }
     })
+### cluster
+    介绍
+        child_process和net模块的组合
+            cluster启动时，内部启动tcp服务器
+            fork()时，将tcp服务器socket文件描述符发给worker, 实现共享端口
+    isWorker
+        判断process.env是否值为NODE_UNIQUE_ID
+    isMaster
+        判断cluster.isWorker
+    事件
+        fork            # fork时
+        online          # 工作进程创建好后
+        listening       # 工作进程调listen()后
+        disconnect      # 主进程和工作进程IPC通道断开后
+        exit            # 所有工作进程退出后
+        setup           # cluster.setupMaster()执行后
+
+    o-> cpu核数worker
+    var cluster = require('cluster')
+    cluster.setupMaster({
+        exec: "worker.js"
+    })
+
+    var cpus = require('os').cpus()
+    for (var i = 0; i < cpus.length; i++) {
+        cluster.fork()
+    }
 ### domain
     介绍
         用于异步异常捕获
@@ -849,6 +943,6 @@ date: 2018-10-11T10:33:48+08:00
             logger.error("error:"+e);
         });
         process.on('unhandledRejection', function (err, p) {
-        console.error(err.stack)
+            console.error(err.stack)
         });
 
