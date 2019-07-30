@@ -188,6 +188,8 @@ type: docs
         # go
     beego
         # go
+    gorilla
+        # go
     gin
         # go，类express
     iris
@@ -1985,10 +1987,10 @@ type: docs
                 离线计算框架
             spark
                 介绍
-                        内存计算框架
-                        apache托管UC Berkeley AMP lab开源的类hadoop 通用并行框架
-                        mapreduce中间输出结果可以保存在内存中，不再需要读写hdfs
-                        是scala语言实现的
+                    scala实现
+                    内存计算框架
+                    apache托管UC Berkeley AMP lab开源的类hadoop 通用并行框架
+                    mapreduce中间输出结果可以保存在内存中，不再需要读写hdfs
                 特点
                         准实时，收集成rdd后处理
                         不支持事务

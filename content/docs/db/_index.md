@@ -864,6 +864,9 @@ type: docs
         project voldemort
         tokyo cabinet
         rocksDB
+        groupCache  # go编写
+## 时序
+    influxDB    # go编写
 # newsql
     工具
         分布式
@@ -871,7 +874,7 @@ type: docs
             voltdb
             clustrix
             nuodb
-            tidb
+            tidb    # go编写
         h-store
         foundationDB
         scalebase

@@ -1,11 +1,25 @@
-
-# 历史
-    40年代：汇编语言
-    60年代：汇编语言unux
-    70年代初：c语言、c语言unux、unux开源（美国反垄断法制裁AT&T）
-    70年代末：AT&T分裂，unix闭源
-    80年代：minix
-    90年代：linux  # 80、90年代之间：gun计划
+# 基础
+    历史
+        40年代：汇编语言
+        60年代：汇编语言unux
+        70年代初：c语言、c语言unux、unux开源（美国反垄断法制裁AT&T）
+        70年代末：AT&T分裂，unix闭源
+        80年代：minix
+        90年代：linux  # 80、90年代之间：gun计划
+    文件权限
+        drwxr-xr-x  # d代表目录
+        lrwxrwxrwx  # l代表软连接
+        drwxrwxrwt  # 末尾的t代表粘滞位(sticky bit)，用户只能删除自己建东西
+                    ## chmod 1777来设置
+    扩展名
+        .bin
+            # 二进制可执行文件，加上执行权限./执行即可
+        .tar.gz
+            # gzip压缩,tar打包的文件
+        .tar.tgz
+            ＃ 同gzip
+        .tar.bz2
+        .tar.xz
 # 文件位置
     /var
         /log
@@ -95,36 +109,28 @@
     wtmp            # 用户登录登出记录
     xferlog         # ftp会话
 
-# 原理
-## 约定
-    权限
-        drwxr-xr-x  # d代表目录
-        lrwxrwxrwx  # l代表软连接
-        drwxrwxrwt  # 末尾的t代表粘滞位(sticky bit)，用户只能删除自己建东西
-                    ## chmod 1777来设置
-    扩展名
-        .bin
-            # 二进制可执行文件，加上执行权限./执行即可                
-        .tar.gz                
-            # gzip压缩,tar打包的文件
-        .tar.tgz        
-            ＃ 同gzip
-        .tar.bz2
-        .tar.xz
+# 系统编程
+## 进程通信
+    对象
+        ipc
+    种类
+        消息队列
+        共享内存
+        信号量
+    消息队列
 ## 错误处理
-    curedump机制
+    curedump机制, 产生core文件
     命令
         ulimit
     目录
         /proc/[pid]/
-## 内核
-### fork
+## fork
     介绍
         子线程
-### epoll
+## epoll
     介绍
         多路复用io接口，提高大量并发连接中只有少量活跃情况下系统cpu利用率
-### signals
+## signals
     介绍
         unix系统中出错时显示的错误码（通常是拼在最后）
         http://people.cs.pitt.edu/~alanjawi/cs449/code/shell/UnixSignals.htm
@@ -162,21 +168,13 @@
     SIGWAITING	32	Ignore	All LWPs blocked
     SIGLWP	33	Ignore	Virtual Interprocessor Interrupt for Threads Library
     SIGAIO	34	Ignore	Asynchronous I/O
-### pf-kernel
+## pf-kernel
     介绍
         是linux kernel 的fork, pf代表post-factum, 是作者的nickname
-### libev
+## libev
     libevent
         介绍
             是linux kernel 的fork, pf代表post-factum, 是作者的nickname
-## 进程通信
-    对象
-        ipc
-    种类
-        消息队列
-        共享内存
-        信号量
-    消息队列
 # 发行版
     lfs
     centos
@@ -274,7 +272,8 @@
         pacman -Sy base-devel yaourt
     字体
         wiki上找font configuration
-# 高并发配置
+# 方案
+## 高并发
     查看当前TCP连接的状态和对应的连接数量：
         netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
             # TIME_WAIT占用端口会影响后继新连接

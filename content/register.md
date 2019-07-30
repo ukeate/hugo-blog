@@ -56,6 +56,7 @@ type: docs
         expect
         wget
         sysdig
+        sysstat     # sar, sadf, mpstat, iostat, pidstat
 
         # 程序需要
         g++

@@ -129,15 +129,57 @@ date: 2018-10-10T16:49:27+08:00
         效率工具
             数据迁移工具
             缓存配置工具
-# 工作流
+# 业务
+## 审批
+    模板
+        准入规则
+        起始、终止节点
+        节点, 节点成员, 替换成员, 节点事件(脚本), 跳转公式
+    审批流程
+        创建, 状态查询
+        审批
+## 海
+    type                    # 记录类型
+        property            # 类型动作, 关联到节点, 记录进出节点的动作。如对成员可读、可写, 记录负责人，对记录执行脚本, 记录回收计划
+    model                   # 模式
+        节点树、一个激活
+    节点
+        节点组
+        两节点方向
+    成员
+        节点成员1对多
+        成员分组(group, role)也是成员
+    记录
+        节点记录1对1
+    流转                     # 记录按规则在节点流转, 指定某些节点, 或某些记录。动作流程短路
+        motion               # 一次动作，如新建，移动，删除。
+        规则                 # 该次动作对记录的验证
+        fomula               # 计算motion次序
+        历史                  # 动作历史
+    权限
+        kind                 # pass或 type、model、property、节点、节点from, 节点to 的任意组合
+        access              # 分不同kind划分具体权限, 如(节点from, 节点to)kind的转移权限
+        pass权限             # 如创建type, 创建model, 某节点所有权限等
+    计划                     # 定时或周期的流转
+
+## 工作流
     本质
         状态管理
         工作流重流程轻数据，业务重数据轻流程。工作流修改数据，数据触发工作流
     分层
-        kernel
-            # engine
-        adapter
-            # services
+        engine                          # engine
+            specification, case
+            net
+                netRunner
+                    continueIfPossible  # 遍历task, fire task,
+            condition
+            task
+                join, split             # and所有, xor只一个, or规则
+                workitem
+            flow
+            persisting
+            gateway
+        adapter                         # services
 # 数据
 ## 数据迁移
     去掉约束

@@ -4,89 +4,53 @@ title: "LinuxTool"
 date: 2018-10-11T18:47:57+08:00
 ---
 # 内核
-    modprobe vboxdrv
-        # 内核
-    lsmod
-        # 显示当前系统加载的模块，如systemctl中start了的模块
+    modprobe vboxdrv                    # 内核
+    lsmod                               # 显示当前系统加载的模块，如systemctl中start了的模块
     sysdig
         sysdig
             -c
-                topprocs_cpu
-                    # 进程cpu top
-                    evt.cpu=0
-                        # 只统计cpu0
-                topprocs_net
-                    # 进程带宽 top
-                topprocs_file
-                    # 进程硬盘i/o top
-                topfiles_bytes
-                    # 文件读写 top
-                    proc.name=httpd
-                        # 指定进程名
-                topfiles_time
-                    # 文件时间 top
-                topprocs_errors
-                    # 进程error top
-                topfiles_errors
-                    # 文件error top
-                topscalls_time
-                    # 系统调用时间 top
-                topscalls "evt.failed=true"
-                    # 系统调用出错 top
-                topconns
-                    # 网络连接 top
+                topprocs_cpu            # 进程cpu top
+                    evt.cpu=0           # 只统计cpu0
+                topprocs_net            # 进程带宽 top
+                topprocs_file           # 进程硬盘i/o top
+                topfiles_bytes          # 文件读写 top
+                    proc.name=httpd     # 指定进程名
+                topfiles_time           # 文件时间 top
+                topprocs_errors         # 进程error top
+                topfiles_errors         # 文件error top
+                topscalls_time          # 系统调用时间 top
+                topscalls "evt.failed=true"                 # 系统调用出错 top
+                topconns                # 网络连接 top
                 fdcount_by
-                    proc.name "fd.type=file"
-                        # 进程文件描述符
+                    proc.name "fd.type=file"                # 进程文件描述符
                 fdbytes_by
-                    fd.directory "fd.type=file"
-                        # 目录读写 top
-                    fd.filename "fd.directory=/tmp/"
-                        # /tmp目录文件 读写top
-                    fd.type
-                        # fd type i/o
-                echo_fds "fd.filename=passwd"
-                    # 所有名为passwd文件的i/o
+                    fd.directory "fd.type=file"             # 目录读写 top
+                    fd.filename "fd.directory=/tmp/"        # /tmp目录文件 读写top
+                    fd.type             # fd type i/o
+                echo_fds "fd.filename=passwd"               # 所有名为passwd文件的i/o
                 stdout
-                    proc.name=bash
-                        # 进程标准输出
-                fileslower 1
-                    # 文件i/o 大于1ms
-                spy_users
-                    # 命令执行情况
+                    proc.name=bash      # 进程标准输出
+                fileslower 1            # 文件i/o 大于1ms
+                spy_users               # 命令执行情况
 
-            -A
-                # 只显示可读数据
-            -s 4096
-                # 指定 data buffer 字节
-            -r trace.scap
-                #  指定trace file
-            -pc
-                # 详情
-        csysdig
-            # 交互式工具
-            -vcontainers
-                # 容器资源
-            -pc
-                # 详情
+            -A                          # 只显示可读数据
+            -s 4096                     # 指定 data buffer 字节
+            -r trace.scap               #  指定trace file
+            -pc                         # 详情
+        csysdig                         # 交互式工具
+            -vcontainers                # 容器资源
+            -pc                         # 详情
 # 文件
     rm -rf
     touch
-        -t 0712250000 file
-            # 修改文件时间戳(YYMMDDhhmm)
+        -t 0712250000 file              # 修改文件时间戳(YYMMDDhhmm)
     ls *[0-9]*
-        -R
-            # 递归显示文件
-        -l
-            # 详情
-        -S
-            # 按大小排列
-        -r
-            # reverse
-        -h
-            # 自动大小单位
-        -F
-            # 加后缀标识类型
+        -R                 # 递归显示文件
+        -l                 # 详情
+        -S                 # 按大小排列
+        -r                 # reverse
+        -h                 # 自动大小单位
+        -F                 # 加后缀标识类型
     tree
     mkdir
     rmdir
@@ -94,178 +58,118 @@ date: 2018-10-11T18:47:57+08:00
         ~
         -
     cp
-        -a
-            # 带权限复制
+        -a                  # 带权限复制
     mv
     find .
         maxdepth 1
         -name "*.go"
         -type f
-        -atime +100
-            # 100天未使用过的执行文件
-        -mtime -10
-            # 10天内创建或修改的文件
-        -exec chmod +x
-            # 对找到的文件执行命令
-        -xdev
-            # 忽略块设备
-    pwd
-    file
-        # 探测文件类型
+        -atime +100         # 100天未使用过的执行文件
+        -mtime -10          # 10天内创建或修改的文件
+        -exec chmod +x      # 对找到的文件执行命令
+        -xdev               # 忽略块设备
+    pwd                     # 当前路径
+    file                    # 探测文件类型
+    uniq                    # 删除重复列
     ln
     du -d 1 -h
-        -s
-            # 只返回汇总情况
-        -k
-            # 统一单位
-    chmod ugo+rwx
-        # 所有人(u), 群组(g), 其他人(o)以读、写、执行权限
-    chattr +i file
-        # 改变属性
+        -s                  # 只返回汇总情况
+        -k                  # 统一单位
+    chmod ugo+rwx           # 所有人(u), 群组(g), 其他人(o)以读、写、执行权限
+    chattr +i file          # 改变属性
     lsattr file
     chown -R outrun:outrun .
     chgrp -R outrun .
-    getfacl
-        # 查看一个文件的ACL设置
+    getfacl                 # 查看一个文件的ACL设置
     setfacl
-        -m u:linuxcast:rwx   filename
-            # 配置用户权限
-        -m g:linuxcats:r-x  filename
-            # 配置组的权限
-        -x u:linuxcast filename
-            # 删除一个ACL设置
+        -m u:linuxcast:rwx   filename   # 配置用户权限
+        -m g:linuxcats:r-x  filename    # 配置组的权限
+        -x u:linuxcast filename         # 删除一个ACL设置
 
-    mucommander
-        # 跨平台文件管理软件
+    mucommander             # 跨平台文件管理软件
 
     cat
-    tac
-        # 倒转行显示
-    wc
-        # 统计行, 单词, 字符
+    tac                     # 倒转行显示
+    wc                      # 统计行, 单词, 字符
     grep
     awk
     sort
-        -r
-            # reverse
-        -n
-            # 显示行号
+        -r                  # reverse
+        -n                  # 显示行号
     more
     less
 
     iconv
-        -l
-            # 列出已知的编码
-        -f gbk -t utf-8 -c orig.txt -o tgt.txt
-            # 转码
+        -l                  # 列出已知的编码
+        -f gbk -t utf-8 -c orig.txt -o tgt.txt      # 转码
     tar xf
-        cfzv x.tar.gz x
-            # 压缩
-        xfzv x.tar.gz
-            # 解压
+        cfzv x.tar.gz x     # 压缩
+        xfzv x.tar.gz       # 解压
         --exclude=/proc
-    gzip x
-        # 压缩
-        -d x
-            # 解压
+    gzip x                  # 压缩
+        -d x                # 解压
     unzip
-    unzip-beta
-        # 解压并转码中文
+    unzip-beta              # 解压并转码中文
     head -2
     tail -2
         -f
-    paste file1 file2
-        # 合并两个文件或两栏内容
-        -d '+'
-            # 分隔符
+    paste file1 file2       # 合并两个文件或两栏内容
+        -d '+'              # 分隔符
     nano
-    strings     # 打印可打印字符
+    strings                 # 打印可打印字符
 
-# kit
-## 系统
+# 系统
     man
-        -f
-            # 简要介绍
-        -k
-            # 通配搜索
+        -f                  # 简要介绍
+        -k                  # 通配搜索
     su
     sudo
     clear
-    whatis
-        # man -f
-    apropos
-        # man -k
-    uname -a
-        # 查看版本
+    whatis                  # man -f
+    apropos                 # man -k
+    uname -a                # 查看版本
     hostname
-    id
-        # 用户信息
+    id                      # 用户信息
     adduser outrun
-    passwd
-        # 修改密码
-    usermod
-        # 修改用户状态
-        -a -G root outrun
-            # 加入组
-        -l
-            # 改名
-        -L
-            # 锁定
-        -U
-            # 解锁
-    groups
-        # 查看组
+    passwd                  # 修改密码
+    usermod                 # 修改用户状态
+        -a -G root outrun   # 加入组
+        -l                  # 改名
+        -L                  # 锁定
+        -U                  # 解锁
+    groups                  # 查看组
     adddgroup
     groupadd
-    poweroff
-        # 立即关机
+    poweroff                # 立即关机
     shutdown -h now
-        -h
-            # 关机
-        -r
-            # 重启
-    pm-suspend
-        # 挂起电脑
+        -h                  # 关机
+        -r                  # 重启
+    pm-suspend              # 挂起电脑
     halt
 
-## 查看
+# 查看
     echo
-    watch -n 1 -d netstat  -ant
-        # 监视
+    watch -n 1 -d netstat  -ant         # 监视
     date +%Y/%m/%d/%H:%M
-    rig
-        # 随机产品人名地名
-    forturn
-        # 随机名言
-    toilet
-        # 彩虹字
+    rig                     # 随机产品人名地名
+    forturn                 # 随机名言
+    toilet                  # 彩虹字
     cowsay
-    figlet
-        # 大写字
-    cmatrix
-        # 终端黑客帝国
-    sl
-        # 火车
-    cal 9 1752
-        # 打印日历
-## 控制
-    script/scriptreply
-        # 终端录制
+    figlet                  # 大写字
+    cmatrix                 # 终端黑客帝国
+    sl                      # 火车
+    cal 9 1752              # 打印日历
+# 控制
+    script/scriptreply      # 终端录制
     source
     bc
-    maxima
-        # 符号计算
-    pv -qL 10
-        # 文件缓慢显示
-    aview
-        # 图片文件化
-    shred
-        # 文件粉碎
-    factor
-        # 分解质因数
+    maxima                  # 符号计算
+    pv -qL 10               # 文件缓慢显示
+    aview                   # 图片文件化
+    shred                   # 文件粉碎
+    factor                  # 分解质因数
     screenfetch
-    expect
-        # 为运行的脚本预填表单
+    expect                  # 为运行的脚本预填表单
 
         o-> 实例
         #!/usr/bin/expect -f
@@ -276,33 +180,23 @@ date: 2018-10-11T18:47:57+08:00
 
         expect eof
 
-        o-> 后台执行
-                # 不要expect eof
+        o-> 后台执行        # 不要expect eof
         if [fork]!=0 exit
         disconnect
 # 日志
-    dmesg
-            # 启动日志
-    rsyslog
-            # 日志管理, syslog的实现, 在systemd中被systemd-journal取代
-    mcelog
-            # machine check exception log
-    journalctl
-            # 日志查看
+    dmesg                   # 启动日志
+    rsyslog                 # 日志管理, syslog的实现, 在systemd中被systemd-journal取代
+    mcelog                  # machine check exception log
+    journalctl              # 日志查看
             -xe
 # 设备
     top
         top -d 1 -p pid [,pid ...]
     htop
-    vmstat
-        # 获得有关进程、swap、内存、cpu等系统信息
-    dstat
-        # 定时收集系统信息
-    sar
-        # 全面的系统活动情况
-    ulimit -s unlimited
-        # 限制shell启动资源
-        # 不限制堆栈大小
+    vmstat                  # 获得有关进程、swap、内存、cpu等系统信息
+    dstat                   # 定时收集系统信息
+    sar                     # 全面的系统活动情况
+    ulimit -s unlimited     # 限制shell启动资源, 不限制堆栈大小
         -a 显示各种限制
         -u 10000 最大用户数
         -n 102400 文件句柄数
@@ -312,22 +206,15 @@ date: 2018-10-11T18:47:57+08:00
         -v unlimited 虚拟内存
     setup
 
-    slabtop
-        # 内核片缓存信息
-    mpstat
-        # cpu统计信息
-    lxtask
-        # 监控内存
+    slabtop                 # 内核片缓存信息
+    mpstat                  # cpu统计信息
+    lxtask                  # 监控内存
 
-    xgamma -gamma .75
-        # 调整屏幕色值
+    xgamma -gamma .75       # 调整屏幕色值
 
-    amixer set Master 100%
-        # 调节音量
-    alsamixer
-        # 调节声音
-    powertop
-        # intel电源管理
+    amixer set Master 100%  # 调节音量
+    alsamixer               # 调节声音
+    powertop                # intel电源管理
 
 
     lspci
@@ -341,41 +228,26 @@ date: 2018-10-11T18:47:57+08:00
     mkswap
 
     testdisk /dev/sdb1
-    e2fsck -a /dev/sdb1
-        # 修复ext2
-    ntfsfix -d -b /dev/sdb1
-        # 修复ntfs坏扇区和脏标记
-    fsck /dev/sda1
-        # 检查并修复
+    e2fsck -a /dev/sdb1         # 修复ext2
+    ntfsfix -d -b /dev/sdb1     # 修复ntfs坏扇区和脏标记
+    fsck /dev/sda1              # 检查并修复
 
-    udisks --detach 设备编号
-        # 移除磁盘
+    udisks --detach 设备编号     # 移除磁盘
 
     mount  /dev/sdb1 /mnt
-        -o acl
-                # 打开acl功能
-        -o loop x.iso
-                # 挂载文件
-        -o iocharset=utf8
-                # 指定编码
-        -t vfat
-                # 指定类型
+        -o acl                  # 打开acl功能
+        -o loop x.iso           # 挂载文件
+        -o iocharset=utf8       # 指定编码
+        -t vfat                 # 指定类型
     umount
-        -n
-                # 执行umount却不写入
-        -l
-                # lazy
-        -f
-                # force
+        -n                      # 执行umount却不写入
+        -l                      # lazy
+        -f                      # force
 
-    df -h
-        # 已挂载分区列表
-        -T
-                # 查看分区类型
-    blktrace
-        # 磁盘访问情况
-    lsblk
-        # 查看挂载的分区
+    df -h                       # 已挂载分区列表
+        -T                      # 查看分区类型
+    blktrace                    # 磁盘访问情况
+    lsblk                       # 查看挂载的分区
     lvs
         LVM逻辑卷的创建流程如下：
             将一个磁盘或分区格式化为物理卷：pvcreate /dev/sdb1
@@ -397,15 +269,12 @@ date: 2018-10-11T18:47:57+08:00
         删除一个物理卷：
         pvremove /dev/sda1
 ## 进程
-    pidstat
-        # 进程使用资源的情况
+    pidstat                 # 进程使用资源的情况
     ps
-        aux     # 用在unix style中, BSD格式显示
-        ef      # 用在system v style中, 标准格式显示
-    pstree
-        # 进程关系
-    pmap pid
-        # 进程
+        aux                 # 用在unix style中, BSD格式显示
+        ef                  # 用在system v style中, 标准格式显示
+    pstree                  # 进程关系
+    pmap pid                # 进程
 
     kill 1024
         -9
@@ -418,22 +287,17 @@ date: 2018-10-11T18:47:57+08:00
             # 19 STOP 暂停(同ctrl + z)
         -l      # 列出所有信号名称和编号
 
-    pkill Xorg
-        # kill 所有包含
-    killall Xorg
-        # kill 所有包含
-    xkill
-        # 运行后 在xwindow点击kill窗口
+    pkill Xorg              # kill 所有包含
+    killall Xorg            # kill 所有包含
+    xkill                   # 运行后 在xwindow点击kill窗口
 ## 网络
-    ufw
-        # 简化防火墙
+    ufw                     # 简化防火墙
     iptables
         iptables -A INPUT -p tcp --dport 22 -j ACCEPT
         iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
         iptables -L -n
         service iptables save
-        iptables -t nat -L
-                # 查nat表
+        iptables -t nat -L  # 查nat表
         iptables -F
 
         配置文件
@@ -442,16 +306,15 @@ date: 2018-10-11T18:47:57+08:00
                 save
 
         service iptables save
-        service iptables restart    # 开放端口
+        service iptables restart            # 开放端口
 
         systemctl enable iptables.service
 
-        iptables -A INPUT -p tcp --dport 3128 -j ACCEPT
-                # DROP
+        iptables -A INPUT -p tcp --dport 3128 -j ACCEPT         # DROP
         iptables -A OUTPUT -p tcp --sport 3128 -j ACCEPT
 
         iptables -t nat -A POSTROUTING -s 192.168.252.0/24 -j SNAT --to-source 10.171.83.146
-                # vpn服务器
+            # vpn服务器
     firewall
         systemctl start firewalld
 
@@ -462,8 +325,7 @@ date: 2018-10-11T18:47:57+08:00
             --list-all
             --set-default-zone=public
     wget
-        -i filelist.txt
-            # 下载一个文件中的所有url
+        -i filelist.txt         # 下载一个文件中的所有url
         -x  # 强制创建目录
         -P  # 目录prefix
         -r  # 递归下载
@@ -478,8 +340,7 @@ date: 2018-10-11T18:47:57+08:00
 
     ping
     telnet
-    nmblookup -A ip
-        # 查询域名
+    nmblookup -A ip             # 查询域名
     ifconfig
         打开, 关闭网卡
             ifconfig eth0 up
@@ -491,77 +352,53 @@ date: 2018-10-11T18:47:57+08:00
             ifconfig enp0s20u6u3 hw ether 00:50:56:c0:00:02
         虚拟网卡
             ifconfig wlp7s0:1 ip netmask
-                    # 共用一个ip
-    netctl
-        # 配置网卡服务
-    route
-        # 查看路由表
-        -n
-            # 不解析域名
-    arp -n
-        # 显示局域网 ip mac表
-        -s ip mac
-            # 设置ip mac表
+                # 共用一个ip
+    netctl                  # 配置网卡服务
+    route                   # 查看路由表
+        -n                  # 不解析域名
+    arp -n                  # 显示局域网 ip mac表
+        -s ip mac           # 设置ip mac表
     tcpdump
         介绍
             抓包
         使用
             tcpdump -n -i eth0 host 192.168.31.147 and 114.114.114.114
-                    # 本机192.168.31.147与远程主机114.114.114.114的数据
+                # 本机192.168.31.147与远程主机114.114.114.114的数据
             tcpdump -n -i eth0 dst 192.168.31.147
-                    #  进入本机192.168.31.147的数据
-                    # tcpdump -n -i eth0 dst 192.168.31.147 or 192.168.31.157 and tcp
-                    ## 进入两个本机的tcp包
-                    # and port !22
-                    ## 端口
+                #  进入本机192.168.31.147的数据
+                # tcpdump -n -i eth0 dst 192.168.31.147 or 192.168.31.157 and tcp
+                ## 进入两个本机的tcp包
+                # and port !22
+                ## 端口
             tcpdump -n -i eth0 src 192.168.31.147
                 # 本机出去的包
     curl
-        curl -v
-            # 详细头信息
-        curl -H "Cookie: foo=bar; baz=val"
-            # 发送cookie
+        curl -v             # 详细头信息
+        curl -H "Cookie: foo=bar; baz=val"          # 发送cookie
         curl -X post -k http://localhost:9090/a -H "Content-Type: text/plain" -d '{"name": "a"}'
             # post请求
-    nc -U a.sock
-        # netcat, 功能全面
-    dig
-        # 域名解析
+    nc -U a.sock            # netcat, 功能全面
+    dig                     # 域名解析
     nmap
-        -sP ip/24
-            # 查看网内所有ip
-    ip
-        # 网卡与ip信息
+        -sP ip/24           # 查看网内所有ip
+    ip                      # 网卡与ip信息
 
-    iotop
-        # 实时监视io
-    iostat
-        # 负载情况
-    lsof -i:8080
-        # 列出当前系统打开的文件，必须root运行才准确
-    nicstat
-        # 网络流量统计
-    netstat -antpu
-        # 端口
-    ss
-        # 端口，性能高
-        -l
-            # listening
-    iwlist
-        # 列出无线网
-    iwconfig
-        # 无线网卡设置
-    pppoe
-        # 宽带
-    w3m
-        # 命令行浏览器
+    iotop                   # 实时监视io
+    iostat                  # 负载情况
+    lsof -i:8080            # 列出当前系统打开的文件，必须root运行才准确
+    nicstat                 # 网络流量统计
+    netstat -antpu          # 端口
+    ss                      # 端口，性能高
+        -l                  # listening
+    iwlist                  # 列出无线网
+    iwconfig                # 无线网卡设置
+    pppoe                   # 宽带
+    w3m                     # 命令行浏览器
 
     ssh
-    sshfs -o allow_other root@ip:~ /mnt
-        # 挂载远程目录
+    sshfs -o allow_other root@ip:~ /mnt                 # 挂载远程目录
     scp a.txt root@ip:~
-    vnc
-        # 远程桌面
+    vnc                     # 远程桌面
         Virtual Network Computing
         相关文章
             linux 自带远程桌面--VNC服务配置说明
@@ -572,32 +409,22 @@ date: 2018-10-11T18:47:57+08:00
         启动
             vncserver :1
         登录
-            vncviewer
-                # fedora 下gnome自带的vncviewer名为:Remote Desktop Viewer
-                输入192.168.0.62:1        # 实际端口号为5901, 如果服务号为2则为5902
+            vncviewer        # fedora 下gnome自带的vncviewer名为:Remote Desktop Viewer
+                输入192.168.0.62:1                      # 实际端口号为5901, 如果服务号为2则为5902
             或者浏览器java-plugin
-                localhost:5801                # 需要安装java
+                localhost:5801                          # 需要安装java
     wifi-menu
 # 调度
-    at
-        # 某时间运行一次
+    at                      # 某时间运行一次
 
-    jobs
-        # 后台作业
-    fg
-        # 后台作业调度到前台
-    bg
-        # 继续执行后台作业
-    osmo
-        # 计划任务软件
-    reap
-        # 用于定时删除目录中文件，并打印日志
-        -h
-            # 打印帮助信息
-        -t
-            # 后台运行, 并设置时间间隔
-        -s
-            # single 单次运行
+    jobs                    # 后台作业
+    fg                      # 后台作业调度到前台
+    bg                      # 继续执行后台作业
+    osmo                    # 计划任务软件
+    reap                    # 用于定时删除目录中文件，并打印日志
+        -h                  # 打印帮助信息
+        -t                  # 后台运行, 并设置时间间隔
+        -s                  # single 单次运行
     cron
         介绍
             crond服务在systemd中被timer取代
@@ -606,19 +433,19 @@ date: 2018-10-11T18:47:57+08:00
             $ service crond start
             $ service crond stop
             $ service crond restart
-            $ service crond reload                # 重载配置
-            $ crontab crontest.cron # 添加定时任务。打印的文件在用户根目录下
-            $ crontab -l                # 列出用户目前的crontab
-            $ crontab -u                # 设定某个用户的cron服务
-            $ crontab -r                # 删除某个用户的cron服务
-            $ crontab -e                # 编辑某个用户的cron服务
+            $ service crond reload                      # 重载配置
+            $ crontab crontest.cron                     # 添加定时任务。打印的文件在用户根目录下
+            $ crontab -l                                # 列出用户目前的crontab
+            $ crontab -u                                # 设定某个用户的cron服务
+            $ crontab -r                                # 删除某个用户的cron服务
+            $ crontab -e                                # 编辑某个用户的cron服务
                 # crontab -u root -l   查看root的设置
 
-            /etc/crontab                # 系统配置文件
+            /etc/crontab                                # 系统配置文件
             /etc/cron.hourly
             /etc/cron.daily
             /etc/cron.weekly
-            /etc/cron.monthly        # 每小时、天、周、月执行的脚本
+            /etc/cron.monthly                           # 每小时、天、周、月执行的脚本
 
             定时格式
                 M H D m d cmd
@@ -632,39 +459,26 @@ date: 2018-10-11T18:47:57+08:00
             crontest.cron文件中
                 15,30,45,59 * * * * echo "aa.........." >> aa.txt
                     # 每15分钟执行一次打印
-            0 */2 * * * date                # 每两个小时
+            0 */2 * * * date                            # 每两个小时
 # 包管理
-    rpm
-        #源 rpm fusion
+    rpm                         # 源 rpm fusion
         -i 安装
         -e 卸载
         -qa 查看安装的包名
         -ql 包名, 查看安装的文件
         -qc 包名, 查看软件的配置文件
-    pacman
-        # 源 mirrors.163.com
-        -Qeq | pacman -S -
-            # 重新安装所有包
-        -S $(pacman -Qnq)
-            # 重新安装所有包
-        -Ss ^ibus-*
-            # 通配search
-        -S $(pacman -Ssq fcitx*)
-            # 通配安装
-        -R $(pacman -Qsq fcitx)
-            # 通配删除
-        -Rcns plasma
-            # 删除plasma
-        -Sc
-            # 清除缓存
-        -Qii zsh
-            # 包信息
-        -Ql zsh
-            # 查看安装的文件
-        -Qo /bin/zsh
-            # 查看文件属于的包
-    downgrade
-        # 用于给pacman安装过后软件降级
+    pacman                      # 源 mirrors.163.com
+        -Qeq | pacman -S -      # 重新安装所有包
+        -S $(pacman -Qnq)       # 重新安装所有包
+        -Ss ^ibus-*             # 通配search
+        -S $(pacman -Ssq fcitx*)                # 通配安装
+        -R $(pacman -Qsq fcitx)                 # 通配删除
+        -Rcns plasma            # 删除plasma
+        -Sc                     # 清除缓存
+        -Qii zsh                # 包信息
+        -Ql zsh                 # 查看安装的文件
+        -Qo /bin/zsh            # 查看文件属于的包
+    downgrade                   # 用于给pacman安装过后软件降级
     yum
         设置代理
             /etc/yum.conf
@@ -675,106 +489,55 @@ date: 2018-10-11T18:47:57+08:00
             proxy_password=你的用户名的密码
 
         yum
-            whatprovides 'bin/isstat'
-                # 查看命令属性哪个包
-            whatprovides git
-                # 查看git命令所在的包
+            whatprovides 'bin/isstat'           # 查看命令属性哪个包
+            whatprovides git                    # 查看git命令所在的包
             history list
-            history redo 序号
-                # 重新做序号
-            history undo 序号
-                # 恢复历史中执行的动作
-            groups list
-                # 查看安装的组
+            history redo 序号                    # 重新做序号
+            history undo 序号                    # 恢复历史中执行的动作
+            groups list                         # 查看安装的组
             list installed
             list extras
             info installed
 
         编译用包
-            build-essential
-                # yum中基本编译依赖包
+            build-essential                     # yum中基本编译依赖包
             yum install make cmake apr* autoconf automake curl-devel gcc gcc-c++ zlib-devel openssl openssl-devel pcre-devel gd  kernel keyutils  patch  perl kernel-headers compat* mpfr cpp glibc libgomp libstdc++-devel ppl cloog-ppl keyutils-libs-devel libcom_err-devel libsepol-devel libselinux-devel krb5-devel zlib-devel libXpm* freetype libjpeg* libpng* php-common php-gd ncurses* libtool* libxml2 libxml2-devel patch freetype-devel ncurses-devel libmcrypt libtool flex pkgconfig libevent glib libgnomeui-devel
-    dpkg
-        # 管理deb包程序
-        -i
-            # 安装
-        -r
-            # 删除
-    pkgfile
-        # 查看命令所需的包
-# 输入法
-    fcitx
-    ibus
-    ibus-daemon -d -x -r
-        # ibus后台运行
-# 桌面
-    gnome
-        gnome3应用程序列表
-            /usr/share/applications
-        取消ctrl+alt+down/up
-            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['']"
-            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "['']"
-        gnome-shell
-            alt + f2后输入lg
-        gnome terminate
-            ctrl + shift + c/v          # 复制/粘贴
-            ctrl + shift + t/n          # 打开新标签/新窗口
-            ctrl + w 或 alt + backspace  # 删除最后的word
-            ctrl + shift + w/q          # 关闭当前term/所有term
-            ctrl + shift + f/g/h        # 搜索/搜索下一个/搜索上一个
-            ctrl + pageUp/pageDown      # 切换标签
-            ctrl + shift + pageUp/pageDown  # 移动标签
-            alt + 1/2/3/..../0          # 切换到第1/2/3/....../10个标签
-        系统快捷键
-            右键快捷键
-                shift + f10
-    kde
-    awesome
-    i3
+    dpkg                        # 管理deb包程序
+        -i                      # 安装
+        -r                      # 删除
+    pkgfile                     # 查看命令所需的包
 # init
     grub
         /etc/default/grub       # 设置文件
         grub2-mkconfig -o /boot/grub2/grub.cfg      # 使设置生效，update-grub 是debian下做的包装
-    upstart
-        # 状态 waiting, starting, pre-start, spawned, post-start,running,pre-stop, stopping, killed, post-stop
+    upstart                     # 状态 waiting, starting, pre-start, spawned, post-start,running,pre-stop, stopping, killed, post-stop
     systemv
     systemd
-    sestatus -v
-        # 查看selinux 状态
+    sestatus -v                 # 查看selinux 状态
     systemctl
         status
-        daemon-reload
-            # 修改service文件后重载
-        systemctl list-units
-            # list known units
-        systemctl list-unit-files
-            # 已知的services
-        systemctl list-sockets
-            # list socket units ordered by the listening address
-        systemctl enable NAME
-            # 设置开机启动, 生成service脚本命令
+        daemon-reload           # 修改service文件后重载
+        systemctl list-units                        # list known units
+        systemctl list-unit-files                   # 已知的services
+        systemctl list-sockets                      # list socket units ordered by the listening address
+        systemctl enable NAME                       # 设置开机启动, 生成service脚本命令
         systemctl disable NAME
         systemctl start NAME
         systemctl stop NAME
         systemctl restart NAME
         systemctl reload NAME
-    setenforce 0
-        # 临时systemd
-    getenforce
-        # 临时关闭systemd
+    setenforce 0                # 临时systemd
+    getenforce                  # 临时关闭systemd
     service
         service start
         service restart
         service stop
         service status
-    chkconfig iptables on/off
-        # 设置服务启动
-        --level 2345 iptables off
-            # 查看各level服务状态
+    chkconfig iptables on/off   # 设置服务启动
+        --level 2345 iptables off                   # 查看各level服务状态
         --list
 # 编程
-    :() { :|:& };:
-        # fork bombmake
+    :() { :|:& };:              # fork bombmake
     make
         注意
             缩进只能用tab
@@ -839,8 +602,7 @@ date: 2018-10-11T18:47:57+08:00
     cmake
 
     bash
-        set -o
-            # 设置快捷键模式，默认emacs
+        set -o              # 设置快捷键模式，默认emacs
         快捷键
             <C-c> 中断
             <C-d> eof
@@ -912,54 +674,71 @@ date: 2018-10-11T18:47:57+08:00
 
         pane
             prefix
-                "        # 横分
-                %         # 竖分
-                x        # 关闭
-                !        # 移到新window
-                方向        # 切换
-                o        # 切换到下一个
+                "            # 横分
+                %            # 竖分
+                x            # 关闭
+                !            # 移到新window
+                方向          # 切换
+                o            # 切换到下一个
                 <C-o>        # 向下旋转
                 <M-o>        # 向上旋转
-                {        # 向前置换
-                }        # 向后转换
-                <C-方向>        # 调整size
-                <M-方向>        # 5倍调整size
-                空格        # 切换布局
-                <M-[0-5]>        # 选择布局
-                q        # 显示编号
+                {            # 向前置换
+                }            # 向后转换
+                <C-方向>      # 调整size
+                <M-方向>      # 5倍调整size
+                空格          # 切换布局
+                <M-[0-5]>    # 选择布局
+                q            # 显示编号
 
         内置命令
             source-file a
     screen
-        -ls
-            # 查看所有session
-        -r
-            # 进入id
-    makepkg
-        # 创建软件包
+        -ls                 # 查看所有session
+        -r                  # 进入id
+    makepkg                 # 创建软件包
 
-    perf
-        # 性能调优
-    strace
-        # 跟踪系统调用
-    itrace
-        # linux系统编程中跟踪进程的库函数调用
-        -S ./hello
-            # 跟踪所有系统调用
-    dtrace
-        # 应用程序动态跟踪
+    perf                    # 性能调优
+    strace                  # 跟踪系统调用
+    itrace                  # linux系统编程中跟踪进程的库函数调用
+        -S ./hello          # 跟踪所有系统调用
+    dtrace                  # 应用程序动态跟踪
     gdb
-# 模拟
+# 桌面用户
+## 桌面
+    gnome
+        gnome3应用程序列表
+            /usr/share/applications
+        取消ctrl+alt+down/up
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "['']"
+        gnome-shell
+            alt + f2后输入lg
+        gnome terminate
+            ctrl + shift + c/v                  # 复制/粘贴
+            ctrl + shift + t/n                  # 打开新标签/新窗口
+            ctrl + w 或 alt + backspace          # 删除最后的word
+            ctrl + shift + w/q                  # 关闭当前term/所有term
+            ctrl + shift + f/g/h                # 搜索/搜索下一个/搜索上一个
+            ctrl + pageUp/pageDown              # 切换标签
+            ctrl + shift + pageUp/pageDown      # 移动标签
+            alt + 1/2/3/..../0                  # 切换到第1/2/3/....../10个标签
+        系统快捷键
+            右键快捷键
+                shift + f10
+    kde
+    awesome
+    i3
+## 输入法
+    fcitx
+    ibus
+    ibus-daemon -d -x -r        # ibus后台运行
+## 模拟
     wine
-    winetricks
-        # 安装wine的各种依赖
-    cabextract
-        # microsoft cabinet获取工具
+    winetricks                  # 安装wine的各种依赖
+    cabextract                  # microsoft cabinet获取工具
 # 方案
-    命令组合
-        # xargs sed | grep awk
-        grep
-            # 去除某些 grep nginx | grep -v grep
+    命令组合                    # xargs sed | grep awk
+        grep                    # 去除某些 grep nginx | grep -v grep
     过滤进程并kill
         ps -ef|grep -v "grep"|grep aurora/app.js |awk '{print $2}'| xargs kill -9
             # grep -v 去掉包含"grep"的条目
@@ -967,8 +746,7 @@ date: 2018-10-11T18:47:57+08:00
             # awk 取第二列(pid)的内容
             # xargs 将前面过滤后的内容作为参数，执行kill -9
     后台
-        nohup *** > /dev/null &
-            # 在脚本文件中写入^C可以使脚本执行完nohup退出(exit不可以)
+        nohup *** > /dev/null &                 # 在脚本文件中写入^C可以使脚本执行完nohup退出(exit不可以)
 
     复制多个
         ls -rt | tail -4 | xargs -i cp -r {} ~/sdb/work/ryxWork/架构/
@@ -1013,7 +791,7 @@ date: 2018-10-11T18:47:57+08:00
 
         yum install dhcp
         vi /etc/dhcp/dhcpd.conf
-            option domain-name-servers 192.168.0.1,8.8.8.8; # 自己的dns提供商
+            option domain-name-servers 192.168.0.1,8.8.8.8;         # 自己的dns提供商
             option routers 192.168.0.42;    # 本机ip
             option domain-name "mydhcp";
             option domain-name-servers 192.168.0.1;

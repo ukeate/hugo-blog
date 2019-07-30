@@ -7,21 +7,31 @@ date: 2018-10-09T16:10:44+08:00
 # 基础
     特点
         易工程化
-            简单性而不方便性，避免工程复杂性乘法增长
+            简单性而不方便性，避免工程复杂性乘法增长            # 某部分变复杂，增加其他部分的复杂性(功能、选项、配置)
                 没有动态库, 没有泛型, 没有继承, 没有异常, 没有宏，没有注解，没有线程局部存储
             类型系统，无类型风格
-            集合直接持有元素    # 自然方式
+            自然方式工作
+                不显式初始化和隐式构造函数
+                集合直接持有元素
             标准库避免配置和解释     # 自带电池
             项目结构简单
-        编译为本地机器码
+            编译检查代码格式
+        csp(communicating sequential process)并发，变长栈运行轻量线程
+        编译为本地机器码        # 像c一样，所以又叫类c语言
             编译快
         强静态类型
         有gc
         大厂支持
+    历史
+        2007年设计，受影响于Alef(CSP系列), Oberon-2(ALGOL60, Modula-2系列), C
+            # 目的解决google许多复杂性激增的软件系统
+        2009年发布, 作者是Robert Griesemer, Rob Pike, Ken Thompson
+        2012年1.0
     并发编程特点
         语言层面关键字
-        csp并发模型
-            channel为一等公民
+        例程
+            流程控制: csp       # channel为一等公民
+            通信方式: promise-future, channel, event
         高效调度模型(调度器，资源占用小)
             O(1)的调度
             一进程可支撑上百万例程,5kib/goroutine的开销,
@@ -29,6 +39,9 @@ date: 2018-10-09T16:10:44+08:00
     编译
         CGO_ENABLED=0
             # 静态链接，不跨平台
+        初始化
+            包级别初始化在main前
+            局部变量在函数执行时
     配置
         GOROOT
             # go安装目录
@@ -39,135 +52,209 @@ date: 2018-10-09T16:10:44+08:00
             # 当前bin目录
         GO15VENDOREXPERIMENT
             # 依赖目录
-    例程原理
-        流程控制: csp
-        通信方式: promise-future, channel, event
 # 命令
-    godoc
-        -http=:6060
-            # 运行本地帮助网站
     go
-        build
-            # 编译代码包
-        install
-            # 编译安装
-        get
-            # 下载依赖
-            # 默认目录是GOPATH下的pkg
-            -u
-                # update
-            -v
-                # 查看进度
-        clean
-            # 清理build产生的文件
-            -c
-                # 清理.test文件
-            -i
-                # 清理生成的可执行文件
-            -r
-                # 包括依赖包的结果文件
-        run
-            # 编译并运行
-        list
-            # 列出指定代码包的信息
-        fix
-            # 升级旧代码成新版本代码
-        vet
-            # 检查静态错误
+        version
+        env                     # 打印go环境信息
+        run                     # 编译并运行
+        build                   # 编译成二进制执行文件
+        install                 # 编译安装
+        get                     # 下载依赖, 默认目录是GOPATH下的pkg
+            -u                  # update
+            -v                  # 查看进度
+        clean                   # 清理build产生的文件
+            -c                  # 清理.test文件
+            -i                  # 清理生成的可执行文件
+            -r                  # 包括依赖包的结果文件
+        list                    # 列出指定代码包的信息
+        fix                     # 升级旧代码成新版本代码
+        vet                     # 检查静态错误
         test
             # go test -cover -args -config config_it.toml -test.run "TestA"
             # 执行当前目录下所有_test.go结尾的文件
-            -file
-                # 可省略，测试单个文件, 如go test test_a.go a.go a.pb.go
-                ## 测试单个文件需要引入原文件
-            -args
-                # 运行时参数
-            -run TestFoo
-                # 测单个方法，名字正则匹配，如^TestFoo
-            -test.run "TestCreate"
-                # 同上
-            -v
-                # 也显示非错误信息
-            -bench=".*"
-                # 指定运行的用例
-            --cpuprofile=cpu.prof
-                # 生成cpu分析文件
-            --memprofile=mem.prof
-                # 生成内存分析文件
-            -c
-                # 生成可执行的二进制文件，名为x.test，它用来生成状态图
-            -cover
-                # 显示覆盖率
+            -file               # 可省略，测试单个文件, 如go test test_a.go a.go a.pb.go
+                                ## 测试单个文件需要引入原文件
+            -args               # 运行时参数
+            -run TestFoo        # 测单个方法，名字正则匹配，如^TestFoo
+            -test.run "TestCreate"                      # 同上
+            -v                  # 也显示非错误信息
+            -bench=".*"         # 指定运行的用例
+            --cpuprofile=cpu.prof                       # 生成cpu分析文件
+            --memprofile=mem.prof                       # 生成内存分析文件
+            -c                  # 生成可执行的二进制文件，名为x.test，它用来生成状态图
+            -cover              # 显示覆盖率
         tool
-            pprof
-                # 交互式访问概要文件
+            pprof               # 交互式访问概要文件
                 module1.test cpu.prof
                     # 用性能测试生成cpu状态图
-            fix
-                # 同go fix
-            vet
-                # 同go vet
-            cgo
-                # 生成能够调用c语言代码的go源码文件
+            fix                 # 同go fix
+            vet                 # 同go vet
+            cgo                 # 生成能够调用c语言代码的go源码文件
         doc
-        env
-            # 打印go环境信息
+            doc http.ListenAndServe
+        fmt                     # 代码格式化
+    godoc
+        -http=:6060             # 运行本地帮助网站
+    gofmt
 # 语法
-    min, max := 0, 100
-        # 自动引申变量类型
-    var s string
-## 内置关键字
-    defer fn
-    go fn
-## 包函数
-    init
-    main
+    包
+        main包              # 入口包
+            main()          # 入口函数
+        import
+            逐行import或import(多行)
+        var和const
+            逐行或var(多行), const(多行)
+        包函数
+            init
+    注释
+        //或/**/
+    命名
+        字母或下划线开头，区分大小写, 不能用关键字
+        关键字: break, default, func, interface, select, case, defer, go, map, struct, chan, else
+            goto, package, switch, const, fallthrough, if, range, type, continue, for, import, return, var
+        首字母大小写决定可见性，大写表示其是导出的
+        go倾向短名称, 驼峰式命名, 缩写全大写或小写
+    声明定义
+        不能有无用的声明变量
+        var s string            # 未初始化值默认零值，类型和表达式可省一个
+        var s string = ""       # 不推荐
+        var s = ""              # 不推荐
+        s := ""                 # 短变量声明
+
+        var i,j int             # 自动引申变量类型
+        i, j := 0, 1
+        i, j := true, "a"       # 类型可不一致
+        i, err := 0, e          # err在本词法块中声明过(外层不算)，这里是赋值。:=要求至少一个声明
+
+
+        const
+
+        type
+        func
+        变量生命周期
+            包级别是整个程序执行时间
+            局部变量声明时创建，直到不可访问
+        堆栈
+            逃逸变量(函数外保存地址)在堆，局部变量在栈                   # 与变量创建方式无关(new与否), 逃逸需要一次额外内存分配。
+    赋值
+        x = 1
+        *p = 1
+        p.name = ""
+        m[key] = 1
+
+        +=
+        i++和i--                # 只能自成一行, 且不能++i, --i
+        _                       # 忽略变量
+        a, b = b, a             # 多重赋值
+
+        v, err = f()
+        v, ok = m[key]          # map查询
+        v, ok = x.(T)           # 类型断言
+        v, ok = <-ch            # 通道接收
+    复合字面量                   # 初始化复合类型
+        []string                # slice
+        S{A:1}                  # 结构体
+    指针                         # 不能运算
+        &获取地址
+        *获取指针
+    语句
+        for
+            for i, j := 0, 1; i < n; i++ {}
+            for i < n {}
+            for {}
+            for index, value := range slice1{}
+        if
+            if i < n {} else {}
+            if err := f(); err != nil {}
+        switch
+            switch {                # 无标签(tagless), 相当于switch true,
+            case x > 0:             # fallthrough可贯穿, break, continue, goto, 可标签化
+            }
+            switch i := 0 {}        # switch true
+            switch i++ { }          # switch true
+            switch f() {}           # switch true
+
+            switch i {
+            case 0:
+            case 1:
+            default:                # default可在任何地方
+            }
+    关键字
+        defer fn
+        go fn
+    方法和接口
+        func F(i int) int {
+        }
 ## 内置
+    零值                              # 保障变量良好定义，没有未初始化变量
+        数字0, 布尔false, 字符串""
+        接口和引用类型(slice, 指针, map, channel, 函数)nil
+        复合类型其所有元素或成员零值
     常量
         true
         false
-    函数
-        append
-        cap
-        close
-            # channel中用
-        complex
-        copy
-        delete
-        imag
-        len
-        make
-        new
-        panic
-        real
-        recover
+        iota
+        nil
     类型
-        ComplexType
-        FloatType
-        IntegerType
-        Type
-        Type1
-        bool
-        byte
-        complex128
-        complex64
-        error
-        float32
-        float64
         int
+        int8
         int16
         int32
         int64
-        int8
-        rune
-            # int32别名
-        string
         uint
+        uint8
         uint16
         uint32
         uint64
-        uint8
         uintptr
+        float32
+        float64
+        complex128
+        complex64
+        bool
+        byte
+        rune
+            # int32别名
+        string
+        error
+
+        Type
+        IntegerType
+        FloatType
+        ComplexType
+    引用类型
+        slice
+        map                         # key可nil, 取不存在key时, 得到value类型的零值。随机无序遍历
+        chan
+            ch := make(chan string)
+
+            var cin chan<- string
+            var cout <-chan string
+
+            ch <- ""
+            <-ch
+    命名类型
+        type
+        结构体
+            type Point struct {
+                X, Y int
+            }
+    函数
+        make
+        len
+        cap
+        new                         # 创建指定类型变量，初始化为零值，返回地址。不带任何信息且是零值(struct{}和[0]int)的类型, new出的地址不同(从前相同)
+
+        append
+        copy                        # slice或string元素复制
+        close                       # channel中用
+        delete
+        complex                     # 创建复数对象
+        real                        # 获取复数的实部
+        imag                        # 获取复数的虚部
+        panic
+        recover
+
 ## 异常
     func Try(fn func(), handler func(interface{})) {
         defer func() {
@@ -185,25 +272,113 @@ date: 2018-10-09T16:10:44+08:00
             print(e)
         })
     }
-# 包
+# 内部包
+    # golang.org/pkg 找到索引
     fmt
+        Printf()                # 可以用转义序列(\t等)表示不可见字符
+            %d                  # 十进制整数
+            %x, %o, %b          # 十六进制、八进制、二进制整数
+            %f, %g, %e          # 浮点数6位小数、15位小数、6位小数e表示
+            %t                  # 布尔
+            %c                  # unicode字符
+            %s                  # 字符串
+            %q                  # 带引号字符串("abc")，或字符('c')
+            %v                  # 内置格式的任何值
+            %T                  # 任何值
+            %%                  # %本身
+        Fprintf()
+    os
+        Stdin                   # 输入流
+        Args                    # 运行参数
+        Open()                  # 打开文件
+            File
+                Read()
+                Write()
+                Close()
+        Exit(1)                 # 1异常退出
+    io
+        Copy()
+    io/ioutil
+        Discard                 # 丢弃
+
+        ReadFile()              # 读整个文件到内存
+        WriteFile()
     bytes
+    strings
+        Join()
+        Split()
     net
         http
         poolServer(epoll/kqueue/iocp)
             # 支持多核大量并发连接fd
+    net/http
+        Get()
+            Body
+                Close()
+        HandleFunc()
+            ResponseWriter
+            Request
+                RemoteAddr      # 客户ip:端口
+                Host
+                Method
+                Proto           # 网络协议
+                Header
+                Form            # 先ParseForm()
+                URL
+                    Path
+
+                ParseForm()
+        ListenAndServe()
     time
+        Now()
+        Since()
+            Seconds()
+    bufio                       # 带缓冲io
+        NewScanner()
+            Scanner             # 以行或单词断开
+                Scan()          # 有内容返回true
+                Text()
+    flag
+        Args                    # 非标识参数
+        Parse()                 # 出错调os.Exit(2)
+
+        o-> 输入'-s / a bc', 输出'a/bc'
+        sep := flag.Strings("s", " ", "desc s")
+        flag.Parse()
+        println(strings.Join(flag.Args(), *sep))
     template
     regexp
     gob
     json
     errors
         New
-    flag
     testing
     log
+        Fatal
     reflect
     encoding/gob
+    math
+        Sin()
+    math/rand
+        Seed(time.Now().UTC().UnixNano())
+        Float64()
+    image
+        Rect()
+        NewPaletted()
+            SetColorIndex()
+    image/color
+        Color
+        White
+        Black
+    image/gif
+        GIF
+    sync
+        Mutex
+            Lock()
+            Unlock()
+# 外部包
+    # godoc.org 搜索
+    goimports           # 格式化imports顺序
 # 测试
     规则
         文件名以_test.go结尾
@@ -251,16 +426,16 @@ date: 2018-10-09T16:10:44+08:00
             label1:
             for {
                 select {
-                    case c<- struct{}{}:
-                        fmt.Println(1)
-                    case <-c:
-                        fmt.Println(2)
-                        break         # 无标签break跳出当前select块
-                            # break label
-                            # goto label2
-                            # return
-                    default:
-                        fmt.Println(3)
+                case c<- struct{}{}:
+                    fmt.Println(1)
+                case <-c:
+                    fmt.Println(2)
+                    break         # 无标签break跳出当前select块
+                        # break label
+                        # goto label2
+                        # return
+                default:
+                    fmt.Println(3)
                 }
             }
             label2:
@@ -336,11 +511,11 @@ date: 2018-10-09T16:10:44+08:00
                     }()
 
                     select {
-                        case <-ctx.Done():
-                            <-errc
-                            return ctx.Err()
-                        case err := <-errc:
-                            return err
+                    case <-ctx.Done():
+                        <-errc
+                        return ctx.Err()
+                    case err := <-errc:
+                        return err
                     }
                 }
 
@@ -358,8 +533,8 @@ date: 2018-10-09T16:10:44+08:00
             o-> done控制goroutine退出
             func f(done <-chan struct{}) {
                 select {
-                    case <-done:
-                        return
+                case <-done:
+                    return
                 }
             }
 
@@ -399,9 +574,9 @@ date: 2018-10-09T16:10:44+08:00
             func (s *S) loop() {
                 for {
                     select {
-                        case errc := <-s.closing:
-                            errc <- nil
-                            return
+                    case errc := <-s.closing:
+                        errc <- nil
+                        return
                     }
                 }
             }
@@ -413,9 +588,9 @@ date: 2018-10-09T16:10:44+08:00
                     defer close(out)
                     for _, n := range nums {
                         select {
-                            case out <- n:
-                            case <-done:
-                                return
+                        case out <- n:
+                        case <-done:
+                            return
                         }
                     }
                 }()
@@ -427,9 +602,9 @@ date: 2018-10-09T16:10:44+08:00
                     defer close(out)
                     for n := range in {
                         select {
-                            case out <- n * n:
-                            case <-done:
-                                return
+                        case out <- n * n:
+                        case <-done:
+                            return
                         }
                     }
                 }()
@@ -443,8 +618,8 @@ date: 2018-10-09T16:10:44+08:00
                 output := func(c <-chan int) {
                     for n := range c {
                         select {
-                            case out <- n:
-                            case <-done:
+                        case out <- n:
+                        case <-done:
                         }
                     }
                     wg.Done()
@@ -483,10 +658,10 @@ date: 2018-10-09T16:10:44+08:00
             }
         timeout
             select {
-                case <-ch:
-                    ...
-                case <-time.After(time.Second)
-                    return
+            case <-ch:
+                ...
+            case <-time.After(time.Second)
+                return
             }
     常用
         中断
