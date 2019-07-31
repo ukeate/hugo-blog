@@ -1314,6 +1314,34 @@ func KMP() {
         特点
             双方不需知道加密算法
             公钥和私钥，客户用公钥加密，服务端用私钥解密
+# 种群统计
+```golang
+/*
+    统计二进制串置位(位值是1)数
+
+    8位全1数为255, 缓存0-255数的置位数到pc。值为0,1,1,2,1,2,...
+    byte()会截断8位，如byte(256) = 0
+    byte(x>>(0*8))得到x低8位截断数值，byte(x>>(1*8))得到x低9-16位截断数值
+    累加8段数值在pc中映射的置位数，得到x的置位数
+
+    时间 n/8
+*/
+func Count(x uint64) int {
+    var pc [256]byte
+	for i := range pc {
+		pc[i] = pc[i/2] + byte(i&1)
+	}
+	count := int(pc[byte(x>>(0*8))] +
+        pc[byte(x>>(1*8))] +
+        pc[byte(x>>(2*8))] +
+        pc[byte(x>>(3*8))] +
+        pc[byte(x>>(4*8))] +
+        pc[byte(x>>(5*8))] +
+        pc[byte(x>>(6*8))] +
+        pc[byte(x>>(7*8))])
+    return count
+}
+```
 # 资源
     token bucket
         # 令牌桶

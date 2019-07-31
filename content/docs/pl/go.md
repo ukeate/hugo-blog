@@ -97,17 +97,22 @@ date: 2018-10-09T16:10:44+08:00
         -http=:6060             # 运行本地帮助网站
     gofmt
 # 语法
-    包
+    包                      # 路径引用，命名空间
         main包              # 入口包
             main()          # 入口函数
+        包名最好匹配目录名     # 导入路径的最后一段
         import
             逐行import或import(多行)
+            import 别名 包路径
         var和const
             逐行或var(多行), const(多行)
-        包函数
-            init
+        包文件函数
+            init            # 文件在编译前排序，按依赖顺序和文件名，也是init的调用顺序。init不能调用和引用
+        包依赖排序依次初始化
     注释
         //或/**/
+        package前写文档注释，一个包约定一个
+        doc.go约定为包的扩展文档注释
     命名
         字母或下划线开头，区分大小写, 不能用关键字
         关键字: break, default, func, interface, select, case, defer, go, map, struct, chan, else
@@ -124,12 +129,13 @@ date: 2018-10-09T16:10:44+08:00
         var i,j int             # 自动引申变量类型
         i, j := 0, 1
         i, j := true, "a"       # 类型可不一致
-        i, err := 0, e          # err在本词法块中声明过(外层不算)，这里是赋值。:=要求至少一个声明
-
+        i, err := 0, e          # err声明过(只检测本词法块，外层不算)，声明i, 赋值err。:=要求至少一个声明
 
         const
 
-        type
+        type                    # 类型声明
+            type A int          # 底层共类型, 可赋值性，可比较性。可重写String方法让fmt打印时个性化
+            a = A(i)            # 可赋值就可类型转换
         func
         变量生命周期
             包级别是整个程序执行时间
@@ -151,6 +157,8 @@ date: 2018-10-09T16:10:44+08:00
         v, ok = m[key]          # map查询
         v, ok = x.(T)           # 类型断言
         v, ok = <-ch            # 通道接收
+        可赋值性：类型精准匹配，nil赋值任何接口变量或引用变量, 常量更易隐式转换赋值
+            ==和!= 比较，两边要求是可赋值的
     复合字面量                   # 初始化复合类型
         []string                # slice
         S{A:1}                  # 结构体
@@ -164,11 +172,11 @@ date: 2018-10-09T16:10:44+08:00
             for {}
             for index, value := range slice1{}
         if
-            if i < n {} else {}
+            if i < n {} else if i < m {} else {}
             if err := f(); err != nil {}
         switch
             switch {                # 无标签(tagless), 相当于switch true,
-            case x > 0:             # fallthrough可贯穿, break, continue, goto, 可标签化
+            case x > 0:             # fallthrough可贯穿, 可用控制流标签
             }
             switch i := 0 {}        # switch true
             switch i++ { }          # switch true
@@ -179,11 +187,52 @@ date: 2018-10-09T16:10:44+08:00
             case 1:
             default:                # default可在任何地方
             }
+        控制流标签
+            break, continue, goto   # 可标签化, 如break Label1
+    作用域
+        词法块：语法块(block)(大括号), 隐式块(未在大括号中的声明, 如if中)
+            全局块                   # 内置
+            包级别                   # 函数外的声明
+            文件级别                  # 导入的包
+            局部
+        控制流标签作用域是外层函数
+        覆盖
+            x := 1
+            for {
+                x := x+1
+                if .. {
+                    x := x+1        # 这里值的x是最外层x
+                }
+            }
+        if声明的变量(隐式词法块)，else中可见
+            if v, err := f(); err != nil {      # else中处理非err逻辑
+                return err
+            } else {
+                v.close()
+            }
+        包中声明作用域无顺序，可递归    # 常量、变量不可以引用自己
     关键字
         defer fn
         go fn
     方法和接口
         func F(i int) int {
+        }
+    异常
+        func Try(fn func(), handler func(interface{})) {
+            defer func() {
+                if err := recover(); err != nil {
+                    handler(err)
+                }
+            }()
+            fn()
+        }
+
+        func main() {
+            Try(func() {
+                panic("a")
+            }, func(e interface{}) {
+                print(e)
+            })
         }
 ## 内置
     零值                              # 保障变量良好定义，没有未初始化变量
@@ -255,26 +304,9 @@ date: 2018-10-09T16:10:44+08:00
         panic
         recover
 
-## 异常
-    func Try(fn func(), handler func(interface{})) {
-        defer func() {
-            if err := recover(); err != nil {
-                handler(err)
-            }
-        }()
-        fn()
-    }
-
-    func main() {
-        Try(func() {
-            panic("a")
-        }, func(e interface{}) {
-            print(e)
-        })
-    }
 # 内部包
     # golang.org/pkg 找到索引
-    fmt
+    fmt                         # string类型会调对象的String()方法
         Printf()                # 可以用转义序列(\t等)表示不可见字符
             %d                  # 十进制整数
             %x, %o, %b          # 十六进制、八进制、二进制整数
@@ -349,6 +381,8 @@ date: 2018-10-09T16:10:44+08:00
     template
     regexp
     gob
+    strconv
+        ParseFloat
     json
     errors
         New
@@ -357,6 +391,8 @@ date: 2018-10-09T16:10:44+08:00
         Fatal
     reflect
     encoding/gob
+    unicode
+        ToUpper()
     math
         Sin()
     math/rand

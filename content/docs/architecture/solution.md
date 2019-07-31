@@ -161,7 +161,23 @@ date: 2018-10-10T16:49:27+08:00
         access              # 分不同kind划分具体权限, 如(节点from, 节点to)kind的转移权限
         pass权限             # 如创建type, 创建model, 某节点所有权限等
     计划                     # 定时或周期的流转
-
+## 适配器boss
+    action                  # 存http地址，参数名，验证器
+        code                # 业务，如用户套餐
+        mode: get/post/put/delete               # 如获得套餐，添加套餐，修改套餐，删除套餐
+        ctx                 # 参数map, action调用前后修改
+        next                # 下个触发action
+    history_action          # action调用历史
+    suite                   # 带参action, thunk待触发
+        price               # 标价
+        tag                 # 用作商品分类
+    order                   # 用户关联到suite, 计费
+    category                # 生成action模板
+        apps/plugins        # 由category生成, 多个带形参(如app_id)action, 封装成的模板。添加实例填入实参
+    role
+    permission              # action code
+        type                # action, suite等
+        access              # crud和其它自定义权限
 ## 工作流
     本质
         状态管理

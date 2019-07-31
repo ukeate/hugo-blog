@@ -3,8 +3,79 @@ Categories: ["语言"]
 title: "Java"
 date: 2018-10-09T08:48:07+08:00
 ---
+# 基础
+    历史
+        1991.4 Oak
+        1995.5 Java1.0 "Write Once, Run Anywhere"
+        1996.1 JDK1.0, 纯解释型JVM(Sun Classic VM), Applet, AWT
+        1996.5 JavaOne大会
+        1997.2 JDK1.1, JDBC, JAR文件格式, JavaBeans, RMI, 内部类(Inner Class), 反射(Reflection)
+        1998.12 JDK1.2, 分出J2SE、J2EE、J2ME。JVM内置JIT, EJB, Java Plug-in, Java IDL, Swing, Collections, strictfp关键字
+        1999.4 JVM HotSpot
+        2000.5 JDK1.3, 数学运算, Timer, JNDI成为平台服务, CORBA IIOP实现RMI, 2D API, JavaSound
+        2002.2 JDK1.4, 成熟版本，多公司参与。正则, 异常链, NIO, 日志类, XML, XSLT
+            # .NET发布
+        2004.9 JDK1.5, 自动装箱, 泛型, 动态注解, 枚举, 变长参数, foreach, 改进内存模型JMM(Java Memory Model), concurrent包
+        2006.12 JDK1.6, 改名为Java SE 6, Java EE 6, Java ME 6。动态语言支持(内置Mozilla JavaScript Rhino), 编译API, HTTP服务器API。JVM改进(锁、gc、类加载)
+        2006.11 JavaOne Java开源。建立OpenJDK
+        2009.2 JDK1.7, OpenJDK1.7和Sun JDK1.7几乎一样。Lambda项目, Jigswa项目(虚拟机模块化), 动态语言支持, GarbageFirst收集器, Coin项目(语言细节进化)。Oracle收购Sun后延迟部分项目。支持Mac OS X和ARM
+        2009.4 Oracle收购Sun
 
+        o-> JVM历史
+        Sun Classic                 # 1.0到1.3
+            解释器
+            sunwjit                 # 外挂编译器, 还有SymantecJITt shuJIT等
+                编译器和解释器不能同时工作，编译器接管后，要对所有代码编译，不能用耗时稍高的优化，效率低
+        Exact VM                    # 1.2到1.3
+            使用准确内存管理EMM(Exact Memory Management)而得名
+                虚拟机知道内存数据类型, gc时好判断数据是否被使用
+                抛弃Classic VM基于handler(句柄关联对象移动地址)的对象查找方式, 每次定位对象少一次间接查找
+            两级即时编译器
+            与解释器混合工作
+        Sun HotSpot VM              # 1.2, Sun JDK和OpenJDK, 来源Strongtalk VM
+            EMM
+            热点代码探测              # 与解释器协同，平衡最优响应时间和最佳执行性能
+                执行计数器找出最有编译价值的代码，通知JIT以方法为单位编译
+                方法频繁调用或有效循环多，触发标准编译和OSR(栈上替换)
+                不用等待本地代码输出就执行，编译时间压力小，可引入更多优化技术，输出更高效本地代码
 
+        KVM                         # 强调简单、轻量、可移植，但运行慢。Android, iOS前手机平台广泛使用
+        CDC-HI VM/CLDC-HI VM        # CDC/CLDC(Connected Limited Device Configuration)希望在移动端建立统一java编译接口, 这是它们的参考实现， Java ME的支柱
+        Squawk VM                   # 运行于Sun SPOT(small programmable object technology, 一种手持wifi设备)。java本身实现大部分
+        JavaInJava                  # 实验，java实现自身元循环(meta-circular), 需要运行在宿主虚拟机上，没有JIT, 解释运行
+        Maxine VM                   # 几乎java实现, 有JIT和gc, 没有解释器，宿主或独立运行，效率接近HotSpot Client VM
+
+        BEA JRockit                 # 专注服务器端，不太关心响应时间，没有解释器
+            gc和MissionControl领先
+        IBM J9 VM                   # IT4J(IBM Technology for Java Virtual Machine), SmallTalk虚拟机扩展而来, 面向各平台，主要应用于IBM产品
+
+        Azul VM                     # HotSpot改进，Azul Systems公司运行于专有硬件Vega
+            每个实例管理数十cpu, 数百GB内存，可控gc时间，对硬件优化线程调度
+        Zing JVM                    # Azul VM运行于x86平台
+        BEA Liquid VM               # 现在的JRockit VE(virtual edition), BEA运行在自己Hypervisor系统上
+            实现专用操作系统的必要功能，如文件系统、网络支持
+            虚拟机直接控制硬件, 好处如 线程调度不用切换内核态、用户态等
+        Apache Harmony              # 虚拟机，兼容Java1.5、1.6, 没得到TCK认证(Technology Compatibility Kit)兼容性测试的授权
+            许多代码吸纳进IBM的JDK1.7和Google Android SDK
+        Google Android Dalvik VM    # Android平台核心组成部分之一
+            不能直接执行class, 执行dex文件可由class文件转化, 可直接使用大部分Java API
+            寄存器架构，非栈架构
+            Android2.2提供JIT
+        Microsoft JVM               # 微软想垄断Java，Sun打官司令开发停止
+        其它
+            JamVM, cacaovm, SableVM, Kaffe, Jelatine JVM, NanoVM, MRP, Moxie JVM, Jikes RVM
+    JDK(java development kit)       # java开发的最小环境
+        Java语言
+        JVM
+        Java API类库
+    JRE(java runtime environment)
+        JVM
+        Java SE API
+    平台
+        Java Card                        # Applets, 运行在小内存设备
+        Java ME(Micro Edition)           # 以前叫J2ME。手机, PDA, 精简API
+        Java SE(Standard Edition)        # 以前叫J2SE, 桌面应用, 完整API
+        Java EE(Enterprise Edition)      # 企业应用(ERP, CRM), 扩充API(javax包, 有些合入了JavaSE), 部署支持
 # 命令与工具
     bin目录
         javac           #  编译器
@@ -1635,43 +1706,8 @@ date: 2018-10-09T08:48:07+08:00
                 初始化语句   # 如static块和static变量
     线程
         运行时都有线程栈，保存变量值信息。访问对象值时，建立变量副本。修改后(线程退出前)副本值写到对象
-    gc
-        # garbage collector
-        定位
-            引用计数器(java1.1废弃)   # 给每个对象设置计数器，有引用+1, 失效-1
-                不能解决循环引用问题  # A, B互相引用不回收
-                计数器修改开销大
-            根搜索算法(使用)   # 从GC Roots对象起点，向下搜索，路径成为Reference Chain, 不可达对象不可用
-                GC Roots包括
-                    虚拟机栈(栈帧中本地变量表)中的引用对象
-                    方法区域中的类静态引用对象
-                    方法区域中常量引用对象
-                    本地方法栈JNI(native方法)引用的对象
-        回收算法
-            标记-清除(mark-sweep)   # DVM(Dalvik Virtual Machine, 安卓用)使用的算法
-                # 效率不高，清除后产生大量不连续空间
-                标记所有要回收的对象
-                清除标记对象
-            复制(copying)
-                # 实现简单，效率高。内存利用率不高
-                # 用于新生代，两块比例8:1
-                内存分成相等两块，使用其中一块
-                回收时，存活对象复制到另一块，这块整个清理掉
-            标记-整理(mark-compact)
-                # 适合老年代
-                把存活对象往内存一端移动
-                回收边界外内存
-            分代收集(generational collection)
-                新生代用复制算法
-                老年代用标记-整理算法
-        4种引用类型回收
-        方法区回收
-            废弃的常量   # 看引用计数
-            无用的类
-                实例都已经回收
-                加载该类的ClassLoader已回收
-                该类的class对象没有被引用，无法反射该类的方法
-
+    JIT(just in time)
+        # 热点代码检测, 运行时编译和优化
 
 ## 类加载器
     父亲委派机制(java2)
