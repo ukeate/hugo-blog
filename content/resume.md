@@ -41,13 +41,13 @@ draft: true
 # 使用的技术
 ## 常用
 * 工具: linux、git、vim、goland、webstorm
-* 技能: golang、js
+* 技能: golang、js、java
 * 框架: express、node.js、grpc
 * 服务: mongodb、mysql、elasticsearch
 
 ## 了解
 * 工具: eclipse、vscode、maven、npm、pm2、openvpn、kibana、jira、confluence、grafana等
-* 技能: java、python、canvas、css等
+* 技能: python、canvas、css等
 * 框架: vue、java ssh、springmvc、springboot, lucene、shiro、mybatis、birt、koa、socket.io、swig、tornado、django、open tracing、jquery、fis、bootstrap、webpack、gulp、angluar1、three.js、sim.js等
 * 服务: redis、docker、nginx、jenkins、tidb、pgsql、oracle、rabbitmq、nsq、kafka、neo4j、tomcat等
 
@@ -104,7 +104,7 @@ draft: true
 4. 技术调研(mysql集群、redis集群、netty, rabbitmq等)
 
 ### 工作介绍
-    瑞银信是一家银行公司，为发展互联网业务，当时在北京和济南成立了技术部门。济南部门技术人员多是浪潮老员工，部门业绩很好。
+    瑞银信是一家互联网金融公司，在北京和济南成立了技术部门。济南部门技术人员多是浪潮老员工，部门业绩很好。
     研发部是我和上司两人，工作任务也少，所以我参与了很多产品部的开发。期间用lucene（没用solr）实现了搜索服务，基于shiro封装了权限框架，调研了socket.io重构了推送服务等。
     期间对java有很多实践（工作前我对java和java web、数据库、linux等技能有过系统的学习），上司对我的帮助很大。
 

@@ -1068,6 +1068,11 @@ date: 2018-10-09T08:48:07+08:00
 
     HashMap
         # hash表实现，支持null的键和值
+        实现
+            数组存Entry, 位置称为bucket
+            Entry为元素，单链表拉链解决碰撞
+            hashcode(key)得到bucket索引
+            扩容要rehash
         类
             Entry
     LinkedHashMap

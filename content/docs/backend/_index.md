@@ -628,9 +628,10 @@ type: docs
         # java apache的标签库
 ### spring mvc
     原理
-        DispatchServlet捕获请求
-        解析url, 调用HandlerMapping映射到处理类HandlerExcutionChain, 根据Handler选择HandlerAdapter
-        数据处理后，返回ModelAndView对象给DispatchServlet
+        DispatchServlet doService()捕获请求, doDispatch()用HandlerMapping映射url得到HandlerExcutionChain(执行链, 包括拦截器和handler)
+        handler getHandlerAdapter得到适配器来处理handler, 返回ModelAndView
+            # HandlerAdapter分三类: Servlet、Controller, HttpRequest
+        DispatchServlet用ViewResolver(视图解析器)解析ModelAndView成View
             # ModelAndView是逻辑视图，DispatchServlet转化成视图View
         返回View
     与struts2区别

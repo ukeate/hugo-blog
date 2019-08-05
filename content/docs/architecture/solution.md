@@ -130,6 +130,79 @@ date: 2018-10-10T16:49:27+08:00
             数据迁移工具
             缓存配置工具
 # 业务
+## 关注/信箱
+    要求
+        user人数10w, 活跃1w。
+        大部分user关注1k人, 一部分大v被关注100w人。
+        每人每天发100条博文
+        user新博文数量提醒，消息标记已读
+    表
+        user
+        user_followers
+        user_followed
+        user_posts(u_id, created_ts)
+        user_messages(u_id, p_id, is_read)
+            # 10w * 100条数据 / 天
+    定时任务拉取
+        user_followed拉u_id, user_posts表按时段拉id, 更新user_messages
+        优点
+            平均, 少次, 增量。
+        缺点
+            及时性中
+            每次对所有用户操作
+        数据
+            10w*1k*100条数据 / 天
+    发布时推送
+        有p_id, user_followers, 更新user_messages
+        优点
+            及时性高
+        缺点
+            计算集中, 可能高峰
+        数据
+            最高 100w*100条数据 / 次
+            10w*100次 / 天
+    messages处理
+        存部分messages
+            不活跃user不存message
+                在登录状态，定时拉取
+                    优点
+                        减少message
+                    缺点
+                        计算集中
+                    数据
+                        1k * N(N<100)条 / 次
+                        1w * 1k * 100条数据 / 天
+        messages结构变化
+            u_id: [{p_id: uint, is_read: bool}]         #  条数稳定为10w
+            用mongodb或redis
+    消息队列?
+        服务端存message状态，不能mq
+        如果客户端存状态，这就是个简单的mq问题
+## 权限
+    成员
+        user
+        role
+        group
+    访问权限
+        权限1: 游客，用户，rememberMe
+        权限2: uri前缀(功能模块)
+        权限3: uri后缀(静态资源过滤)
+        判断位置: 过滤器中
+    资源权限
+        权限: kind:part1:part2...
+        判断位置: 渲染数据前
+    数据权限
+        资源层级
+            权限: 2
+            判断位置: 进方法前
+        单表
+            权限: 表名:列名:值
+            判断位置: 写sql前
+    方法权限
+        权限: 方法域:方法名
+        判断位置: 进方法前
+    性能
+        grantTable缓存u_id, res_id关系
 ## 审批
     模板
         准入规则
