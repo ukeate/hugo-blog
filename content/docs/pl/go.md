@@ -756,6 +756,13 @@ date: 2018-10-09T16:10:44+08:00
     go/doc
     go/token
     runtime
+        Stack()                             # 调用栈
+        Gosched()                           # 让出执行权
+        Goexit()                            # 终止当前goroutine, 会执行defer
+        LockOSThread()                      # 绑定协程到当前线程
+        UnlockOSThread()
+        GOMAXPROCS()                        # 并发线程数
+        NumGoroutine()                      # 限制goroutine数
     runtime/debug
     os
         Stdin                   # 输入流
@@ -820,6 +827,35 @@ date: 2018-10-09T16:10:44+08:00
     net/http/httputil
     net/url
         QueryEscape()           # url转义
+    context                     # 线程安全, 树形结构
+        Cancel()
+        Deadline(Timeout)
+        Value()
+        TODO()
+
+        o-> ctx.Done()
+        func f(ctx context.Context) (error) {
+            errc := make(chan error, 1)
+
+            go func() {
+                defer close(errc)
+                time.Sleep(2 * time.Second)
+                errc <- nil
+            }()
+
+            select {
+            case <-ctx.Done():
+                <-errc
+                return ctx.Err()
+            case err := <-errc:
+                return err
+            }
+        }
+
+        o-> WithTimeout
+        ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)     # 调cancel提前结束
+        defer cancel()
+        return f(ctx)
     flag
         Args                    # 非标识参数
         Parse()                 # 出错调os.Exit(2)
@@ -1222,43 +1258,7 @@ date: 2018-10-09T16:10:44+08:00
             不能中断
             无返回值
         runtime
-            Stack()                             # 调用栈
-            Gosched()                           # 让出执行权
-            Goexit()                            # 终止当前goroutine, 会执行defer
-            LockOSThread()                      # 绑定协程到当前线程
-            UnlockOSThread()
-            GOMAXPROCS()                        # 并发线程数
-            NumGoroutine()                      # 限制goroutine数
-        context                                 # 线程安全, 树形结构
-            context
-                Cancel
-                Deadline(Timeout)
-                Value
-                TODO
-
-                o-> ctx.Done()
-                func f(ctx context.Context) (error) {
-                    errc := make(chan error, 1)
-
-                    go func() {
-                        defer close(errc)
-                        time.Sleep(2 * time.Second)
-                        errc <- nil
-                    }()
-
-                    select {
-                    case <-ctx.Done():
-                        <-errc
-                        return ctx.Err()
-                    case err := <-errc:
-                        return err
-                    }
-                }
-
-                o-> WithTimeout
-                ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)     # 调cancel提前结束
-                defer cancel()
-                return f(ctx)
+        context
         time
     并发模式                                    # 避免goroutine泄漏，保证通信顺序
         done/quit
@@ -1410,6 +1410,9 @@ date: 2018-10-09T16:10:44+08:00
             case <-time.After(time.Second)
                 return
             }
+        控制并发数
+            并发写缓冲区channel
+            for循环产生并发数goroutine
     常用
         中断
             # os.Exit()程序返回错误码

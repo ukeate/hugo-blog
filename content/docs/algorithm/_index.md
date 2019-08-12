@@ -334,7 +334,7 @@ func HeapSort(elements []int) {
 	swap := func(i int, j int) {
 		elements[i], elements[j] = elements[j], elements[i]
 	}
-	headAdjuct := func(pos int, len int) {
+	headAdjust := func(pos int, len int) {
 		val := elements[pos]
 		child := pos*2 + 1
 
@@ -356,7 +356,7 @@ func HeapSort(elements []int) {
 	buildHeap := func() {
 		halfLen := len(elements) / 2
 		for i := halfLen; i >= 0; i-- {
-			headAdjuct(i, len(elements))
+			headAdjust(i, len(elements))
 		}
 
 	}
@@ -364,7 +364,7 @@ func HeapSort(elements []int) {
 	buildHeap()
 	for i := len(elements) - 1; i > 0; i-- {
 		swap(0, i)
-		headAdjuct(0, i)
+		headAdjust(0, i)
 	}
 }
 

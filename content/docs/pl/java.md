@@ -2052,8 +2052,17 @@ date: 2018-10-09T08:48:07+08:00
     服务器
         JVM设置- XX :+ HeapDumpOnOutOfMemoryError, OOM时输出dump信息
 # 模式
-## 单例
-    # singleton
+## 单例(singleton)
+    确保只有一个实例
+        # 大多有资源管理器的功能
+        # 反射机制会使所有单例失效：私有构造方法可以被访问
+    应用
+        线程池
+        缓存
+        日志对象
+        对话框
+        打印机
+        显卡驱动程序
     o-> 饿汉
     public class Singleton {
         public static Singleton instance = new Singleton();
@@ -2062,11 +2071,23 @@ date: 2018-10-09T08:48:07+08:00
             return instance;
         }
     }
-    o-> 懒汉
-        # 双重检测(DCL)问题,
-        # 1 t1编译singleton = new Singleton()时重排序把没初始化对象赋值给singleton时, t2判断singleton为null。用volatile解决
+    o-> 懒汉式
+    public class Singleton {
+        private static Singleton single=null;
+        private Singleton() {}
+        public synchronized  static Singleton getInstance() {
+            if (single == null) {
+                single = new Singleton();
+            }
+            return single;
+        }
+    }
+    o-> 懒汉，双重检测(DCL)
+        # 解决问题并发创建问题。在不同jvm或多核cpu上，有无序写入bug。
+        # 解决bug: 1 直接创建static属性, 2 get方法修饰synchronized
     public class Singleton {
         private static volatile Singleton singleton = null;
+            # volatile: t1编译singleton = new Singleton()时重排序把没初始化对象赋值给singleton时, t2判断singleton为null。
         private Singleton(){}
         public static Singleton getInstance(){
             if (singleton == null) {
@@ -2079,6 +2100,25 @@ date: 2018-10-09T08:48:07+08:00
                 }
             }
             return singleton;
+        }
+    }
+    o-> map注册
+        # 学Spring，将类名注册
+    public class Singleton {
+        private static Map<String,Singleton> map = new HashMap<String,Singleton>();
+        static{
+            Singleton single = new Singleton();
+            map.put(single.getClass().getName(), single);
+        }
+        protected Singleton(){}
+        public static Singleton getInstance(String name) {
+            if(name == null) {
+                name = Singleton.class.getName();
+            }
+            if(map.get(name) == null) {
+                map.put(name, (Singleton) Class.forName(name).newInstance());
+            }
+            return map.get(name);
         }
     }
 ## 工厂
@@ -2203,7 +2243,7 @@ date: 2018-10-09T08:48:07+08:00
     }
     Icalculator cal = new Minus();
     cal.calculate(exp);
-# 观察者
+## 观察者
     # Observer, 对象变化，一对多广播
     public interface Observer {
         public void update();

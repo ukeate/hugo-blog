@@ -18,7 +18,6 @@ type: docs
                 iplimage
                         # 图像处理
 # php
-
     安装
             php, php-cgi
         编译安装

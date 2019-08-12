@@ -3,6 +3,9 @@ Categories: ["运维"]
 title: "LinuxTool"
 date: 2018-10-11T18:47:57+08:00
 ---
+# 包
+    net-tools
+        ifconfig
 # 内核
     modprobe vboxdrv                    # 内核
     lsmod                               # 显示当前系统加载的模块，如systemctl中start了的模块
@@ -45,12 +48,13 @@ date: 2018-10-11T18:47:57+08:00
     touch
         -t 0712250000 file              # 修改文件时间戳(YYMMDDhhmm)
     ls *[0-9]*
-        -R                 # 递归显示文件
-        -l                 # 详情
-        -S                 # 按大小排列
-        -r                 # reverse
-        -h                 # 自动大小单位
-        -F                 # 加后缀标识类型
+        -R                  # 递归显示文件
+        -l                  # 详情
+        -S                  # 按大小排列
+        -r                  # reverse
+        -h                  # 自动大小单位
+        -F                  # 加后缀标识类型
+        -Z                  # 显示文selinux状态
     tree
     mkdir
     rmdir
@@ -58,7 +62,10 @@ date: 2018-10-11T18:47:57+08:00
         ~
         -
     cp
-        -a                  # 带权限复制
+        -r                  # 递归
+        -p                  # 带权限复制
+        -d                  # 保留链接
+        -a                  # -dpr
     mv
     find .
         maxdepth 1
@@ -117,11 +124,25 @@ date: 2018-10-11T18:47:57+08:00
         -d '+'              # 分隔符
     nano
     strings                 # 打印可打印字符
+    getenforce              # 查看selinux状态
+    sestatus -v             # 查看selinux状态
+    setenforce 0            # 临时关闭selinux
+        1                   # 启用
+    chcon
+        -R                  # 递归
+        -t                  # type
+        -u                  # user
+        -r                  # role
+        --reference         # 参照更新
+        chcon -R -t mysqld_db_t /data
+        chcon -R --reference=/var/lib/mysql /data
 
 # 系统
     man
         -f                  # 简要介绍
         -k                  # 通配搜索
+    w                       # 在线用户、系统负载
+    id outrun               # 用户信息
     su
     sudo
     clear
@@ -130,24 +151,33 @@ date: 2018-10-11T18:47:57+08:00
     uname -a                # 查看版本
     hostname
     id                      # 用户信息
-    adduser outrun
+    useradd outrun          # 创建用户
+        -g outrun           # 指定组
+        -r                  # 是系统用户
+        -d /home/outrun     # 指定登录目录
+        -u 544              # 指定id
     passwd                  # 修改密码
     usermod                 # 修改用户状态
         -a -G root outrun   # 加入组
-        -l                  # 改名
-        -L                  # 锁定
-        -U                  # 解锁
+        -l newuser user1    # 改名
+        -L user1            # 锁定
+        -U user1            # 解锁
+        -d /home/ftp ftp    # 改登录目录
+        -u 123 outrun       # 修改id
+    userdel -r user1        # 完全删除用户
     groups                  # 查看组
-    adddgroup
-    groupadd
+    groupadd ftp            # 创建组
     poweroff                # 立即关机
     shutdown -h now
         -h                  # 关机
         -r                  # 重启
     pm-suspend              # 挂起电脑
     halt
+    bash
+        -c                  # 执行命令字符串
 
 # 查看
+    env                     # 查看所有环境变量
     echo
     watch -n 1 -d netstat  -ant         # 监视
     date +%Y/%m/%d/%H:%M
@@ -293,6 +323,33 @@ date: 2018-10-11T18:47:57+08:00
 ## 网络
     ufw                     # 简化防火墙
     iptables
+        -L                  # list 显示
+        -n                  # 端口以数字显示
+        -A                  # append, 添加
+        -D                  # delete, 删除
+        -p                  # 协议
+        --dport             # 目标端口
+        --sport             # 源端口
+        -j                  # 跳转
+            ACCEPT
+            SNAT            # 只适用于POSTROUTING链，修改源地址
+        -t                  # 要操作的匹配表
+        -F                  # flush
+
+        表
+            filter          # 默认表
+                INPUT       # 进入
+                OUTPUT      # 出去
+                FORWORD     # 通过
+            nat             # 遇到产生新的连接的包
+                PREROUTING  # 修改到来的包
+                OUTPUT      # 修改路由前本地的包
+                POSTROUTING # 修改准备出去的包
+            mangle          # 指定包修改
+                PREROUTING
+                OUTPUT
+
+        o->
         iptables -A INPUT -p tcp --dport 22 -j ACCEPT
         iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
         iptables -L -n
@@ -318,12 +375,21 @@ date: 2018-10-11T18:47:57+08:00
     firewall
         systemctl start firewalld
 
+        o-> ftp
+        firewall-cmd --zone=public --add-port=20/tcp --permanent
+        firewall-cmd --zone=public --add-port=21/tcp --permanent
+        firewall-cmd --permanent --add-port=1000-2000/tcp
+        firewall-cmd --complete-reload
+
+        o-> 8080
         firewall-cmd --query-port=8080/tcp
             --add-port=8080/tcp --permanent --zone=public
             --reload
             --get_active-zones
             --list-all
             --set-default-zone=public
+        o->
+        firewall-cmd --permanent --remove-port=8080/tcp
     wget
         -i filelist.txt         # 下载一个文件中的所有url
         -x  # 强制创建目录
@@ -377,6 +443,7 @@ date: 2018-10-11T18:47:57+08:00
         curl -H "Cookie: foo=bar; baz=val"          # 发送cookie
         curl -X post -k http://localhost:9090/a -H "Content-Type: text/plain" -d '{"name": "a"}'
             # post请求
+        curl -O http://104.223.142.166/isu80        # 抓文件
     nc -U a.sock            # netcat, 功能全面
     dig                     # 域名解析
     nmap
@@ -387,7 +454,15 @@ date: 2018-10-11T18:47:57+08:00
     iostat                  # 负载情况
     lsof -i:8080            # 列出当前系统打开的文件，必须root运行才准确
     nicstat                 # 网络流量统计
-    netstat -antpu          # 端口
+    netstat
+        -a                  # 显示所有
+        -n                  # 显示数字，而不是别名
+        -t                  # 仅显示tcp
+        -u                  # 仅显示udp
+        -p                  # 显示建立链接的程序名
+        -l                  # 仅列出listen的服务
+        -o                  # 显示timer, 如keepalive
+        -antpu          # 端口
     ss                      # 端口，性能高
         -l                  # listening
     iwlist                  # 列出无线网
@@ -396,6 +471,8 @@ date: 2018-10-11T18:47:57+08:00
     w3m                     # 命令行浏览器
 
     ssh
+    sshpass
+        sshpass -p asdf ssh root@47.74.230.238
     sshfs -o allow_other root@ip:~ /mnt                 # 挂载远程目录
     scp a.txt root@ip:~
     vnc                     # 远程桌面
@@ -467,19 +544,42 @@ date: 2018-10-11T18:47:57+08:00
         -qa 查看安装的包名
         -ql 包名, 查看安装的文件
         -qc 包名, 查看软件的配置文件
-    pacman                      # 源 mirrors.163.com
-        -Qeq | pacman -S -      # 重新安装所有包
-        -S $(pacman -Qnq)       # 重新安装所有包
-        -Ss ^ibus-*             # 通配search
-        -S $(pacman -Ssq fcitx*)                # 通配安装
-        -R $(pacman -Qsq fcitx)                 # 通配删除
-        -Rcns plasma            # 删除plasma
-        -Sc                     # 清除缓存
-        -Qii zsh                # 包信息
-        -Ql zsh                 # 查看安装的文件
-        -Qo /bin/zsh            # 查看文件属于的包
-    downgrade                   # 用于给pacman安装过后软件降级
+    pacman
+        -Qeq | pacman -S -                  # 重新安装所有包
+        -S $(pacman -Qnq)                   # 重新安装所有包
+        -Ss ^ibus-*                         # 通配search
+        -S $(pacman -Ssq fcitx*)            # 通配安装
+        -R $(pacman -Qsq fcitx)             # 通配删除
+        -Rcns plasma                        # 删除plasma
+        -Sc                                 # 清除缓存
+        -Qii zsh                            # 包信息
+        -Ql zsh                             # 查看安装的文件
+        -Qo /bin/zsh                        # 查看文件属于的包
+
+        源
+            mirrors.163.com
+    downgrade                               # 用于给pacman安装过后软件降级
     yum
+        list                                # 列出所有包
+            updates                         # 列可更新的包
+            installed                       # 列已安装
+            extras                          # 已安装但不在yum repository的包
+        search
+        install
+        remove
+        info                                # 包详情
+            updates
+            installed
+            extras
+        provides                            # 包文件
+        whatprovides 'bin/isstat'           # 查看命令属性哪个包
+        history
+            list
+            redo 序号                        # 重新做序号
+            undo 序号                        # 恢复历史中执行的动作
+        groups list                         # 查看安装的组
+
+
         设置代理
             /etc/yum.conf
             proxy=http://XXX.XXX.XXX.XXX：XXXX
@@ -487,18 +587,6 @@ date: 2018-10-11T18:47:57+08:00
             proxy=FTP://XXX.XXX.XXX.XXX:XXXX
             proxy_username=你的用户名
             proxy_password=你的用户名的密码
-
-        yum
-            whatprovides 'bin/isstat'           # 查看命令属性哪个包
-            whatprovides git                    # 查看git命令所在的包
-            history list
-            history redo 序号                    # 重新做序号
-            history undo 序号                    # 恢复历史中执行的动作
-            groups list                         # 查看安装的组
-            list installed
-            list extras
-            info installed
-
         编译用包
             build-essential                     # yum中基本编译依赖包
             yum install make cmake apr* autoconf automake curl-devel gcc gcc-c++ zlib-devel openssl openssl-devel pcre-devel gd  kernel keyutils  patch  perl kernel-headers compat* mpfr cpp glibc libgomp libstdc++-devel ppl cloog-ppl keyutils-libs-devel libcom_err-devel libsepol-devel libselinux-devel krb5-devel zlib-devel libXpm* freetype libjpeg* libpng* php-common php-gd ncurses* libtool* libxml2 libxml2-devel patch freetype-devel ncurses-devel libmcrypt libtool flex pkgconfig libevent glib libgnomeui-devel
@@ -513,7 +601,6 @@ date: 2018-10-11T18:47:57+08:00
     upstart                     # 状态 waiting, starting, pre-start, spawned, post-start,running,pre-stop, stopping, killed, post-stop
     systemv
     systemd
-    sestatus -v                 # 查看selinux 状态
     systemctl
         status
         daemon-reload           # 修改service文件后重载
@@ -526,13 +613,12 @@ date: 2018-10-11T18:47:57+08:00
         systemctl stop NAME
         systemctl restart NAME
         systemctl reload NAME
-    setenforce 0                # 临时systemd
-    getenforce                  # 临时关闭systemd
     service
         service start
         service restart
         service stop
         service status
+        service --status-all
     chkconfig iptables on/off   # 设置服务启动
         --level 2345 iptables off                   # 查看各level服务状态
         --list

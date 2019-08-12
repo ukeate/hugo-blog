@@ -399,3 +399,18 @@ date: 2018-10-10T16:49:27+08:00
                 layout
                     # 组合方式
                     水平，垂直，tab
+# 功能实现
+## 重复提交
+    直接redirect
+    csrf令牌
+## 权限
+    过滤器 页面权限
+    拦截器aop 数据权限
+## seo
+    静态化
+## web状态
+    cookie
+    url中sessionId
+## 加密
+    base64
+    sha

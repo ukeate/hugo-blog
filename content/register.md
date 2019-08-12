@@ -55,6 +55,7 @@ type: docs
         git
         expect
         wget
+        vsftpd
         sysdig
         sysstat     # sar, sadf, mpstat, iostat, pidstat
 
@@ -115,35 +116,40 @@ type: docs
         tomcat
         flame-graph
         jdk1.8
+        jdk12
         node
         protoc
     diy
         blog
     文件
-        ~/code
-        ~/scripts/work
-        ~/scripts/app
-        ~/scripts/config
-        ~/scripts/login
-        ~/.xinitrc
-        ~/.bashrc
-        ~/.gitconfig
-        ~/.openvpn
-        ~/.ssh
-        ~/.tmux.conf
-        ~/.config/awesome
-        ~/.config/VirtualBox/VirtualBox.xml
-        /opt/env
-        /opt/svc
-        /etc/resolv.conf
+        ~
+            /code
+            /scripts
+                /work
+                /app
+                /config
+                /login
+            /.xinitrc
+            /.bashrc
+            /.gitconfig
+            /.openvpn
+            /.ssh
+            /.tmux.conf
+            /.config
+                /awesome
+                /VirtualBox/VirtualBox.xml
+        /opt
+            /env
+            /svc
+        /etc
+            /resolv.conf
+            /vsftpd.conf
         /data/var/mysql
         /db/mongo
-        /srv/ftp
-        /srv/http
+        /var/ftp
 
         # log
         ~/VBoxSVC.log
-        ~/VirtualBox VMs/machinename/Logs
         ~/.config/VirtualBox/selectorwindow.log
 # vim
     命令

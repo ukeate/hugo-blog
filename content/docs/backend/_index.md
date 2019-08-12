@@ -591,7 +591,7 @@ type: docs
         namespace
                 server
                         var nsp = io.of('/my-namespace');
-                        nsp.emit('hi', 'everyone!');                # ns广播
+                        Onsp.emit('hi', 'everyone!');                # ns广播
                 client
                         var socket = io('/my-namespace');
         room

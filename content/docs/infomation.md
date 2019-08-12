@@ -89,6 +89,7 @@ date: 2018-10-10T20:56:27+08:00
     https://segmentfault.com/a/1190000000437463
         # Go并发模式：管道和取消
     http://tutorials.jenkov.com/java-concurrency/index.html
+        # java并发指南
 # 资源
     java1234.com
         # pdf书籍资源
@@ -130,6 +131,7 @@ date: 2018-10-10T20:56:27+08:00
     freebuf
     http://www.123cha.com/alexa/
         # 网站排名查询
+    36氪
 # 效果
     http://graphicnovel-hybrid4.peugeot.com/start.html
     http://wildflower.resn.co.nz/
@@ -186,10 +188,11 @@ date: 2018-10-10T20:56:27+08:00
         # canvas视频破碎
     http://www.html5tricks.com/demo/html5-cool-fire-effect/index.html
         # 火焰
-        # java并发指南
 # 招聘
-    100offer
-    36氪
     拉勾网
     内推网
     猎聘网
+    智联
+    51job
+    100offer
+

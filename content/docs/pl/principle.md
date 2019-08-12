@@ -3,7 +3,7 @@ title: "程序语言原理"
 date: 2018-10-10T15:13:01+08:00
 ---
 
-# 语言
+# 基础
     注意
         比较语言，共通处(抽象的元知识)是要点
         在历史上判断设计者意图     # 利于了解知道的根基
@@ -195,8 +195,6 @@ date: 2018-10-10T15:13:01+08:00
                                         ruby模块混入名称冲突时, 使用最后的模块, Trait会报错    # Smalltalk的Squeak处理器可取方法别名，可指定不参与冲突
                                         scala声明创建实例需要的方法, 另一Trait声明提供的方法，组合匹配后可创建实例
                                         对Trait改写定义新的Trait(继承), Trait组合成新Trait
-
-
 # 原理
     gc
         # garbage collector
@@ -249,6 +247,8 @@ date: 2018-10-10T15:13:01+08:00
     实现
         事件发布订阅
             回调函数事件化(钩子机制)
+        cps: continuation-passing style
+            在函数式编程中, 多传一个参数k明确控制continuation
         promise/deferred        # promise/A, promise/B, promise/D模型
             # promise在外部暴露接口(可变部分), deferred在内部维护状态(不可变部分)
             状态

@@ -13,13 +13,6 @@ type: docs
     竖线( | )表示在其左右两边任选一项，相当于"OR"的意思。
     ::= 是“被定义为”的意思。
 
-# 语言
-    # org-mode
-    # markdown
-    # restructedText
-    # LaTex
-    # plantUML
-        # xml
 # 媒体
     场景控制
         3CAD

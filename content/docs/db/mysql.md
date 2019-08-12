@@ -5,14 +5,24 @@
         3306
     命令
         mysql
-            --max-relay-logs-size=300                        # 中继日志大小(sql语句数)
-            --relay-log-purge={0|1}                        # 中继日志自动清空
-            --relay-log-space-limit=0                        # 限制中继日志大小,0表示无限制
-        services.msc
-        mysql -h 127.0.0.1 -u root -p
-        mysqldump -uroot -p day02>d:/backup.sql                // 备份
-        mysql -uroot -p day02<d:/backup.sql                        // 导入
-        mysqladmin -uroot -proot status                                # 查看当前连接数
+            --max-relay-logs-size=300           # 中继日志大小(sql语句数)
+            --relay-log-purge={0|1}             # 中继日志自动清空
+            --relay-log-space-limit=0           # 限制中继日志大小,0表示无限制
+
+            o->
+            mysql -h 127.0.0.1 -u root -p
+        mysqldump
+            -uroot
+            -p
+            -h127.0.0.1
+            -P3306
+            --force
+            --all-databases                     # 所有库
+            --databases db1 db2                 # 多库
+
+            o->
+            mysqldump -uroot -p db1 tb1> tb1.sql
+        mysqladmin -uroot -p status             # 查看当前连接数
     组件
         mysql enterprise monitor documentation
         mysql enterprise monitor connector
@@ -78,6 +88,9 @@
         一些命令强制自动提交
             DLL命令
             lock tables
+    目录
+        /var/lib/mysql              # 默认数据库
+        /var/log/mariadb            # 默认日志
 
 # 引擎
     XtraDB
@@ -425,51 +438,93 @@
 
 # 方案
     初始化
+        systemctl start mariadb
         mysql_secure_installation
-        mysqladmin -uroot -p 原密码 新密码
-        mysql_safe --user=mysql --skip-grant-tables --skip-networking
-                # 用于再登录重置密码
+        etc/my.cnf文件
+            [mysqld]
+            default-storage-engine = innodb
+            innodb_file_per_table
+            max_connections = 4096
+            collation-server = utf8_general_ci
+            character-set-server = utf8
+            [mysql]
+            default-character-set=utf8
+        systemctl restart mariadb
+    移数据库
+        同mysql版本, 新目录下替换(/var/lib/mysql/)ibdata1、数据库名目录
+        error: mysqld does not have the access rights to the directory. File name ./ibdata1
+            chcon -R --reference=/var/lib/mysql 新目录
+            或
+            chcon -R -t mysqld_db_t -u system_u -r object_r 新目录
+    重初始化数据库
+        rm -r /var/lib/mysql/*
+        mysql_install_db
+        chown mysql:mysql -R /var/lib/mysql
+        systemctl restart mariadb
+        mysql -uroot mysql
+        update user set password=password('asdf') where user='root';
+        flush privileges;
     授权远程登录
         GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'asdf' WITH GRANT OPTION;
-
-    mysql重置密码
-        UPDATE user SET password=PASSWORD('asdf') WHERE user='root';
-        FLUSH PRIVILEGES;
-
     创建用户
         CREATE USER 'username'@'host' IDENTIFIED BY 'password';
     删除用户
         DROP USER 'username'@'host';
-
+    免密登录
+        mysql_safe --user=mysql --skip-grant-tables --skip-networking
     修改密码
         问题
             error 1045(28000) access denied for user 'root'@'localhost' (using password:no)
-        update方式
-            update mysql.user set password=password('root') where user='root';
-        set方式
-            SET PASSWORD FOR 'username'@'host' = PASSWORD('newpassword');
-            flush privileges;
-        mysqladmin方式
-            mysqladmin -uroot -p password 新密码
-        mysqld_safe方式
-            mysqld_safe --user=mysql --skip-grant-tables --skip-networking &
-            mysql -u root mysql
-            UPDATE user SET Password=PASSWORD('newpassword') where USER='root';
-                    # 新版中password改为authentication_string
-            flush privileges;
-        文件方式
-            使用/etc/mysql/my.cnf中[client]下的user与password
-        mysqld方式
-            mysqld --skip-grant-tables
-            mysql -u root mysql
-            update user set password=password('asdf') where user='root'
-            flush privileges
-            重启mysql
-        mysqld方式2
-            创建a.sql
-                update mysql.user set password=password('mysql') where user='修改用户';
-                flush privileges
-            mysqld --defaults-file="a.sql"
+        不能登录时
+            mysqld_safe方式
+                mysqld_safe --user=mysql --skip-grant-tables --skip-networking &
+                mysql -u root mysql
+                update user set password=password('newpassword') where user='root';
+                        # 新版中password改为authentication_string
+                flush privileges;
+            mysqld_safe方式2
+                创建a.sql
+                    update mysql.user set password=password('mysql') where user='修改用户';
+                    flush privileges
+                mysqld_safe --defaults-file="a.sql"
+            文件方式
+                使用/etc/mysql/my.cnf中[client]下的user与password
+        能登录时
+            mysqladmin方式
+                mysqladmin -uroot -p password 新密码
+            update方式
+                update mysql.user set password=password('root') where user='root';
+                flush privileges;
+            set方式
+                SET PASSWORD FOR 'username'@'host' = PASSWORD('newpassword');
+                flush privileges;
+    编码问题
+        查询
+            show variables like "%colla%"       # 字符串排序规则
+            show variables like "%char%"
+        修改
+            set character_set_client='utf8'
+        创建db时指定
+            create database `db1` character set 'utf8' collate 'utf8_general_ci'
+        创建表时指定
+            create table (...) engine=innodb default charset=utf8
+        查看db和表编码
+            show database `db1`
+            show create table `tb1`
+        修改db和表编码
+            alter database `db1` default character set utf8 collate utf8_general_ci
+            alter table `tb1` default character set utf8 collate utf8_general_ci
+    导库
+        导出
+            o->
+            mysqldump -uroot -p db1 > db1.sql
+            o->
+            mysqldump -uroot -p db1 tb1 > db1_tb1.sql
+        导入
+            o->
+            mysql -uroot -p db1 < db1.sql
+            o-> 数据库中
+            source db1.sql
     主从复制
         mysql配置文件my.cnf
         [mysqld]
@@ -496,19 +551,3 @@
             The slave I/O thread stops because master and slave have equal MySQL server UUIDs; these UUIDs must be different for replication to work.
                 # 随意修改data/auto.cnf中的uuid的值
             主A复制到主B后，主B不会把数据复制到主B的从
-    编码问题
-        查询
-            show variables like "%colla%"       # 字符串排序规则
-            show variables like "%char%"
-        修改
-            set character_set_client='utf8'
-        创建db时指定
-            create database `db1` character set 'utf8' collate 'utf8_general_ci'
-        创建表时指定
-            create table (...) engine=innodb default charset=utf8
-        查看db和表编码
-            show database `db1`
-            show create table `tb1`
-        修改db和表编码
-            alter database `db1` default character set utf8 collate utf8_general_ci
-            alter table `tb1` default character set utf8 collate utf8_general_ci

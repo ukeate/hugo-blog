@@ -127,25 +127,32 @@ type: docs
                 host-only:单机模式
 
 ## virtualbox
+    网络连接
+|                 |NAT  |Bridged Adapter|Internal|Host-only Adapter|
+|:----------------|:----|:--------------|:--------|:----------------|
+|虚拟机->主机      |√    |√              |×         |默认不能，需设置
+|主机->虚拟机      |×    |√              |×         |默认不能，需设置
+|虚拟机->其他主机   |√    |√              |×        |默认不能，需设置
+|其他主机->虚拟机   |×    |√              |×         |默认不能，需设置
+|虚拟机间          |×    |√              |同网络可以 |√
     方案
         linux安装增强iso
-                iso位置
-                        /usr/share/virtualbox
-                编译环境
-                        kernel-devel
-                        gcc
+            iso位置
+                /usr/share/virtualbox
+            编译环境
+                kernel-devel
+                gcc
 
 
         共享剪切板与拖拽文件
-                虚拟机启动后devices下设置
+            虚拟机启动后devices下设置
         共享文件夹
             linux下挂载
-                    mount -t vboxsf 共享名 /mnt/share
+                mount -t vboxsf 共享名 /mnt/share
             windows下挂载
-                    我的电脑 右键 映射网络驱动器
+                我的电脑 右键 映射网络驱动器
         clone
             clone 时选择更新mac,并在虚拟机中网络连接设置中重写mac与ip
-
             配置主机间ssh免登录，远程ssh与所有主机免登录
 # 认证
 ## ssh（secure shell）
@@ -192,12 +199,17 @@ type: docs
             sshpass  -p zlycare@123 ssh zlycare@10.162.201.58
 
 ## openvpn
-    o-> 安装 2.0.9
+    编译安装
         yum install openssl-devel gcc lzo-devel
         mkdir –p /usr/local/openvpn && cd /usr/local/openvpn/
         ./configure --with-lzo-headers=/usr/local/include --with-lzo-lib=/usr/local/lib
         make
         make install
+
+    生成证书
+        目标
+            服务器: ca.crt、server.key、server.crt、dh.pem
+            客户端: ca.crt、client.key、client.crt
         cd /usr/local/openvpn/openvpn-2.0.9/easy-rsa/2.0/
         tail -5 vars
                 export KEY_COUNTRY="CN"
@@ -209,84 +221,82 @@ type: docs
         ./clean-all
         ./build-ca
         ./build-key-server server
-        ./build-key-pass zdong
-                # ./build-key zdong 无密码
+        ./build-key-pass outrun
+                # ./build-key outrun 无密码
         ./build-dh
-        mkdir -p /etc/openvpn
+
+    server配置
         cp -p ../../sample-config-files/server.conf /etc/openvpn
-        cp keys/* /etc/openvpn
-        /usr/local/sbin/openvpn --config /etc/openvpn/server.conf &
+        o-> server.conf
+            ;local 172.21.223.196
+            port 1194
+            proto udp
+            dev tun
 
-        cd keys
-        mkdir zdong
-        cp zdong.* zdong
-        cp ca.* zdong
-        vim zdong/client.ovpn
-        tar cvzf zdong.tar.gz zdong
+            ca /etc/openvpn/ca.crt
+            cert /etc/openvpn/server.crt
+            key /etc/openvpn/server.key
+            dh /etc/openvpn/dh1024.pem
 
-        vim /etc/sysctl.conf
-                net.ipv4.ip_forward = 1
-                        # 开启路由转发
-        sysctl -p
-        iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -j SNAT --to-source 45.55.56.16
+            server 192.168.200.0 255.255.255.0
+            ifconfig-pool-persist ipp.txt
+            push "route 0.0.0.0 0.0.0.0"
+            keepalive 10 120
 
+            cipher AES-256-CBC
+            comp-lzo
+            persist-key
+            persist-tun
 
-    o-> server.conf
-        dev tun
-        ca /etc/openvpn/ca.crt
-        cert /etc/openvpn/server.crt
-        key /etc/openvpn/server.key
-        dh /etc/openvpn/dh1024.pem
-        server 192.168.200.0 255.255.255.0
-        ifconfig-pool-persist ipp.txt
-        push "route 0.0.0.0 0.0.0.0"
-        #push "route 192.168.10.0 255.255.255.0"
-        push "redirect-gateway def1 bypass-dhcp"
-        push "dhcp-option DNS 223.5.5.5"
-        #client-config-dir ccd
-        client-to-client
-        #duplicate-cn
-        #keepalive 10 120
-        comp-lzo
-        persist-key
-        persist-tun
-        status openvpn-status.log
-        log /var/log/openvpn.log
-        verb 3
+            status openvpn-status.log
+            log /var/log/openvpn.log
 
-    o-> client.ovpn
-        client
-        dev tun
-        proto udp
-        remote 45.55.56.16
-        resolv-retry infinite
-        nobind
-        persist-key
-        persist-tun
-        ca ca.crt
-        cert zdong.crt
-        key zdong.key
-        comp-lzo
-        verb 3
-        mute 20
-        #redirect-gateway def1
+            verb 3
+            explicit-exit-notify 1
+        openvpn --config /etc/openvpn/server.conf &
 
-    o-> 连接
+    linux配置
+        iptables
+            vim /etc/sysctl.conf
+                net.ipv4.ip_forward = 1     # 开启路由转发
+            sysctl -p
+            iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -j SNAT --to-source 45.55.56.16
+        firewall
+            firewall-cmd  --add-service=openvpn --zone=public --permanent
+            firewall-cmd --reload
+
+    client配置
+        o-> client.ovpn
+            client
+            dev tun
+            proto udp
+            remote 45.55.56.16 1194
+            resolv-retry infinite
+            nobind
+            ca ca.crt
+            cert outrun.crt
+            key outrun.key
+            ;ns-cert-type server
+            cipher AES-256-CBC
+            comp-lzo
+            persist-key
+            persist-tun
+            verb 3
+            mute 20
         openvpn --config openvpn.conf
             # --user outrun
             # --auth-nocache
             # askpass pass.txt 放密码到文件
-
-    o-> expect免密码连接
-        #!/usr/bin/expect -f
-        spawn sudo openvpn --config /home/outrun/.openvpn/meiqia-vpn-ldap.ovpn
-        # match_max 100000
-        expect "*?assword*:*"
-        send -- "1234\n"
-        expect "*Username:*"
-        send -- "outrun\n"
-        expect "*Password:*"
-        expect "#"
+        o-> 免密码连接
+            #!/usr/bin/expect -f
+            spawn sudo openvpn --config /home/outrun/.openvpn/meiqia-vpn-ldap.ovpn
+            # match_max 100000
+            expect "*?assword*:*"
+            send -- "1234\n"
+            expect "*Username:*"
+            send -- "outrun\n"
+            expect "*Password:*"
+            expect "#"
 ## opendj
     介绍
         open source directory services for the java platform
@@ -799,25 +809,28 @@ type: docs
 ## vsftp
     介绍
         默认端口21
-        匿名用户登陆名为ftp或anonymous, 目录在/var/ftp, 只能下载不能上传
-        本地用户用户名和密码与本地用户相同，目录为该用户的登录目录
+    用户
+        匿名用户
+            默认为ftp或anonymous
+            目录在/var/ftp
+            只能下载不能上传
+        本地用户
+            用户名和密码与本地用户相同
+            目录为该用户的登录目录
+        虚拟用户
+            文件配置名字和密码
+            要生成认证文件
     文件
-        /usr/sbin/vsftpd
-                # VSFTPD的主程序
-        /etc/rc.d/init.d/vsftpd
-                # initd启动脚本
-        /etc/vsftpd/vsftpd.conf
-                # 主配置文件
-        /etc/pam.d/vsftpd
-                # PAM认证文件
-        /etc/vsftpd.ftpusers
-                # 禁止使用VSFTPD的用户列表文件
-        /etc/vsftpd.user_list
-                # 禁止或允许使用VSFTPD的用户列表文件
-        /var/ftp
-                # 匿名用户主目录
-        /var/ftp/pub
-                # 匿名用户的下载目录
+        /usr/sbin/vsftpd                    # 主程序
+        /etc
+            /rc.d/init.d/vsftpd             # initd启动脚本
+            /vsftpd.conf                    # 主配置
+            /vsftpd.ftpusers                # 用户黑名单, 一行一名字
+            /vsftpd.user_list               # 用户黑/白名单, 一行一名字
+            /pam.d/vsftpd                   # pam认证文件
+        /var
+            /ftp                            # 匿名用户主目录
+            /ftp/pub                        # 匿名用户的下载目录
     默认用户与组
         用户
             adduser -d /var/ftp -g ftp -s /sbin/nologin ftp
@@ -825,31 +838,43 @@ type: docs
             ftp
     命令
         systemctl start vsftpd
-    配置
-        /etc/vsftpd/vsftpd.conf文件中
-            anonymous_enable=YES
-            local_enable=YES
-            write_enable=YES
-            chroot_local_user=YES
-            allow_writeable_chroot=YES
-            local_root=/
-                    # local_root表示使用本地用户登录到ftp时的默认目录
-            anon_root=/
-                    # anon_root表示匿名用户登录到ftp时的默认目录
-            chroot_list_file=/etc/vsftpd/chroot_list
+    使用
+        /etc/vsftpd.conf
+            anonymous_enable=YES            # 允许匿名用户
+            local_enable=YES                # linux用户可登录, 虚拟用户可登录
+            write_enable=NO                 # 可写
+            local_umask=022                 # user文件权限, 默认077
+            dirmessage_enable=YES           # 显示目录信息
+            xferlog_enable=NO               # 记录上传/下载日志
+            connect_from_port_20=YES        # 确保用20端口传输
+            chroot_local_user=NO            # linux用户可以chroot到他的home目录。YES时, chroot_list_file指定黑名单
+            chroot_list_enable=NO
+            chroot_list_file=/etc/vsftpd/chroot_list                # 一行一名字
+            ls_recurse_enable=NO            # 允许ls -R
+            allow_writeable_chroot=NO
+            listen=NO
+            listen_ipv6=YES                 # 包含ipv4,和listen只能有一个YES
 
-        编辑/etc/vsftpd/chroot_list
-            在这里面输入用户名字，一行写一个用户名。
-
-        重启vsftpd
+            pam_service_name=vsftpd
+            local_root=/home/outrun/Downloads                       # linux用户默认目录。会先登录到用户目录，再切换到这里
+            anon_root=/home/outrun/Downloads                        # 匿名用户默认目录
+            ftp_username=ftp                # 匿名用户名，默认ftp
+            userlist_enable=YES             # 读vsftpd.user_list黑名单
+            tcp_wrappers=NO                 # 结合tcp_wrapper限制ip登录
+                /etc
+                    /hosts.allow            # 允许地址
+                    /hosts.deny             # 拒绝地址
+        useradd -d /home/ftp ftp
+        mkdir /home/ftp && chown ftp /home/ftp && chgrp ftp /home/ftp
+        systemctl restart vsftpd
         打开tcp, udp端口21, 20
-
+    方案
         root 登录
-                /etc/vsftpd/vsftpd.conf
-                        userlist_enable=YES
-                        pam_service_name=vsftpd
-                /etc/vsftpd/ftpusers与/etc/vsftpd/user_list
-                        注释root
+            /etc/vsftpd/vsftpd.conf
+                userlist_enable=YES
+                pam_service_name=vsftpd
+            /etc/vsftpd/ftpusers与/etc/vsftpd/user_list
+                注释root
 ## SimpleHTTPServer
     pythom -m SimpleHTTPServer 8080
 ## pyshark
