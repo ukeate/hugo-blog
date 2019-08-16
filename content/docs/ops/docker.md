@@ -20,78 +20,113 @@ date: 2018-10-11T18:18:21+08:00
 # 命令
     docker
         -h
-        search mysql
-        pull centos:7
+        version
+        search mysql                    # 搜索镜像
+        pull centos:7                   # 下载镜像
             centos:latest
             outrun11/test:nginx1
-        images centos
-            # 本地镜象列表
-        rmi centos:latest
-            # 删除镜象
-        run
-            # 在新容器中运行命令
-            # -t 伪tty, -i 交互的
-            # -rm=true执行完后删除
-            # -v /etc/:/opt/etc/ 挂载本机/etc到容器/opt/etc, /etc/:/opt/etc/:ro 只读挂载, /etc/ 对外共享/etc
-            # -p 1234:80 端口映射本机1234端口到容器80
-            # --volumes-from etc_share 使用另一个容器对外共享的磁盘
-            # -d 后台运行
-            # --link redis_server:redis 连接容器的redis命令
-            # -w /var/node 当前工作目录
-            # -e NODE_ENV='' 环境变量
+        image
+            ls
+            pull
+            rm
+        images centos                   # 本地镜象列表
+        rmi centos:latest               # 删除镜象
+        container
+            run                         # 新建容器
+                --name                  # 显示名
+                -t                      # 伪tty, -i 交互的
+                -rm=true                # 执行完后删除
+                -v /etc/:/opt/etc/      # 挂载本机/etc到容器/opt/etc, /etc/:/opt/etc/:ro 只读挂载, /etc/ 对外共享/etc
+                -p 1234:80              # 端口映射本机1234端口到容器80
+                --volumes-from etc_share                    # 使用另一个容器对外共享的磁盘
+                -d                      # 后台运行
+                --link redis_server:redis                   # 连接容器的redis命令
+                -w /var/node            # 当前工作目录
+                -e NODE_ENV=''          # 环境变量
 
-            --name nsqd -p 4150:4150 nsqio/nsq /nsqd
-                # 端口
-            -t -i centos /bin/bash
-                # 启动容器, 执行bash
-            b15 /bin/echo 'hello'
-                # 启动容器
-            --rm=true -i -t --name=ls-volume -v /etc/:/opt/etc/ centos ls /opt/etc
-                # 创建共享
-            -i -t -p 1337:1337 --name=etc_share -v /etc/ centos mkdir /etc/my_share && /bin/sh -c "while true; do echo hello; sleep 1; done"
-                # 持续运行
-            --rm=true -i -t --volumes-from etc_share --name=ls_etc centos ls /etc
-                # 使用共享
-        start 026
-            # 启动已建立的容器, id可以只输入前几位
-            cp 026e:/docker/file /local/file
-        restart 026e
-        kill 026e
-        ps -a
-            # 容器列表
-        rm
-            # 移除容器
+                --name nsqd -p 4150:4150 nsqio/nsq /nsqd
+                    # 端口
+                -it centos /bin/bash
+                    # 启动容器, 执行bash
+                b15 /bin/echo 'hello'
+                    # 启动容器
+                -it --rm=true --name=ls-volume -v /etc/:/opt/etc/ centos ls /opt/etc
+                    # 创建共享
+                -it -p 1337:1337 --name=etc_share -v /etc/ centos mkdir /etc/my_share && /bin/sh -c "while true; do echo hello; sleep 1; done"
+                    # 持续运行
+                -it --rm=true --volumes-from etc_share --name=ls_etc centos ls /etc
+                    # 使用共享
+            exec                        # 已有容器中运行
+                -i
+                -t
+            ls
+            start 026                       # 启动已建立的容器, id可以只输入前几位
+                cp 026e:/docker/file /local/file
+            restart 026e
+            kill 026e
+        ps -a                           # 容器列表
+        rm                              # 移除容器
             docker rm docker ps -aq
                 # 移除所有未运行的容器
             rm -f 026
 
 
         login
-        build -t="nginx/test" .
-            # 用当前目录Dockerfile创建新镜像
+        build -t="nginx/test" .         # 用当前目录Dockerfile创建新镜像
         tag nginx/test:test1 outrun11/test:nginx1
             # 远程docker基站创建repository, 名字test
         push outrun11/test:nginx1
             logs beae3392
+
+
+        swarm                           # 一个或多个docker组成
+            init
+        node                            # swarm节点
+            ls
+        service                         # 运行于swarm的服务
+            create
+            ls
+            ps
+            rm
+            inspect                     # 详情
+            scale                       # 加减副本
+            update                      # 变更属性
+            logs                        # 查日志
+
+
+        network                         # 网卡
+            ls
+            rm
+            prune                       # 删除全部未使用
+            inspect                     # 详情
+            create
+                -d nat                  # 指定驱动
+
+
+        volume
+            create
+            ls
+            rm
+            prune                       # 删除全部未使用
+            inspect
+
+
+        stack                           # 单文件定义多服务
+            deploy
+            ls
+            ps
+            rm
 # Dockerfile
-    FROM nginx
-        # 基于镜像
-    EXPOSE 80
-        # 内部服务开启的端口
-    ENV NODE_ENV test
-        # 环境变量
-    COPY ./bin /data/a
-        # 复制外部文件到内部
-    VOLUME ["/data/log"]
-        # 创建挂载点
-    ENTRYPOINT ["/data/a/a"]
-        # 容器启动命令，只有一个
-    CMD ["-config", "config.toml"]
-        # 启动命令，只有一个。可为entrypoint指定参数
-    RUN echo 'test'
-        # 在当前镜像基础上执行命令，提交为新的镜像
-    MAINTAINER outrun
-        # 指定维护者信息
+    FROM nginx                          # 基于镜像
+    MAINTAINER outrun                   # 指定维护者信息
+    EXPOSE 80                           # 内部服务开启的端口
+    ENV NODE_ENV test                   # 环境变量
+    WORKDIR /src
+    COPY ./bin /data/a                  # 复制外部文件到内部
+    VOLUME ["/data/log"]                # 创建挂载点
+    ENTRYPOINT ["/data/a/a"]            # 容器启动命令，只有一个
+    CMD ["-config", "config.toml"]      # 启动命令，只有一个。可为entrypoint指定参数
+    RUN echo 'test'                     # 在当前镜像基础上执行命令，提交为新的镜像
 # 方案
     进入容器
         docker exec -it mysql bash

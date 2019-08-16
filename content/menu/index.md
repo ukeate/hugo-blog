@@ -54,7 +54,7 @@ headless: true
 - [**图形工具**] (/docs/tool)
   - [vim](/docs/tool/vim)
   - [eclipse](/docs/tool/eclipse)
-- [管理](/docs/management)
+- [方法](/docs/method)
 - [媒体](/docs/media)
 - [英语](/docs/english)
 - [题目](/docs/interview)
