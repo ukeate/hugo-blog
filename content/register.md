@@ -7,8 +7,13 @@ type: docs
 # 连接
 <a href="http://localhost:1315/docs/infomation/" target="_blank">信息</a>
 <a href="https://shimo.im/" target="_blank">石墨</a>
-<a href="https://processon.com/" target="_blank">processon</a>
 <a href="https://www.vtrhome.net/" target="_blank">vpntech</a>
+<br/>
+<a href="https://www.infoq.cn/" target="_blank">infoQ</a>
+<a href="https://www.v2ex.com/" target="_blank">V2EX</a>
+<br/>
+<a href="https://processon.com/" target="_blank">ProcessOn</a>
+<a href="https://www.atlassian.com/" target="_blank">Atlassian</a>
 
 
 # go
@@ -58,10 +63,16 @@ type: docs
         vsftpd
         sysdig
         sysstat     # sar, sadf, mpstat, iostat, pidstat
+        shadowsocks
+        polipo
 
         # 程序需要
         g++
-        python
+        python2.7
+            python3.5
+        php
+            php-cgi
+            php-fpm
         lua
         ruby
         cmake
@@ -245,7 +256,15 @@ type: docs
 
 # intellij
     shift shift
-
+# docker
+    /etc/docker/daemon.json
+        {
+          "registry-mirrors": ["https://nmp74w3y.mirror.aliyuncs.com"]
+        }
+    /etc/systemd/system/docker.service.d/http-proxy.conf            # 没有时创建
+        Environment="HTTP_PROXY=http://127.0.0.1:8123"
+            "HTTPS_PROXY=http://127.0.0.1:8123"
+            "NO_PROXY=192.168.1.1,localhost"
 # awesome
     快捷键
         独立

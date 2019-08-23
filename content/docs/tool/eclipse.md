@@ -273,10 +273,10 @@ date: 2018-10-11T18:33:08+08:00
     全局 上下文信息 Alt+？
     Alt+Shift+?
     Ctrl+Shift+Space 
-    ｊａｖａ编辑器 显示工具提示描述 F2 
-    ｊａｖａ编辑器 选择封装元素 Alt+Shift+↑ 
-    ｊａｖａ编辑器 选择上一个元素 Alt+Shift+← 
-    ｊａｖａ编辑器 选择下一个元素 Alt+Shift+→ 
+    java编辑器 显示工具提示描述 F2
+    java编辑器 选择封装元素 Alt+Shift+↑
+    java编辑器 选择上一个元素 Alt+Shift+←
+    java编辑器 选择下一个元素 Alt+Shift+→
     文本编辑器 增量查找 Ctrl+J 
     文本编辑器 增量逆向查找 Ctrl+Shift+J 
     全局 粘贴 Ctrl+V 
@@ -350,12 +350,12 @@ date: 2018-10-11T18:33:08+08:00
 
     源代码
     作用域 功能 快捷键 
-    ｊａｖａ编辑器 格式化 Ctrl+Shift+F 
-    ｊａｖａ编辑器 取消注释 Ctrl+\ 
-    ｊａｖａ编辑器 注释 Ctrl+/ 
-    ｊａｖａ编辑器 添加导入 Ctrl+Shift+M 
-    ｊａｖａ编辑器 组织导入 Ctrl+Shift+O 
-    ｊａｖａ编辑器 使用try/catch块来包围 未设置，太常用了，所以在这里列出,建议自己设置。
+    java编辑器 格式化 Ctrl+Shift+F
+    java编辑器 取消注释 Ctrl+\
+    java编辑器 注释 Ctrl+/
+    java编辑器 添加导入 Ctrl+Shift+M
+    java编辑器 组织导入 Ctrl+Shift+O
+    java编辑器 使用try/catch块来包围 未设置，太常用了，所以在这里列出,建议自己设置。
     也可以使用Ctrl+1自动修正。 
 
     运行

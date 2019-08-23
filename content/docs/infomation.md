@@ -4,58 +4,73 @@ title: "Infomation"
 date: 2018-10-10T20:56:27+08:00
 ---
 
-# 工具
-    http://lpaste.net/
-        # 粘代码
-    https://pastee.org/
-        # 粘贴代码
-    http://editor.method.ac/
-        # 在线ps
-    https://www.processon.com/
-        # 在线思维导图, uml等
-    https://www.gliffy.com/go/html5/launch
-        # 在线画图
-    etherpad.org
-        # 在线协作无缝编辑
-    www.webpagetest.org
-        # web test
-    http://www.lmgtfy.com/?q=Linux#seen
-        # let me google this for you
-    http://tool.lu/coderunner/
-        # 在线repl
-    http://bird.so
-        # 程序信息搜索
-    zeplin
-        # 设计和前端协同工具
-# 更新学习
-    大前端
-    http://a.haskellcn.org/study
-        # haskell书目录
-    liaoxuefeng
-        # 廖雪峰blog
-    http://blogjava.net/
-        # blog java
-    https://github.com/alsotang/node-lessons
-        # alsotang blog
-    http://www.yinwang.org/
-    https://yinwang0.wordpress.com/
-        # 王垠
-    http://tech.meituan.com/
-        # 美团tech
-    http://harttle.com/
-        # harttle博客
-    http://learningwebgl.com/
-        # webgl 基础
-    http://www.cnblogs.com/iamzhanglei/
-        # js动画博客
-    http://calvin1978.blogcn.com/articles/javabookshelf.html
-        # 江南白衣的书架
-    http://www.cnblogs.com/iamzhanglei/
-        # 当耐特的博客
-    http://jm-blog.aliapp.com/
-        # 阿里中间件博客
-    https://softwarefoundations.cis.upenn.edu/
-        # pl基础
+# 信息公布
+    新资讯
+        hackernews
+        infoq
+        v2ex
+        freebuf
+        36氪
+
+
+        http://tech.meituan.com/
+            # 美团tech
+        http://www.yinwang.org/
+        https://yinwang0.wordpress.com/
+            # 王垠
+        https://softwarefoundations.cis.upenn.edu/
+            # pl基础
+
+
+        http://a.haskellcn.org/study
+            # 廖雪峰blog
+        http://calvin1978.blogcn.com/articles/javabookshelf.html
+            # 江南白衣的书架
+
+
+        大前端
+        http://harttle.com/
+            # harttle博客
+        http://www.cnblogs.com/iamzhanglei/
+            # 当耐特前端
+    资料
+        http://www.linuxidc.com
+            # linux资讯、书
+        java1234.com
+            # pdf书籍资源
+    问答
+        quora
+        stack overflow
+        知乎
+    框架
+        https://github.com/sindresorhus/awesome
+            各技术框架
+        github.com search 'stars:>1000'
+            # github星项目
+        http://a.haskellcn.org/study
+            # haskell书目录
+    查询
+        http://www.123cha.com/alexa/
+            # 网站排名查询
+        天眼查
+        乌云网
+            # 白帽漏洞
+# 做题
+    http://www.codewars.com/
+        # haskell等语言在线做题
+    https://leetcode.com/problemset/algorithms/
+        # leetcode
+# 资源
+    堆糖
+        # 图片
+    www.pudn.com
+        # 源码下载
+    http://www.pssdss.com/
+        # 源码购买
+    http://www.iconfont.cn/plus
+        # 在线图标
+    http://www.blendswap.com/
+        # blender 模型分享
 # 留查
     vim实用技巧
     算法设计与分析基础
@@ -90,48 +105,6 @@ date: 2018-10-10T20:56:27+08:00
         # Go并发模式：管道和取消
     http://tutorials.jenkov.com/java-concurrency/index.html
         # java并发指南
-# 资源
-    java1234.com
-        # pdf书籍资源
-    堆糖
-    gitter.im
-        # 社区成长问答区
-    github.com search 'stars:>1000'
-        # github星项目
-    www.codesky.net
-        # 源码下载
-    www.pudn.com
-        # 源码下载
-    http://www.pssdss.com/
-        # 源码购买
-    http://www.wooyun.org/
-        # 乌云网，白帽
-    http://www.iconfont.cn/plus
-        # 在线图标
-    http://www.k8sec.com/forum.php
-        # 社工库
-    http://www.blendswap.com/
-        # blender 模型分享
-    alloyteam.github.io
-        # 腾讯web前端
-    ftp1.linuxidc.com
-        # linux书ftp
-        ftp1.linuxidc.com http://www.linuxidc.com
-# 做题
-    http://www.codewars.com/
-        # haskell等语言在线做题
-    https://leetcode.com/problemset/algorithms/
-        # leetcode
-    codility.com
-# 信息公布
-    infoq
-    hackernews
-    v2ex
-    quora
-    freebuf
-    http://www.123cha.com/alexa/
-        # 网站排名查询
-    36氪
 # 效果
     http://graphicnovel-hybrid4.peugeot.com/start.html
     http://wildflower.resn.co.nz/
@@ -189,6 +162,7 @@ date: 2018-10-10T20:56:27+08:00
     http://www.html5tricks.com/demo/html5-cool-fire-effect/index.html
         # 火焰
 # 招聘
+    boss直聘
     拉勾网
     内推网
     猎聘网

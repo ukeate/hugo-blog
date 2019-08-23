@@ -132,6 +132,8 @@ type: docs
         # 手机，类bootstrap
     frozenui
         # 手机
+    flutter
+        # google移动端框架
 ## 富应用
     react
     angular

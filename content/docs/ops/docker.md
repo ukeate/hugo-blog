@@ -116,6 +116,38 @@ date: 2018-10-11T18:18:21+08:00
             ls
             ps
             rm
+# docker-compose
+    docker-compose
+        -h                              # 帮助
+        -f                              # 指定模板
+        version
+
+        up                              # 所有模板创建容器
+            -d                          # 后台
+        down                            # 删除容器、网络、卷、镜像
+        rm                              # 删除容器
+        create                          # 创建容器
+
+        stop                            # 停止容器
+        start                           # 启动容器
+        restart
+        pause                           # 暂停容器
+        unpause
+        kill                            # 强制停止容器
+        scale                           # 指定容器个数
+
+        ps                              # 列出所有容器
+        logs                            # 查日志
+        port                            # 显示容器映射端口
+        run                             # 容器中执行命令
+        exec
+
+        config                          # 查看配置
+        build                           # (重)构建容器
+        pull                            # 拉依赖镜像
+        push                            # 推送镜像
+
+
 # Dockerfile
     FROM nginx                          # 基于镜像
     MAINTAINER outrun                   # 指定维护者信息
@@ -160,6 +192,21 @@ date: 2018-10-11T18:18:21+08:00
             # 把容器提交为镜像
         docker images node_pm2
         docker push outrun11/node_pm2
+    代理
+        /etc/systemd/system/docker.service.d/http-proxy.conf            # 没有时创建
+            Environment="HTTP_PROXY=http://127.0.0.1:8123"
+                "HTTPS_PROXY=http://127.0.0.1:8123"
+                "NO_PROXY=192.168.1.1,localhost"
+        systemctl daemon-reload
+    换源
+        /etc/docker/daemon.json                                         # 没有时创建
+            {
+              "registry-mirrors": ["https://nmp74w3y.mirror.aliyuncs.com"]
+            }
+        systemctl daemon-reload
+        systemctl restart docker
+    登录运行容器
+        docker exec -it 8ce /bin/bash
     jenkins
         docker pull jenins
         mkdir /var/jenkins_home
@@ -202,6 +249,25 @@ date: 2018-10-11T18:18:21+08:00
     es
         docker run -it  -v /home/test/es/config/:/usr/share/elasticsearch/config/ -v /home/test/es/plugins/:/usr/share/elasticsearch/plugins/ elasticsearch:5.4.3 /bin/bash
         docker run -d -p 9200:9200 -p 9300:9300 --name es  -v /home/test/es/config/:/usr/share/elasticsearch/config/ -v /home/test/es/plugins/:/usr/share/elasticsearch/plugins/ elasticsearch:5.4.3
+    dokuwiki
+        docker-compose.yml
+            version: '3'
+            services:
+              dokuwiki:
+                restart: always
+                image: bitnami/dokuwiki:latest
+                ports:
+                  - 8004:80
+                environment:
+                  - DOKUWIKI_FULL_NAME=outrun
+                  - DOKUWIKI_EMAIL=934260428@qq.com
+                  - DOKUWIKI_WIKI_NAME=Wiki
+                  - DOKUWIKI_USERNAME=outrun
+                  - DOKUWIKI_PASSWORD=asdfasdf
+                volumes:
+                  - ./.data:/home/outrun/scripts/config/dokuwiki/data
+        docker-compose -f /路径/docker-compose.yml up -d
+
 # 工具
     harbor
         企业级register镜像服务器

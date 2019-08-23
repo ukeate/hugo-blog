@@ -25,6 +25,7 @@ headless: true
   - [原理](/docs/architecture/principle)
   - [性能](/docs/architecture/performance)
   - [方案](/docs/architecture/solution)
+  - [第三方服务](/docs/architecture/3rd_product)
   - [nginx](/docs/architecture/nginx)
   - [nodejs](/docs/architecture/nodejs)
 - [**后端**] (/docs/backend)

@@ -133,12 +133,21 @@
                 监控label                # 筛选pod得到数量
     命令
         kubectl
+            logs
+                kubectl logs --tail=1000 appID1
+                    # 查看日志
+            exec
+                kubectl exec -it appID1 /bin/sh
+                    # 交互命令进入app
             create
                 -f mysql-rc.yaml        # 创建rc
                 -f mysql-svc.yaml       # 创建service
             get
                 rc                      # 查看rc
                 pods
+                pod
+                    kubectl get pod -l app=app1 -o wide
+                        # 查看pod app状态
                 services
                 svc                     # 查看service, 包含cluster ip
                 nodes
@@ -988,10 +997,43 @@
             简化本地库的分配和连接
             可以maven配置dependency
             提供openssl的支持
-
 ## jetty
-    是开源的servlet容器，基于java, 可以给jsp和servlet提供运行环境
-    jetty容器可以实例化成一个对象，迅速为一些独立运行(stand-alone)的java应用提供网络和web连接
+    # 是开源的servlet容器，基于java, 可以给jsp和servlet提供运行环境
+    # jetty容器可以实例化成一个对象，迅速为一些独立运行(stand-alone)的java应用提供网络和web连接
+## apache
+    # http容器，可容纳php, python。一请求一线程
+    安装
+        pacman -S apache
+        mkdir /srv/http
+        chown http:http /srv/http
+    编译安装
+        ./configure
+            --prefix=/全路径/install_path
+            --with-apxs2=/全路径/apxs            # 模块
+        make
+        make install
+    命令
+        httpd
+            -f                                  # 指定配置
+            -t                                  # 配置检查
+            -k
+                start
+                restart
+                graceful
+                stop
+                graceful-stop
+        apachectl
+            graceful                            # 重载配置
+            -f /全路径/httpd.conf                # 指定配置
+            -t                                  # 配置检查
+    配置
+        /etc/httpd/conf/httpd.conf
+            DocumentRoot "/srv/http"            # 项目路径
+            Listen                              # 端口
+    案例
+        php
+            docker解决
+## lighttpd
 ## meteor
     # 包装node
 ## ringojs
@@ -1185,71 +1227,6 @@
 ## fastdfs
     # 开源分布式文件系统
 
-# 第三方服务
-    teamwork
-        confluence
-        teambition
-        basecamp
-        jira
-        testlink
-        shimo
-        dropbox
-        trello
-    itsm/erp
-        # IT Service Management, 信息技术服务管理
-        salesforce
-        servicenow
-        workday
-            # hr平台
-    pay
-        支付宝
-        易宝
-        财付通
-    cti
-        天润
-        云之讯
-        容联
-    report/olap
-        palo
-    idc
-        # infomation data corporation 互联网数据中心
-    cdn
-        七牛
-    ws
-        阿里云
-        青云
-        digital ocean
-        vultr
-        aws
-        Linode
-        azure
-            # 微软开放平台
-        gce
-            # google compute engine
-        txCloud
-            # 云柜，数据存储和计算
-        首都在线
-    paas
-        gae
-            # google app engine
-        sae
-            # sina app engine
-        heroku
-    im
-        环信
-        云片
-        jpush
-        im
-        sms.webchinese.cn
-        个推
-    ops
-        docker
-    safe
-        1password
-    dns
-        godaddy
-        万网
-        dnspod
 ## cdn
     介绍
         流量不大时带宽比cdn便宜, 流量大时cdn便宜。
@@ -1259,3 +1236,13 @@
     盛大云   9k/月          1.7w/月
     网宿
     蓝汛
+## aws服务器
+    命令
+        aws
+            s3
+                cp --recursive bin s3://meiqia/crm-module/search/bin
+                    # 级联复制
+                sync s3://meiqia/crm-module/search/bin bin
+                    # 下载
+                rm --recursive s3://meiqia/crm-module/search
+                    # 级联删除

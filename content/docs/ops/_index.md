@@ -34,85 +34,26 @@ type: docs
     mac os
     fushsia
         # goolge os
-# 产品
-    confluence
-            # wiki
-    grafana
-            # 监控
-    jira
-            # IBM Rational提供的缺陷及变更管理工具。它对软件缺陷或功能特性等任务记录提供跟踪管理。提供了查询定制和多种图表报表。
-    teambition
-    redmine
-            # ror开发的项目管理web，支持git, svn, cvs等，把成员、任务、文档、讨论等资源整合在一起
-    gerrit
-            # code review 工具
-    jenkins
-            # java实现的持续集成工具
-    ansible
-            # python实现的自动化部署工具
-    gradle
-            # 自动化构建
-    jumpserver
-    saltstack
-            # 自动化运维工具
-    zabbix
-            # 分布式监控
-    nagios
-            # 监控
-    puppet
-            # 自动化运维
-    selenium
-            # 自动化运维
-    tty.js
-            # 浏览器运行命令
-    coverallx
-            # github上项目的coverage测试覆盖率条目由它提供服务
-    circleCI
-            # github代码测试
-    travis-ci
-            # 利用github hook测试
-    fitness
-            # 自动单元测试
-    coverity
-            # 代码静态检查
-    sentry
-            # error tracing
-# 架构
-## k8s
-    kubectl get pod -l app=app1 -o wide
-        # 查看pod app状态
-    kubectl exec -it appID1 /bin/sh
-        # 交互命令进入app
-    kubectl logs --tail=1000 appID1
-        # 查看日志
-## aws服务器
-    s3命令
-        aws s3 cp --recursive bin s3://meiqia/crm-module/search/bin
-            # 级联复制
-        aws s3 sync s3://meiqia/crm-module/search/bin bin
-            # 下载
-        aws s3 rm --recursive s3://meiqia/crm-module/search
-            # 级联删除
 # 虚拟化
     docker
     vagrant
-            # 用一个virtualbox虚拟机来快速部署开发环境
+        # 用一个virtualbox虚拟机来快速部署开发环境
     parallels desktop
-            # 苹果
+        # 苹果
     xen
     gnome boxes
     hyper-v
-            # 微软
+        # 微软
 ## kvm
     介绍
         kernel-based virtual machine, 使用linux自身的调度器进行管理,所以代码较少
-                # 又叫qemu-system或qemu-kvm
+            # 又叫qemu-system或qemu-kvm
         虚拟化需要硬件支持(如 intel VT技术或AMD V技术)，是基于硬件的完全虚拟化
     原理
         包含一个可加载的内核模块kvm.ko, 由于集成在linux内核中，比其他虚拟机软件高效
     使用
         检查系统是否支持硬件虚拟化
-                egrep '(vmx|svm)' --color=always /proc/cpuinfo
+            egrep '(vmx|svm)' --color=always /proc/cpuinfo
 
 ## vmware
     安装
@@ -122,9 +63,9 @@ type: docs
     网络连接方式
         1.vm9自带的virtual network editor中选择桥接到有线网卡
         2.vm -> setting -> network adapter选项设置
-                bridged（桥接）:与主机平等，可以设置为同一个网段相互访问
-                nat:通过虚拟网卡连接主机，共享网络
-                host-only:单机模式
+            bridged（桥接）:与主机平等，可以设置为同一个网段相互访问
+            nat:通过虚拟网卡连接主机，共享网络
+            host-only:单机模式
 
 ## virtualbox
     网络连接
@@ -199,33 +140,59 @@ type: docs
             sshpass  -p zlycare@123 ssh zlycare@10.162.201.58
 
 ## openvpn
-    编译安装
-        yum install openssl-devel gcc lzo-devel
-        mkdir –p /usr/local/openvpn && cd /usr/local/openvpn/
-        ./configure --with-lzo-headers=/usr/local/include --with-lzo-lib=/usr/local/lib
-        make
-        make install
+    安装
+        yum install openvpn easy-rsa lzo lzo-devel openssl openssl-devel -y
+        或编译安装openvpn
+            mkdir –p /usr/local/openvpn && cd /usr/local/openvpn/
+            ./configure --with-lzo-headers=/usr/local/include --with-lzo-lib=/usr/local/lib
+            make
+            make install
 
     生成证书
         目标
             服务器: ca.crt、server.key、server.crt、dh.pem
             客户端: ca.crt、client.key、client.crt
-        cd /usr/local/openvpn/openvpn-2.0.9/easy-rsa/2.0/
-        tail -5 vars
-                export KEY_COUNTRY="CN"
-                export KEY_PROVINCE="BJ"
-                export KEY_CITY="Beijing"
-                export KEY_ORG="tshar365"
-                export KEY_EMAIL="tshare365@help.org"
-        source vars
-        ./clean-all
-        ./build-ca
-        ./build-key-server server
-        ./build-key-pass outrun
-                # ./build-key outrun 无密码
-        ./build-dh
-
-    server配置
+        查找模板
+            find / -name "vars.example" -type f                         # vars文件
+            find / -name "server.conf" -type f                          # server.conf文件
+        进入目录easy-rsa
+            cd /usr/local/openvpn/openvpn-2.0.9/easy-rsa/2.0/
+            cd /usr/share/easy-rsa/3.0.3/
+        设置vars
+            cp vars.example vars
+            vars文件
+                set_var KEY_COUNTRY="CN"
+                set_var KEY_PROVINCE="BJ"
+                set_var KEY_CITY="Beijing"
+                set_var KEY_ORG="linux"
+                set_var KEY_EMAIL="test@example.net"
+                # set_var EASYRSA_NS_SUPPORT "yes"                      # 客户端配置ns-cert-type server时配置
+        生成server文件
+            rm -rf pki
+            ./easyrsa init-pki                                          # pki目录
+            ./easyrsa build-ca  nopass                                  # 回车过, 生成ca.crt
+            ./easyrsa gen-req vpnserver nopass                          # 回车过, 生成vpnserver.key, vpnserver.req(密钥对、证书请求文件)
+            ./easyrsa sign server vpnserver                             # 生成vpnserver.crt(ca.crt与vpnserver.req签名)
+            ./easyrsa gen-dh                                            # 生成dh.pem(diffie hellman)
+            cp -r ../3.0.3/ ~
+        生成client文件
+            rm -rf pki
+            ./easyrsa init-pki
+            ./easyrsa gen-req client nopass                             # 回车过, 生成client.key, client.req
+            cp pki/reqs/client.req ~/3.0.3/pki/reqs/
+            cp pki/private/client.key ~/3.0.3/pki/private/
+            cd ~/3.0.3
+            ./easyrsa sign client client                                # 生成client.crt(ca.crt与client.req签名)
+        移动server文件到openvpn配置目录
+            cp pki/{ca.crt,dh.pem} /etc/openvpn/server/
+            cp pki/private/vpnserver.key /etc/openvpn/server/
+            cp pki/issued/vpnserver.crt /etc/openvpn/server/
+            cp server.conf /etc/openvpn/server
+        下载client文件
+            pki/ca.crt
+            pki/private/client.key
+            pki/issued/client.crt
+    server.conf
         cp -p ../../sample-config-files/server.conf /etc/openvpn
         o-> server.conf
             ;local 172.21.223.196
@@ -244,7 +211,7 @@ type: docs
             keepalive 10 120
 
             cipher AES-256-CBC
-            comp-lzo
+            comp-lzo                                                    # 减少带宽
             persist-key
             persist-tun
 
@@ -252,9 +219,9 @@ type: docs
             log /var/log/openvpn.log
 
             verb 3
-            explicit-exit-notify 1
-        openvpn --config /etc/openvpn/server.conf &
-
+            explicit-exit-notify 1                                      # 只能udp协议使用
+        sudo openvpn --config /etc/openvpn/server.conf --daemon
+        netstat -anulp | grep 1194
     linux配置
         iptables
             vim /etc/sysctl.conf
@@ -264,7 +231,6 @@ type: docs
         firewall
             firewall-cmd  --add-service=openvpn --zone=public --permanent
             firewall-cmd --reload
-
     client配置
         o-> client.ovpn
             client
@@ -274,8 +240,8 @@ type: docs
             resolv-retry infinite
             nobind
             ca ca.crt
-            cert outrun.crt
-            key outrun.key
+            cert client.crt
+            key client.key
             ;ns-cert-type server
             cipher AES-256-CBC
             comp-lzo
@@ -283,7 +249,7 @@ type: docs
             persist-tun
             verb 3
             mute 20
-        openvpn --config openvpn.conf
+        sudo openvpn --config client.ovpn
             # --user outrun
             # --auth-nocache
             # askpass pass.txt 放密码到文件
@@ -297,16 +263,125 @@ type: docs
             send -- "outrun\n"
             expect "*Password:*"
             expect "#"
+    案例
+        代理http上网                                                     # tcp连接国内服务器会被reset
+            server.conf
+                dev tap
+                proto tcp
+
+                push "redirect-gateway def1 bypass-dhcp"
+                push "dhcp-option DNS 114.114.114.114"
+                push "dhcp-option DNS 8.8.8.8"
+
+                client-to-client
+                ;explicit-exit-notify 1
+            client.ovpn
+                dev tap
+                proto tcp
+        改成用户名密码认证
+            服务器
+                server.conf
+                    auth-user-pass-verify /etc/openvpn/server/checkpsw.sh via-env
+                    verify-client-cert none
+                    username-as-common-name
+                    tls-auth /etc/openvpn/server/ta.key 0
+                    script-security 3
+                checkpsw.sh
+                    #!/bin/sh
+                    PASSFILE="/etc/openvpn/server/user/psw-file"
+                    LOG_FILE="/etc/openvpn/server/log/openvpn-password.log"
+                    TIME_STAMP=`date "+%Y-%m-%d %T"`
+
+                    if [ ! -r "${PASSFILE}" ]; then
+                      echo "${TIME_STAMP}: Could not open password file \"${PASSFILE}\" for reading." >> ${LOG_FILE}
+                      exit 1
+                    fi
+
+                    CORRECT_PASSWORD=`awk '!/^;/&&!/^#/&&$1=="'${username}'"{print $2;exit}' ${PASSFILE}`
+
+                    if [ "${CORRECT_PASSWORD}" = "" ]; then
+                      echo "${TIME_STAMP}: User does not exist: username=\"${username}\", password=\"${password}\"." >> ${LOG_FILE}
+                      exit 1
+                    fi
+
+                    if [ "${password}" = "${CORRECT_PASSWORD}" ]; then
+                      echo "${TIME_STAMP}: Successful authentication: username=\"${username}\"." >> ${LOG_FILE}
+                      exit 0
+                    fi
+
+                    echo "${TIME_STAMP}: Incorrect password: username=\"${username}\", password=\"${password}\"." >> ${LOG_FILE}
+                    exit 1
+                chmod 645 checkpsw.sh
+                mkdir user
+                mkdir log
+                user/psw-file
+                    outrun asdfasdf
+                openvpn --genkey --secret ta.key
+            客户端
+                下载ta.key
+                client.ovpn
+                    ;cert client.crt
+                    ;key client.key
+                    auth-user-pass
+                    tls-auth ta.key 1
+## shadowsocks
+    安装
+        sudo yum -y install epel-release
+        sudo yum -y install python-pip
+        sudo pip install --upgrade pip
+        sudo pip install shadowsocks
+    服务器
+        server.json
+            {
+                "server":"172.21.223.196",
+                "server_port":443,
+                "local_address":"127.0.0.1",
+                "local_port":1080,
+                "password":"asdfasdf",
+                "timeout":300,
+                "method":"aes-256-cfb",
+                "fast_open":false,
+                "workers":5
+            }
+        ssserver -c server.json -d start
+    中继代理
+        client.json
+            {
+                "server":"47.74.230.238",
+                "server_port":443,
+                "local_address": "127.0.0.1",
+                "local_port":1080,
+                "password":"asdfasdf",
+                "timeout":300,
+                "method":"aes-256-cfb"
+            }
+        sslocal -c client.json
+    协议转换
+        安装polipo
+        /etc/polipo/config
+            logSyslog = false
+            logFile = "/var/log/polipo/polipo.log"
+            socksParentProxy = "127.0.0.1:1080"
+            socksProxyType = socks5
+            chunkHighMark = 50331648
+            objectHighMark = 16384
+            serverMaxSlots = 64
+            serverSlots = 16
+            serverSlots1 = 32
+            proxyAddress = "0.0.0.0"
+            proxyPort = 8123
+        polipo -c /etc/polipo/config
+    客户端
+        switchOmega
+            SOCKS5 127.0.0.1 1080
+            http 127.0.0.1 8123
+        环境变量
+            export http_proxy=http://127.0.0.1:8123
+            export https_proxy=http://127.0.0.1:8123
 ## opendj
     介绍
         open source directory services for the java platform
         LDAPv3的认证系统
-## openvpn
-    openvpn --config openvpn.conf
-        # 连接
-        ## --user outrun
-        ## --auth-nocache
-        # askpass pass.txt 放密码到文件
 ## openssl
     使用
         openssl genrsa -out server.key 1024

@@ -19,7 +19,7 @@ type: docs
                         # 图像处理
 # php
     安装
-            php, php-cgi
+            php, php-cgi, php-fpm
         编译安装
             yum install libxml2-devel  openssl-devel  bzip2-devel libmcrypt-devel  -y
             ./configure --prefix=/opt/zly/php --with-mysql=mysqlnd --with-openssl --with-mysqli=mysqlnd --enable-mbstring --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml  --enable-sockets --enable-fpm --with-mcrypt  --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d --with-bz2
@@ -37,7 +37,7 @@ type: docs
     配置
             /etc/php/php.ini
             date.timezone = Europe/Berlin
-                    # 时区设置
+                # 时区设置
             display_errors = On
 
 
@@ -46,8 +46,7 @@ type: docs
             # php5.5集成，把php执行后的数据缓冲到内存中从而避免重复编译
     工具
         fpm
-            介绍
-                php fastCGI 进程管理器
+            # php fastCGI 进程管理器
 # scheme
     # 特点
         词法定界(Lexical Scoping)

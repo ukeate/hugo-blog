@@ -444,7 +444,14 @@ date: 2018-10-11T18:47:57+08:00
         curl -X post -k http://localhost:9090/a -H "Content-Type: text/plain" -d '{"name": "a"}'
             # post请求
         curl -O http://104.223.142.166/isu80        # 抓文件
-    nc -U a.sock            # netcat, 功能全面
+    nc                      # netcat, 功能全面
+        -U a.sock           # 指定socket
+        -v                  # 显示详情
+        -z                  # 只测试连通
+        -u                  # 使用udp
+
+        o-> 测试udp端口
+        nc -vzu 127.0.0.1 1194
     dig                     # 域名解析
     nmap
         -sP ip/24           # 查看网内所有ip
@@ -857,8 +864,10 @@ date: 2018-10-11T18:47:57+08:00
         ls | grep '^Dar' | xargs rm
 
     爬网站
-        wget -x -P curSite -r -l 100 -k -p -L -np http://nodeapi.ucdok.com/api/
-
+        wget -x -P curSite -r -l 100 -k -L -np http://nodeapi.ucdok.com/api/
+        带cookie
+            wget --post-data="username=u1&password=asdf" --save-cookies=cookie --keep-session-cookies "http://www.abc.com/logging.php"
+            wget -x -P curSite -r -l 1 -k -L -np --load-cookies=cookie --keep-session-cookies "https://www.abc.com/display/1"
     递归查找所有内容
         grep -nr 'a' .
 
