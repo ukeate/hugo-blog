@@ -5,15 +5,19 @@ type: docs
 ---
 
 # 连接
+信息:
 <a href="http://localhost:1315/docs/infomation/" target="_blank">信息</a>
 <a href="https://shimo.im/" target="_blank">石墨</a>
 <a href="https://www.vtrhome.net/" target="_blank">vpntech</a>
 <br/>
+资讯:
 <a href="https://www.infoq.cn/" target="_blank">infoQ</a>
 <a href="https://www.v2ex.com/" target="_blank">V2EX</a>
 <br/>
+工具:
 <a href="https://processon.com/" target="_blank">ProcessOn</a>
 <a href="https://www.atlassian.com/" target="_blank">Atlassian</a>
+<a href="https://trello.com/b/bWRQmKff/%E8%BF%9B%E5%BA%A6" target="_blank">Trello</a>
 
 
 # go
@@ -28,7 +32,11 @@ type: docs
 
     快捷键
         ctrl alt f1/f2/...
-
+# 端口
+    1315 blog
+    8123 polipo
+    1080 shadowsocks
+    8004 dokuwiki
 # 系统配置
     bin
         # 系统需要

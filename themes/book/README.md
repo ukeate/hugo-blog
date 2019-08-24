@@ -1,7 +1,6 @@
 # Hugo Book Theme
 
-[![Build Status](https://travis-ci.org/alex-shpak/hugo-book.svg?branch=master)](https://travis-ci.org/alex-shpak/hugo-book)
-[![Hugo](https://img.shields.io/badge/hugo-0.48-blue.svg)](https://gohugo.io)
+[![Hugo](https://img.shields.io/badge/hugo-0.55-blue.svg)](https://gohugo.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ### [Hugo](https://gohugo.io) documentation theme as simple as plain book
@@ -26,7 +25,7 @@
 
 ## Requirements
 
-- Hugo 0.48 or higher
+- Hugo 0.55 or higher
 - Hugo extended version, read more [here](https://gohugo.io/news/0.48-relnotes/)
 
 ## Installation
@@ -139,10 +138,6 @@ BookSection = 'docs'
 # (Optional) This value is duplicate of $link-color for making active link highlight in menu bundle mode
 # BookMenuBundleActiveLinkColor = '\#004ed0'
 
-# (Optional, default false) Include JS scripts in pages. Disabled by default.
-# - Keep side menu on same scroll position during navigation
-BookEnableJS = true
-
 # Set source repository location.
 # Used for 'Last Modified' and 'Edit this page' links.
 BookRepo = 'https://github.com/alex-shpak/hugo-book'
@@ -156,6 +151,10 @@ BookEditPath = 'edit/master/exampleSite/content'
 # - In git information
 # - In blog posts
 BookDateFormat = 'Jan 2, 2006'
+
+# (Optional, default true) Enables search function with lunr.js, 
+# Index is built on fly, therefore it might slowdown your website.
+BookSearch = true
 ```
 
 ### Page Configuration
@@ -259,6 +258,19 @@ sequenceDiagram
         Bob->>Alice: Thanks for asking
     end
 {{< /mermaid >}}
+```
+
+### KaTeX Syntax
+
+Render math formulas with [KaTeX](https://katex.org/)
+
+```
+{{< katex >}}
+$$ x = \begin{cases}
+   a &\text{if } b \\
+   c &\text{if } d
+\end{cases} $$
+{{< /katex >}}
 ```
 
 ## Contributing

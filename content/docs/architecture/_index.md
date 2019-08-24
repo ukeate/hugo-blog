@@ -3,8 +3,8 @@
     Alb        automaticLoopBack 自动回环，虚拟接口
     sdn        software defined network 软件定义网络
 
-# service mesh
-    # 服务网格
+# 服务网格
+    # service mesh
 ## service fabric
     # 微软
 ## lstio
@@ -12,6 +12,8 @@
     组成
         数据面板
         控制面板
+## traefik
+    # go实现，多后台如k8s, swarm, marathon, mesos
 ## linkerd
     # buoyant出品
 ## conduit

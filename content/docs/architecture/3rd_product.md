@@ -9,7 +9,8 @@ date: 2018-10-11T10:33:48+08:00
     tiddlyWiki
         # 可在线定义目录树
     github
-        # 用wiki页面, 或gitboot
+        # 用wiki页面
+    gitboot
     mediaWiki
         # 维基百科样式，只有单页目录树
     dokuWiki
@@ -25,17 +26,34 @@ date: 2018-10-11T10:33:48+08:00
         # 任务管理
 # 团队协作
     jira
-        # IBM Rational提供的缺陷及变更管理工具。它对软件缺陷或功能特性等任务记录提供跟踪管理。提供了查询定制和多种图表报表。
+        # 进度管理
+    rational
+        # IBM, 进度管理
     teambition
-        # 项目管理、团队协作
+        # 进度管理
     basecamp
-        # 项目管理、团队协作
+        # 进度管理
     testlink
-        # 测试，修正，进度
+        # 测试收集, 进度管理
     zeplin
         # 设计和前端协同工具
     redmine
-        # 项目管理, ror开发，支持git, svn, cvs等，把成员、任务、文档、讨论等资源整合在一起
+        # ror开发, 项目管理, 把成员、任务、文档、讨论等资源整合在一起。支持git, svn, cvs等
+
+
+    trello
+        # 进度管理
+
+
+    team
+        # 微软, 聊天
+    slack
+        # 聊天
+    hipChat
+        # Atlassian, 聊天
+    企业微信
+    钉钉
+
     shimo
         # 文档协作
     etherpad.org
@@ -44,10 +62,11 @@ date: 2018-10-11T10:33:48+08:00
         # 文档协作
     坚果云
         # 文档协作
-    trello
-        # 进度管理
+
 
 # 代码
+    github
+    bitBucket
     sentry
         # 产品error tracing
     gerrit

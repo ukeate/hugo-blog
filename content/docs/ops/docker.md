@@ -116,6 +116,17 @@ date: 2018-10-11T18:18:21+08:00
             ls
             ps
             rm
+# Dockerfile
+    FROM nginx                          # 基于镜像
+    MAINTAINER outrun                   # 指定维护者信息
+    EXPOSE 80                           # 内部服务开启的端口
+    ENV NODE_ENV test                   # 环境变量
+    WORKDIR /src
+    COPY ./bin /data/a                  # 复制外部文件到内部
+    VOLUME ["/data/log"]                # 创建挂载点
+    ENTRYPOINT ["/data/a/a"]            # 容器启动命令，只有一个
+    CMD ["-config", "config.toml"]      # 启动命令，只有一个。可为entrypoint指定参数
+    RUN echo 'test'                     # 在当前镜像基础上执行命令，提交为新的镜像
 # docker-compose
     docker-compose
         -h                              # 帮助
@@ -146,19 +157,22 @@ date: 2018-10-11T18:18:21+08:00
         build                           # (重)构建容器
         pull                            # 拉依赖镜像
         push                            # 推送镜像
-
-
-# Dockerfile
-    FROM nginx                          # 基于镜像
-    MAINTAINER outrun                   # 指定维护者信息
-    EXPOSE 80                           # 内部服务开启的端口
-    ENV NODE_ENV test                   # 环境变量
-    WORKDIR /src
-    COPY ./bin /data/a                  # 复制外部文件到内部
-    VOLUME ["/data/log"]                # 创建挂载点
-    ENTRYPOINT ["/data/a/a"]            # 容器启动命令，只有一个
-    CMD ["-config", "config.toml"]      # 启动命令，只有一个。可为entrypoint指定参数
-    RUN echo 'test'                     # 在当前镜像基础上执行命令，提交为新的镜像
+    配置
+        version: '3'
+        services:
+          dokuwiki:
+            restart: always
+            image: bitnami/dokuwiki:latest
+            ports:
+              - 8004:80
+            environment:
+              - DOKUWIKI_FULL_NAME=outrun
+              - DOKUWIKI_EMAIL=934260428@qq.com
+              - DOKUWIKI_WIKI_NAME=Wiki
+              - DOKUWIKI_USERNAME=outrun
+              - DOKUWIKI_PASSWORD=asdfasdf
+            volumes:
+              - ./data:/bitnami                                         # 本地:镜像
 # 方案
     进入容器
         docker exec -it mysql bash
@@ -206,7 +220,7 @@ date: 2018-10-11T18:18:21+08:00
         systemctl daemon-reload
         systemctl restart docker
     登录运行容器
-        docker exec -it 8ce /bin/bash
+        docker exec -it 8ce /bin/sh
     jenkins
         docker pull jenins
         mkdir /var/jenkins_home
