@@ -40,11 +40,17 @@
         libev(libevent)
 # 并发并行
     并发
-        为什么: 多任务能力，非阻塞
-        类比: 任务队列
+        多任务共享时间段, 类比: 任务队列
+        为什么并发
+            多任务能力
+            非阻塞
     并行
-        为什么: 提高执行效率
-        类比: 多核处理器
+        多任务同时处理, 类比: 多核处理器
+        为什么并行
+            提高执行效率
+        分类
+            任务并行化
+            数据并行化
         cpu交替任务           # EDSAC串行任务
             协作式         # 可能独占，Windows3.1, Mac OS 9
             抢占式         # 任务管理器强制中断，Windows95, Mac OS 9以后版本, Unix, Linux
@@ -77,7 +83,7 @@
         业务并行解耦条件(满足幺半群性质)
             封闭性     # 业务运算结果是业务
             结合律     # 业务a、b的结果后与c执行，等同b、c的结果与a执行
-            单位元     # 单位业务a与其它业务b执行，得b
+            单位元     # 恒等业务a与其它业务b执行，得b, 如reduce的初值
     系统应用
         并发能力
         吞吐量(并行)
@@ -240,7 +246,7 @@
         通信顺序进程(communicating sequential processes)
         基于消息传递，侧重信息通道
 ## 数据级并行
-    # 不可变数据
+    # 不可变数据, 观测不可变、实现不可变
 ## lambda架构
     介绍
         综合MapReduce和流式处理的特点，处理大数据问题的架构
@@ -279,3 +285,30 @@
         实现
             redis存储
             token不要太长
+
+# 常见问题
+## CSRF
+    介绍
+        跨域请求伪造(cross-site request forgery)
+        client登录A, 本地生成cookie
+        client登录B, B给执行js，带参数请求站点A
+    解决
+        token验证     # 加入自定义头域
+        验证Referer头域
+## XSS
+    介绍
+        跨站脚本攻击(cross-site scripting, 易和css混淆，所以写成XSS), 渲染页面时脚本未转义
+## XSF
+    介绍
+        跨站flash攻击(cross-site flash), actionScript加载第三方flash
+## sql注入
+    介绍
+        拼装sql，参数插入sql逻辑
+    解决
+        sql预编译
+## 1+N查询
+    介绍
+        先查出外键id集合, 再逐条id查关联表。orm易出的问题
+    解决
+        用 id IN (1,2,3)
+        commit前自动合并sql

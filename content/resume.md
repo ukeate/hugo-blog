@@ -7,6 +7,7 @@ draft: true
 # 个人信息
     申文庆，男，29岁（1990.4）
     工作年限：5年
+    学校: 吉林大学 软件工程 本科
     目前情况：离职
     现在居住地：济南，户口：济南，未婚
     手机：15253159870（济南）
@@ -75,20 +76,23 @@ draft: true
     主要应用技术为golang、grpc、tidb、docker、k8s。我对其中所有复杂业务服务负责，参与所有产品设计，研发，集成，测试到功能迭代。
     期间对系统与架构设计有了较多实践，对微服务有了一定的理解与实践，对go有了较深入的实践。
 ### 职务介绍
-    微服务系统
-        token认证、业务触发器、TCC事务、元数据库级联二方服务、元数据库事务、业务权限认证、DSL、定时任务、事件总线、分布式锁、plugin扩展、业务观察等。
-    运维
-        k8s分析日志, 性能瓶颈定位, open tracing + zipkin跟踪, prometheus + grafana监控, , 实现压测工具, makefile, docker file, CI等。
     海
         对接客户需求, 协助产品设计, 技术选型, 模块设计, 分配开发任务, 核心/复杂代码实现， code review, 参与集成测试, 功能迭代优化。
     审批
         模块设计与优化, 分配开发任务, code review, 协助产品设计, 功能迭代。
+    工作流
+        调研BPMN和各平台标准、参考Activiti, JBPM, YAWL3, Bossa, 用petri-nets理念实现微内核
     搜索
         基于es做租户隔离, 分词, 拼音, 词库, 收集等。
         原型实现, code review, 功能迭代。
     后台管理系统
-        定义统一操作接口, 适配调用各套件。订单系统预订、触发带实参操作, 追踪订单状态与链路, ACL
+        ACL, 各套件适配调用, 订单系统, 链路追踪
         设计, 原型实现, code review。
+    微服务系统(参与)
+        token认证, 权限认证, TCC事务, 业务触发器, 元数据库级联二方服务, 元数据库事务, DSL, 定时任务, 事件总线, 分布式锁, plugin扩展等
+    运维(参与)
+        k8s分析日志, 压测工具, 性能分析, open tracing + zipkin跟踪, prometheus + grafana监控, makefile, docker file, CI等。
+
 ## 2015.10 - 2017.4 北京朱李叶健康科技
 ### 职务：后端
 ### 主要应用技术: node.js、python
@@ -106,7 +110,7 @@ draft: true
 ### 职务介绍
     医生端
         express, mongodb, mysql
-        模块设计, 原型实现, 编写70%的代码
+        模块设计, 原型实现, 编写大部分代码
     后台系统
         单页应用, express, angular1, mongodb
         全栈, 数据分析统计, 业务开通等
@@ -155,6 +159,8 @@ draft: true
         基于lucene, 搜索区域内匹配商品特性的店家, 数据增量同步, 热搜排行
     推送
         基于socket.io, 下推协议数据, 实现远程命令、健康检查、消息推送等
+    excel生成器
+        xml中配置各接口excel格式, 过滤器中检查传参标记, 重写接口返回数据成excel文件
     技术调研
         mysql集群、redis集群、rabbitmq、netty/jetty等
 

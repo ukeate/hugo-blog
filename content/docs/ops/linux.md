@@ -85,11 +85,14 @@
     /sys
         /class
             /backlight
-                /acpi_video0
+                /acpi_video0                    # ati显卡是acpi_video0, intel显卡是intel_backlight
                     /brightness                 # 修改亮度
     ~
         /.bash_profile
+        /.bash_login
+        /.profile                               # 在登录时执行一次, 先.bash_profile, 再bash_login, 再.profile
         /.bashrc
+        /.bash_logout
 
 
     initd

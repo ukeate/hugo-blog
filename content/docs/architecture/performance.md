@@ -1,46 +1,61 @@
 
-# 原则
-    qps
-    latency
-    through put
-
-    bottle-nect(first-principle)
-
-    io
+# 基础
+    性能指标
+        latency
+        throughput
+        qps = throughput / latency
+    性能分析
+        bottle-nect(first-principle)
+    资源
+        CPU和GPU
+        内存
         磁盘
-            iops: 2k
         网络
-            带宽
-            iops: 3w
+        能源
+    逻辑资源
+        fds(文件描述符)
+        sockets
+        内核对象: locks
+        inodes(磁盘索引节点)
+        transactions
+        ip addresses
+        ports
+        random numbers(分布式随机数)
+    容量
+        2000前   尽量少
+        200~    不到机型限制
+        2017    尽量把机器用满
+        以后     metrics分离, 单独规划
+# 计算
+    cpu
+    gpu
+# 存储
+|类型                                     |时间                                         |描述                            |
+|:----------------------------------------|:-------------------------------------------|:-------------------------------|
+|L1 cache                                 |0.5ns                                       |                                |
+|branch mispredict(分支、转移)             |5ns                                         |                                |
+|L2 cache                                 |7ns                                         | 14x L1 cache                   |
+|Mutex lock/unlock                        |25ns                                        |                                |
+|Main memory                              |100ns                                       | 20x L2 cache, 200x L1 cache    |
+|1k字节压缩Zippy                           |3,000ns = 3us                               |                                |
+|在1Gbps网络上发送1k字节                    |10,000ns = 10us                             |                                |
+|SSD随机读4k                               |150,000ns = 150us                           | 1GB/秒                         |
+|内存顺序读1MB                             |250,000ns = 250us                           |                                |
+|同一数据中心往返                           | 500,000ns = 500us                          |                                |
+|SSD顺序读1MB                              |1,000,000ns = 1000us = 1ms                  | 1GB/秒, 4x 内存                 |
+|磁盘搜索                                  |10,000,000ns = 10,000us = 10ms              | 20x 数据中心往返                 |
+|磁盘顺序读1MB                             |20,000,000ns = 20,000us = 20ms              | 80x 内存, 20x SSD               |
+|发包: 美国 -> 荷兰 -> 加拿大               |150,000,000ns = 150,000us = 150ms           |                                |
 
-# 流量
-    小米论坛
-        pv 2000w
-        热门并发300
-        20k/页面
-        300k/图片(未压缩)
-        70k/无图帖子
-        500k-3M/有图帖子
-
-        动态服务器最小带宽: 48Mbps
-        静态服务器最小带宽: 1440Mbps
-        实际购买带宽: 800M
-        带宽费用: 8.7w/month
-
-    糗事百科
-        pv 1000w
-        热门并发150
-        10k/页面
-        70k/图
-        4图/页
-        90k-400k/综合页
-        动态服务器带宽: 12Mbps
-        静态服务器带宽: 336Mbps
-
-# 带宽
-    建议
+# 传输
+    带宽
         热门并发1.5倍到2倍购买
-# 压力
+    方式
+        HDD
+        SSD
+        ethernet
+        南桥、北桥芯片
+# 并发
     并发
         jetty 2k-3k
         nginx 1w
@@ -124,6 +139,29 @@
         优质业务专门机器
         广播改订阅
         换语言/框架重构
+# 案例
+    o-> 小米论坛
+        pv 2000w
+        热门并发300
+        20k/页面
+        300k/图片(未压缩)
+        70k/无图帖子
+        500k-3M/有图帖子
+
+        动态服务器最小带宽: 48Mbps
+        静态服务器最小带宽: 1440Mbps
+        实际购买带宽: 800M
+        带宽费用: 8.7w/month
+
+    o-> 糗事百科
+        pv 1000w
+        热门并发150
+        10k/页面
+        70k/图
+        4图/页
+        90k-400k/综合页
+        动态服务器带宽: 12Mbps
+        静态服务器带宽: 336Mbps
 # 工具数据
     nodejs
         虚拟机数据

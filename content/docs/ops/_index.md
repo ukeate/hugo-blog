@@ -26,6 +26,8 @@ type: docs
             研发工作流支持
             服务支持平台建设
             运维自动化平台建设
+    工作方式
+        邮件申请开通 LDAP, VPN, 测试, 线上
 
 # 系统
     linux
@@ -397,20 +399,44 @@ type: docs
             # 客户端发起安全连接前会获取服务器端的证书, 并通过ca证书验证服务器端证书的真伪，并对服务器名称, IP地址等进行验证
         openssl s_client -connect 127.0.0.1:8000
             # 测试证书是否正常
+# cmdb
+    # configuration management database
+## bt-panel
+    # 宝塔面板，服务器运维面板
+## jumpserver
+        # 跳板机
+# 自动化
+    tty.js
+        # 浏览器运行命令
+    jenkins
+        # java实现的持续集成工具
+    ansible
+        # python实现的自动化部署工具
+    saltstack
+        # 部署, 自动化运维
+    puppet
+        # 自动化运维
+    selenium
+        # 自动化运维
 # 版本
     mercurial
-            # 简称hg，分布式版本控制系统，比git好
+        # 简称hg，分布式版本控制系统，比git好
     clearQuest
-            # IBM Rational提供的缺陷及变更管理工具。它对软件缺陷或功能特性等任务记录提供跟踪管理。提供了查询定制和多种图表报表。
+        # IBM Rational提供的缺陷及变更管理工具。它对软件缺陷或功能特性等任务记录提供跟踪管理。提供了查询定制和多种图表报表。
     clearcase
-            # 配置管理的工具，只是SCM管理工具其中的一种。是RATIONAL公司开发的配置管理工具
-    gradle
-            # dsl声明设置
+        # 配置管理的工具，只是SCM管理工具其中的一种。是RATIONAL公司开发的配置管理工具
     spm
-            # 构建sea.js项目
+        # 构建sea.js项目
     bower
-            # 构建前端
+        # 构建前端
     redmine
+## gradle
+    介绍
+        dsl声明设置
+    命令
+        gradle
+            init
+                --type pom                          # 转换maven项目
 ## git
     目录结构
         .git
@@ -421,6 +447,13 @@ type: docs
             # HEAD的版本号, HEAD^^ 表示HEAD之前两个的版本, HEAD~n 表示之前n个版本
         buffered stage branch head
             # buffered表示当前修改所在的版本，stage是buffered中文件add之后到的版本，branch是stage commit后到的分支(版本)，head是远程仓库的最新版本
+    工作流程
+        fork + pull / merge request 更新代码
+        commit message, pr messsage 提交说明
+            pr是功能展示，前面加"WIP:"
+        user.name, user.email用公司的
+        pr必需有人review, assign到人, 推动review
+        pr不要大
     命令
         git [command] --help
         git help submodule
@@ -799,7 +832,7 @@ type: docs
                 </target>
         </project>
 ## maven
-    repository包依赖关系网站
+    仓库
         mvnrepository.com
     依赖范围
         compile     # 默认,对编译、测试、运行有效
@@ -809,19 +842,112 @@ type: docs
         system      # 本地仓库
         import
     命令
-        pom.xml生成项目命令
-                mvn
-                mvn compile                        # mvn compile exec:java
+        mvn                                     # 相当于mvn compile
+            o-> 全局
+            -version                            # 版本
+            -e                                  # 错误详情
+            help:describe                       # help插件的describe
+                -Dplugin=help                   # 显示help插件的详情
+                -Dfull                          # 显示完整参数
+            help:effective-pom                  # 显示默认设置
+
+            o-> 项目生成
+            archetype:create                    # 创建java项目
+                -DgroupId=com.outrun
+                -DartifactId=erp
+                -Dversion=0.0.1-SNAPSHOT
+                -DarchetypeArtifactId=maven-archetype-webapp                            # 指定模板为webapp
+            archetype:generate                  # 向导创建项目
+            site                                # 产生html文档
+            source:jar                          # 源码打包
+            generate-sources                    # 生成源码, 如xdoclet
+            eclipse:eclipse                     # 生成或转化成eclipse工程
+            eclipse:clean                       # 清除eclipse设置
+            idea:idea                           # 生成idea项目
+
+
+            o-> 项目执行
+            validate                            # 项目验证
+            verify                              # 验证包
+            compile                             # 编译
+                exec:java                       # 编译完成后，执行java main方法
+            test-compile                        # 编译测试代码
+            test                                # 运行测试
+                -skipping                       # 跳过
+                    compile                     # 不编译
+                    test-compile                # 不编译测试
+            integration-test                    # 集成测试
+            package                             # 打包
+                -Dmaven.test.skip=true          # 跳过单元测试，不编译
+                -DskipTests                     # 跳过单元测试，编译
+            install                             # compile, package后， 保存到本地仓库
+                -X                              # 显示依赖
+                -Dmaven.test.skip=true          # 跳过测试
+            clean                               # 清除编译
+                install-U                       # 强制更新
+                package                         # 编译成jar包
+            deploy                              # install后, 上传
+            jar:jar                             # 打jar包
+
+
+            o-> 插件
+            jetty:run                           # 引入jetty-plugin后, 运行jetty
+            tomcat:run
+
+
+            o-> 分析
+            dependency:list                     # 列出依赖
+            dependency:tree                     # 列出依赖树
+            dependency:analyze                  # 依赖分析, 未使用的做标记
+            dependency:resolve                  # 列出已解决的依赖
+            dependency:sources                  # 下载源码
+            dependency:copy-dependencies        # 得到jar包
+    配置
+        <groupId>                               # 包名
+        <artifactId>                            # 项目名
+        <version>
+        <packaging>                             # 打包方式, war, jar
+
+        <parent>                                # 父模块
+
+        <properties>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+            <java.version>1.8</java.version>
+            <spring-cloud.version>Dalston.RELEASE</spring-cloud.version>
+        </properties>
+
+        <dependencies>                              # 子模块继承
+            <dependency>
+                <groupId>
+                <artifactId>
+                <version>
+                    LATEST
+                    ${spring-cloud.version}         #引用properties中定义的变量
+                <scope>                             # 何时使用
+                    compile
+                    provided                        # 类似compile
+                    runtime
+                    test
+                    system
+            </dependency>
+        </dependencies>
+
+        <dependenciesManager>                       # 子模块不继承, 继承时需要声明
+            <dependencies>
+        </dependenciesManager>
+
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>
+                    <artifactId>
+                </plugin>
+            </plugins>
+        </build>
+    工具
         eclipse插件
-                m2e
-        得到jar包
-                mvn dependency:copy-dependencies
-        生成eclipse工程
-                mvn eclipse:eclipse
-        jetty-plugin下运行
-                mvn jetty:run
-        版本
-                mvn -version
+            m2e
     方案
         ojdbc14本地加载
             ＃ oracle是收费的，所以不能直接下载到驱动
@@ -834,6 +960,45 @@ type: docs
                     <artifactId>ojdbc14</artifactId>
                     <version>10.2.0.4.0</version>
                     </dependency>
+        代理
+            复制$M2_HOME/conf/settings.xml到.m2/
+            settings.xml
+                <proxies>
+                    <proxy>
+                      <id>my-proxy</id>
+                      <active>true</active>
+                      <protocol>http</protocol>
+                      <host>localhost</host>
+                      <port>8123</port>
+                      <!--
+                      <username>admin</username>
+                      <password>admin</password>
+                      <nonProxyHosts>repository.mycom.com|*.google.com</nonProxyHosts>
+                      -->
+                    </proxy>
+                </proxies>
+# 代码
+    github
+    bitBucket
+    gitee.com
+        # 码云
+    sentry
+        # 产品error tracing
+    gerrit
+        # code review 工具
+    coverallx
+        # github上项目的coverage测试覆盖率条目由它提供服务
+    circleCI
+        # github代码测试
+    travis-ci
+        # 利用github hook测试
+    fitness
+        # 自动单元测试
+    coverity
+        # 代码静态检查
+    www.webpagetest.org
+        # 测试网站性能
+## gitlab
 # 应用控制
 ## forever
     openvpn --config openvpn.conf
@@ -880,6 +1045,15 @@ type: docs
         pm2 status
         pm2 info 1
         pm2 logs 1
+# 监控
+    prometheus
+        # 监控, go实现
+    grafana
+        # 监控
+    zabbix
+        # 分布式监控
+    nagios
+        # 监控
 # 个人操作
 ## vsftp
     介绍

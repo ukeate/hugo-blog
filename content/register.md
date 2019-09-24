@@ -8,18 +8,47 @@ type: docs
 信息:
 <a href="http://localhost:1315/docs/infomation/" target="_blank">信息</a>
 <a href="https://shimo.im/" target="_blank">石墨</a>
+<a href="https://trello.com/b/bWRQmKff/%E8%BF%9B%E5%BA%A6" target="_blank">Trello</a>
 <a href="https://www.vtrhome.net/" target="_blank">vpntech</a>
 <br/>
 资讯:
 <a href="https://www.infoq.cn/" target="_blank">infoQ</a>
 <a href="https://www.v2ex.com/" target="_blank">V2EX</a>
+<a href="https://juejin.im/" target="_blank">掘金</a>
+<a href="https://www.zhihu.com/people/tao-wen-54/pins" target="_blank">TaoWen</a>
+<a href="http://yinwang.org" target="_blank">YinWang</a>
+<a href="http://www.oreilly.com.cn" target="_blank">O' Reilly</a>
 <br/>
 工具:
-<a href="https://processon.com/" target="_blank">ProcessOn</a>
 <a href="https://www.atlassian.com/" target="_blank">Atlassian</a>
-<a href="https://trello.com/b/bWRQmKff/%E8%BF%9B%E5%BA%A6" target="_blank">Trello</a>
 
+# 布局
+    全
+        console
+        chromium
+        nautilus
+    常切回默认
+        左1, 中2, 右1
+    左
+        1: vscode、blog、wiki
+        2: 扩展ide
+        3: dia
+        4: work display
+        5: virtual box
+        6: postman
 
+        9: chrome、console
+    中
+        1: goland
+        2: intellij idea
+        3: webstorm
+
+        9: chrome、console
+    右
+        1: console
+        2: 扩展ide
+
+        9: chrome、console
 # go
     go test -bench=.  --cpuprofile=cpu.prof --memprofile=mem.prof -config ../conf/config_lc.toml -test.run TestCreateType
     go tool pprof service.test cpu.prof
@@ -33,13 +62,44 @@ type: docs
     快捷键
         ctrl alt f1/f2/...
 # 端口
-    1315 blog
     8123 polipo
     1080 shadowsocks
+
+    1315 blog
+
+    8001 nginx
+    3306 mysql
+    8002 adminer
+    27017 mongo
+    8003 mongo-express
+    6379 redis
+    4369, 5671, 5672, 15671, 15672 rabbitmq
+    9411 zipkin
+    9200 es
+    9100 es-head
+    5601 kibana
+
     8004 dokuwiki
+    8005 wordpress
+    8006 nginx-php-fpm
+    9090, 1883, 5683 thingsBoard
+
+    9000 provider
+    9001,9002 consumer
+    9003,9004 discovery
+    9005,9006 consumer-metadb
+    9010 monitor
+    9011 api-gateway
+    9012 config-server
+    9013 config-client
+    9014 zipkin-server
+    9015 admin-server
+    9016 auth
+    9017 auth-client
 # 系统配置
     bin
         # 系统需要
+        synaptics
         yaourt
         network-manager
         awesome
@@ -87,12 +147,23 @@ type: docs
         protobuf
         openjdk8
         docker
+        docker-compose
             mysql
-            nginx
-            nginx-php
-            nsq
             redis
+            mongodb
+            nginx
             zipkin
+            nsq
+            rabbitmq
+            es
+
+            dokuwiki
+            tiddlywiki
+            wordpress
+            nginx-php
+
+        # 设计需要
+        dia
     opt
         # ide
         webstorm
@@ -141,30 +212,34 @@ type: docs
     diy
         blog
     文件
-        ~
-            /code
-            /scripts
-                /work
-                /app
-                /config
-                /login
-            /.xinitrc
-            /.bashrc
-            /.gitconfig
-            /.openvpn
-            /.ssh
-            /.tmux.conf
-            /.config
-                /awesome
-                /VirtualBox/VirtualBox.xml
-        /opt
-            /env
-            /svc
-        /etc
-            /resolv.conf
-            /vsftpd.conf
-        /data/var/mysql
-        /db/mongo
+        ~/
+            code
+            scripts/
+               work
+               app
+               config
+               login
+            .xinitrc
+            .bashrc
+            .bash_profile
+            .gitconfig
+            .openvpn
+            .ssh
+            .tmux.conf
+            .config/
+                awesome
+                VirtualBox/VirtualBox.xml
+            .m2/
+                settings.xml
+        /opt/
+            env
+            svc
+        /etc/
+            resolv.conf
+            vsftpd.conf
+            X11/
+                xorg.conf.d/
+                    70-synaptics.conf
         /var/ftp
 
         # log
@@ -263,16 +338,33 @@ type: docs
         <C - w> v
 
 # intellij
-    shift shift
+    shift shift     # 打开文件
+    alt enter       # 补全, 快速修复
 # docker
     /etc/docker/daemon.json
         {
-          "registry-mirrors": ["https://nmp74w3y.mirror.aliyuncs.com"]
+          "registry-mirrors": ["https://nmp74w3y.mirror.aliyuncs.com", "http://hub-mirror.c.163.com"]
         }
     /etc/systemd/system/docker.service.d/http-proxy.conf            # 没有时创建
         Environment="HTTP_PROXY=http://127.0.0.1:8123"
             "HTTPS_PROXY=http://127.0.0.1:8123"
             "NO_PROXY=192.168.1.1,localhost"
+# maven
+    ~/.m2/settings.xml
+        <proxies>
+            <proxy>
+              <id>my-proxy</id>
+              <active>true</active>
+              <protocol>http</protocol>
+              <host>localhost</host>
+              <port>8123</port>
+              <!--
+              <username>admin</username>
+              <password>admin</password>
+              <nonProxyHosts>repository.mycom.com|*.google.com</nonProxyHosts>
+              -->
+            </proxy>
+        </proxies>
 # awesome
     快捷键
         独立
@@ -377,6 +469,28 @@ type: docs
 
         run ibus-daemon --xim
         run nm-applet
-
+# synaptics
+    /etc/X11/xorg.conf.d/70-synaptics.conf
+        Section "InputClass"
+            Identifier "touchpad"
+            Driver "synaptics"
+            MatchIsTouchpad "on"
+                    Option "TapButton1" "1"
+                    Option "TapButton2" "3"
+                    Option "TapButton3" "2"
+                    Option "VertEdgeScroll" "on"
+                    Option "VertTwoFingerScroll" "on"
+                    Option "HorizEdgeScroll" "on"
+                    Option "HorizTwoFingerScroll" "on"
+                    Option "CircularScrolling" "on"
+                    Option "CircScrollTrigger" "2"
+                    Option "EmulateTwoFingerMinZ" "40"
+                    Option "EmulateTwoFingerMinW" "8"
+                    Option "FingerLow" "30"
+                    Option "FingerHigh" "50"
+                    Option "MaxTapTime" "125"
+                Option "VertScrollDelta" "-50"
+                Option "HorizScrollDelta" "-50"
+        EndSection
 # tmux
 

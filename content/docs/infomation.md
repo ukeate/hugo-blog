@@ -42,6 +42,7 @@ date: 2018-10-10T20:56:27+08:00
         quora
         stack overflow
         知乎
+        segmentfault
     框架
         https://github.com/sindresorhus/awesome
             各技术框架
@@ -77,6 +78,9 @@ date: 2018-10-10T20:56:27+08:00
     代码之髓
     阿里巴巴Java开发手册
     黑马程序员面试宝典
+    微内核工作流引擎体系结构与部分解决方案参考, 工作流引擎核心调度算法与PetriNet
+    https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md
+        # 提问的智慧
     http://matt.might.net/articles/by-example-continuation-passing-style/
         # cps js
     http://cio.it168.com/a2014/0412/1612/000001612669.shtml

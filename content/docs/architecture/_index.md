@@ -1,3 +1,8 @@
+---
+Categories : ["后端"]
+title: "架构"
+date: 2018-10-11T10:33:48+08:00
+---
 
 # 名词
     Alb        automaticLoopBack 自动回环，虚拟接口
@@ -33,7 +38,7 @@
     # 支持主流hypervisors
     # 一个开源云计算解决方案，可以加速iaaS的部署、管理、配置
 ## cloudfoundry
-    # 根据应用模板，动态生成很多tomcat, mysql, nosql, 动态控制这些实例的启停。
+    # pivotal开源, 根据应用模板，动态生成很多tomcat, mysql, nosql, 动态控制这些实例的启停。
 ## openstack
     # 云操作系统，管理虚拟资源
 # 分布式服务(容器调度编排)
@@ -172,31 +177,8 @@
                 labels:
                     name: myweb         # 标签
 ## spring cloud
-    介绍
-        spring boot基础上构建，快速构建分布式系统
-        面向云环境架构(云原生)    # 适合在docker和paas部署
-    功能
-        配置管理
-        服务发现
-        熔断
-        智能路由
-        微代理
-        控制总线
-        分布式会话
-        集群状态管理
-    子项目
-        spring cloud netflix    # 对netflix oss套件整合
-            eureka     # 服务治理(注册、发现)
-            hystrix    # 容错管理
-            ribbon     # 软负载均衡(客户端)
-            feign      # 基于hystrix和ribbon，服务调用组件
-            zuul       # 网关，智能路由、访问过滤
-            archaius   # 配置
-        spring cloud config     # 应用配置外部化, 推送客户端配置
-        spring cloud bus        # 消息总线，传播集群状态变化来触发动作
-        spring cloud security   # 应用安全控制
-        spring cloud consul     # 封装consul(服务发现与配置, 与docker无缝)
-        spring cloud sleuth     # 跟踪
+## mesos
+    # twitter, apache开源的分布式资源管理框架, 两级调度器
 ## Dubbo
     介绍
         阿里开源，分布式服务框架，rpc方案，soa治理
@@ -225,7 +207,7 @@
         forking     # 并行多个取最快(any)
         broadcast   # 逐个多个，异常退出
     连接方式
-        广播
+        广播      # 不需要中心节点，适用开发测试, 地址段224.0.0.0 - 239.255.255.255
             服务端配置 applicationContext-service.xml
                 <dubbo:application name=”taotao-manager-service” />
                 <dubbo:registry address=”multicast://224.5.6.7:1234” />
@@ -248,6 +230,10 @@
                 timeout=”10000000” />
     注册中心
         zookeeper
+## Dubbox
+    介绍
+        当当网扩展Dubbo
+## netflix oss
 ## orleans
     # .NET
 ## hsf
@@ -263,13 +249,17 @@
         地址服务器
         配置服务器               # 分布式配置
         规则服务(diamond)       # 设置(黑白名单，认证，权重，限流)与推送
+## nscale
+    # 可扩展容器，用node.js和docker实现
+## armada
+    # python微服务
 
 # soa
     # 面向服务架构 service oriented architecture
 ## eai
-        # Enterprise Application Integration 建立底层结构将异构应用集成
+    # Enterprise Application Integration 建立底层结构将异构应用集成
 ## esb
-        # Enterprise Service Bus 企业服务总线， 是连接中枢
+    # Enterprise Service Bus 企业服务总线， 是连接中枢
 
 # rpc
     # 远程过程调用 remote procedure call
@@ -349,7 +339,8 @@
     # soap通讯
 
 # 粘合层
-## zookeeper
+## 治理(服务发现)
+### zookeeper
     介绍
         google chubby的开源实现。用于服务发现
         分布式, hadoop中hbase的组件
@@ -366,43 +357,66 @@
         大多数机器得到响应follow leader
     exhibitor
         # supervisor for zk
-## gearman
-    # 把工作委派给其他机器
-## etcd
+### Eureka
+    # Netflix
+### Consul
+    # Apache
+## 配置
+### etcd
     # k8s中用到的服务发现仓库
-## mesos
-    # apache开源的分布式资源管理框架
-## hystrix
-    功能
-        服务线程隔离、信号量隔离
-        降级: 超时、资源不足
-        熔断: 自动降级、快速恢复
-        请求缓存、请求合并
-## twemproxy
-    redis/memcache分片代理
+### spring cloud config
+### Diamond
+    # 淘宝
+### Archaius
+    # netflix
+### Disconf
+    # 百度
+### QConf
+    # 360
+## 任务
+### Elastic-Job
+    # 当当网
+### Azkaban
+    # linkedin
+### spring cloud task
+
+## 跟踪
+### zipkin
+    # twitter
+### opentracing
+### Hydra
+    # 京东
+### spring cloud sleuth
 
 
-# tracing
-## zipkin
-## opentracing
-
-
-# monitor
-## spy.js
+## 监控
+### spy.js
     # webstorm用的监控工具
-## alinode
+### alinode
     # 朴灵写的运行时性能管理工具
-## oneapm
+### oneapm
     # 监控node性能
     功能
         接口响应时间
         数据库方法时间
         外部服务时间
         单请求的耗时比
-## nscale
-    # 可扩展容器，用node.js和docker实现
 
-# ha
+## 容错
+### hystrix
+    功能
+        服务线程隔离、信号量隔离
+        降级: 超时、资源不足
+        熔断: 自动降级、快速恢复
+        请求缓存、请求合并
+## 代理
+### gearman
+    # 分布式计算, 把工作委派给其他机器
+## hazelcast
+    # 基于内存的数据网格，用于分布式计算
+### twemproxy
+    redis/memcache分片代理
+# 高可用
     # high-availability linux
     目标
         reliability: 可靠性
@@ -903,13 +917,16 @@
                 localhost:8080 -> tomcat manager -> WAR file to deploy
 
 ## netty
-    ## 介绍
+    介绍
         JBOSS提供，由Trustin Lee开发，比mina晚
         java开源框架
-    ## 原理
+    对比java nio
+        java原生nio有bug(epoll bug)且编写困难, 网络可靠性自己处理
+        netty设计优雅，使用方便，高性能、稳定
+    原理
         基于socket的数据流处理
-                # socket数据流不是a queue of packets , 而是a queue of bytes, 所以分次传输的数据会成为a bunch of bytes
-    ## 例子
+            # socket数据流不是a queue of packets , 而是a queue of bytes, 所以分次传输的数据会成为a bunch of bytes
+    例子
         Handler
             ChannelHandler
                 ChannelOutboundHandler
@@ -1064,6 +1081,8 @@
 ## mq
     消息重发
         状态表记录消息状态
+### pulsar
+    # 雅虎开源, 存储和服务分离，高可用存储, 支持流
 ### rabbitMQ
     介绍
         erlang开发, 重量级
@@ -1146,11 +1165,13 @@
     介绍
         apache子项目，scala语言编写, 发布订阅队列
         相对activeMQ轻量
-    架构
-            push/pull队列架构，适合异构集群
-            高吞吐率
-            分布式
-            支持数据并行到hadoop
+    特点
+        push/pull队列架构，适合异构集群
+        分布式, 高吞吐率, 易扩展
+        支持数据并行到hadoop
+        分区有序
+        批量压缩, 零拷贝, 内存缓冲, 磁盘顺序写入
+        可持久化
     工具
         manager # 监控
 ### nsq
@@ -1172,6 +1193,8 @@
 ### beanstalkd
 ### mqtt
         # 最早由ibm提供的，二进制消息的mq
+### metaq
+    # 阿里mq
 ## 任务
 ### quartz
     # java作业调度
@@ -1203,7 +1226,6 @@
             连接设备: 路由,  光纤交换机, 集线器(hub)
             接口: scsi fc
             通信协议: ip scsi
-
 ## iscsi
     # internet scsi
     优点
@@ -1248,3 +1270,58 @@
                     # 下载
                 rm --recursive s3://meiqia/crm-module/search
                     # 级联删除
+
+# 功能服务
+## webs
+    aws
+    阿里云
+    青云
+    轻云
+    digital ocean
+    vultr
+    Linode
+    azure
+        # 微软开放平台
+    gce
+        # google compute engine
+    txCloud
+        # 云柜，数据存储和计算
+    首都在线
+## paas
+    gae
+        # google app engine
+    sae
+        # sina app engine
+    heroku
+## dns
+    godaddy
+    万网
+    dnspod
+## cdn
+    七牛
+## pay
+    支付宝
+    易宝
+    财付通
+## idc
+    # infomation data corporation, 互联网数据中心
+## cti
+    天润
+    云之讯
+    容联
+## 报表/olap
+    palo
+## im
+    环信
+    云片
+    jpush
+    im
+    sms.webchinese.cn
+    个推
+## safe
+    1password
+## 设备
+    京东叮咚
+        # 智能音箱
+    萤石
+        # 视频设备

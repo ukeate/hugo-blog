@@ -121,8 +121,12 @@ type: docs
     crm                 customer relationship management
     erp             enterprise resource planning
     webRTC          web Real-Time Communication
-
-# 写法
+# 开发框架
+## 脚手架
+### spring boot
+### drapWizard
+    # java，类spring boot
+## 写法
     traits-decorator
             # js mixin
     q
@@ -153,7 +157,7 @@ type: docs
             # go 代码解释器
     antlr
             # java dsl
-## ejb
+### ejb
     特点
         分布式，j2ee一部分
 
@@ -161,8 +165,52 @@ type: docs
         会话bean(session)
         实体bean(entity)
         消息驱动bean(message driven)
+## 语言增强
+### guava
+    # google工具集
+    maven
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+    组件
+        o-> 增强
+        Optional                            # null处理
+        Preconditions                       # 准入检查
+        Ordering
+        Throwables
 
-# 套件
+        o-> 集合
+        Multiset                            # 存重复元素
+        Multimap                            # 多值
+        BiMap                               # 双向映射
+        Table                               # 两键一值
+        Range                               # 连续值
+        
+        o-> 字符串
+        Joiner
+        Spilter
+        CharMatcher
+        CaseFormat
+
+        o-> 类型
+        Objects
+        Bytes
+        Shorts
+        Ints
+        Longs
+        Floats
+        Doubles
+        Chars
+        Booleans
+
+        o-> 数学
+        IntMath
+        LongMath
+        BigIntegerMath
+
+        o-> 高可用
+        LoadingCache                        # 堆内缓存
 ## 接口
     luavit
         # lua实现, 类node
@@ -627,36 +675,6 @@ type: docs
     titles
         # java apache的标签库
 ### spring mvc
-    原理
-        DispatchServlet doService()捕获请求, doDispatch()用HandlerMapping映射url得到HandlerExcutionChain(执行链, 包括拦截器和handler)
-        handler getHandlerAdapter得到适配器来处理handler, 返回ModelAndView
-            # HandlerAdapter分三类: Servlet、Controller, HttpRequest
-        DispatchServlet用ViewResolver(视图解析器)解析ModelAndView成View
-            # ModelAndView是逻辑视图，DispatchServlet转化成视图View
-        返回View
-    与struts2区别
-        spring mvc方法对应请求, struts2是类
-        spring mvc请求是方法调用，struts2创建Action实例
-        spring mvc用aop处理请求，struts2用独有的拦截器(interceptor)
-        spring mvc入口是servlet, struts2入口是filter
-        spring mvc集成ajax(@ResponseBody), struts2需要插件
-        spring mvc验证支持JSR303, struts2不支持
-        spring mvc与spring无缝
-        spring mvc不需要配置
-    注解
-        @RequestMapping             # url映射
-        @RequestBody                # 转换参数到对象
-        @ResponseBody               # 返回对象转json
-
-        开启注解处理器
-            springmvc.xml
-                <mvc:annotation-driven>
-    乱码问题
-        post
-            web.xml中配置CharacterEncodingFilter
-        get
-            tomcat配置文件修改项目编码
-            new String(Request.getParameter("a").getBytes("ISO8859-1"), "utf-8")
 ### struts2
     # 基础
         介绍
@@ -1515,343 +1533,167 @@ type: docs
             o-> 设置tomcat/conf/server.xml
                 <Connector port="8080" .. URIEncoding="utf-8"/>
             o-> 提交下载请求用post方式，struts框架自动给post请求编码解码
-### cleaver
-    # 基于node幻灯片
-### hexo
+# 功能
+## 日志
+    log4j
+        # java
+    log4js
+        # js
+## 格式/模板
+    moment
+        # js格式化时间
+    iconv
+        # nodejs调用c++ libiconv库来转码
+    iconv-lite
+        # nodejs实现的转码，比调用c++ 的iconv更高效
+    poi
+        # java 文件处理
+    jFreeChart
+        # java图表库
+    jackson
+        # java json序列化
+    xstream
+        # java xml序列化
+    pango2
+        # 国际化模板
+## 生成 | 加密 | 计算特征
+    simhash
+            # google 文档hash
+    pygments
+            # python 生成高亮html
+    mako
+            # python 模板
+    jinja2
+            # python 模板
+    freemarker
+            # java 模板
+    proguard
+        # java 混淆
+## 邮件
+    javamail
+    nodemailer
+## 客户端
+    c3p0
+        # java rds 连接池
+    dbcp
+        # java rds 连接池
+    druid
+        # java rds 连接池。可监控sql执行性能，记sql日志
+    jdbc
+        # java rds client
+    dbutil
+    hibernate
+    ef
+        # .net orm
+    NHibernate
+        # .net orm
+    peewee
+        # python orm
+    node-mysql
+    mongoose
+    httpClient
+        # java http
+    request
+        # js http
+    superagent
+        # js http
+    mybatis
+## 领域语言
+    lex
+        # 生成词法分析程序
+    yacc
+        # 生成自底向上语法分析程序
+    antlr
+## 图形
+    ccap
+            # 基于c++的图形CImg库，就是一个CImg.h文件
+    canvas
+            # node canvas
+    tesseract
+            # node 验证码
+## pc控制
+    later
+        # nodejs corntab
+    glob
+        # nodejs 匹配获得文件
+    rd
+        # node 遍历文件
+    commander
+        # node制作命令
+    mkdirp
+        # node 递归makedir
+    fs-extra
+        # node扩展fs包
+## 高可用 | 性能
+    retry
+        # js retry
+    ehcache
+        # 缓存
+    tagg
+        # node线程池
+    cluster
+        # node单机集群
+    fiber
+        # node协程
+    akka
+        # scala并发、分布式、容错工具
+    driud
+        # 连接池，阿里开源
+## 前端
+### dwr
     介绍
-        简单轻量，基于node的静态博客框架
-        可以部署在自己node服务器上，也可以部署在github上
-    目录结构
-        scaffolds                                        # 脚手架
-        scripts                                            # 写文件的js, 扩展hexo功能
-        source                                            # 存放博客正文内容
-                _drafts                                    # 草稿箱
-                _posts                                        # 文件箱
-        themes                                            # 皮肤
-        _config.yml                                        # 全局配置文件
-        db.json                                            # 静态常量
+        java函数通过ajax映射到前端js调用
     使用
-        npm install -g hexo
-        hexo version
-        hexo init nodejs-hexo
-        cd nodejs-hexo && hexo server
-        hexo new 新博客                            # 产生 source/_posts/新博客.md
-        hexo server                                        # 启动server
-        hexo generate                                    # 静态化处理
-        github中创建一个项目nodejs-hexo, 在_config.yml中找到deploy部分，设置github项目地址
-        hexo deploy
-                # 部署以后，分支是gh-pages, 这是github为web项目特别设置的分支
-        上github，点settings找到github pages, 找到自己发布的站点
-        无法访问静态资源
-                设置域名
-                        申请域名
-                        dnspod 中 绑定ip
-### hugo
-    简介
+        ajax框架
+        1.导入jar包 dwr.jar
+        2.web-inf/下的配置文件
+            web.xml文件
+                <servlet>
+                    <servlet-name>dwr-invoker</servlet-name>
+                    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+                            # 固定写法
+                    <init-param>
+                            <param-name>debug</param-name>
+                            <param-value>true</param-value>
+                    </init-param>
+                    <init-param>
+                            <param-name>scriptCompressed</param-name>        # 允许在javascript中执行
+                            <param-value>false</param-value>
+                    </init-param>
+                    <load-on-startup>1</load-on-startup>        # web工程启动时加载
+                </servlet>
+                <servlet-mapping>
+                    <servlet-name>dwr-invoker</servlet-name>
+                    <url-pattern>/dwr/*</url-pattern>
+                </servlet-mapping>
+            dwr.xml文件
+                <dwr>
+                    <allow>
+                        <create creator="new" javascript="DWRUserAccess">        # 生成js文件的名（页面中引用）
+                                <param name="class" value="outrun.dwr.DWRUserAccess" />                # 曝露的类
+                        </create>
+                        <convert converter="bean" match="outrun.dwr.User" />        # 注册实体类，可以在js中进行实例化
+                    </allow>
+                </dwr>
+        3.写outrun.dwr.DWRUserAccess中的方法
+        4.页面调用
+            test.html
+                <script src="/outrun/dwr/engine.js"></script>
+                <script src="/outrun/dwr/util.js"></script>
+                <script src="/outrun/dwr/interface/DWRUserAccess.js"></script>
+                <SCRIPT LANGUAGE="JavaScript">
+                    DWRUserAccess.方法(参数,执行完运行的js函数)
+                        # 参数可以是一个map,如
+                            var userMap = {};
+                            userMap.id = regForm.id.value;
+                            userMap.password = regForm.password.value;
+                            userMap.name = regForm.name.value;
+                            userMap.email = regForm.email.value;
+                            DWRUserAccess.save(userMap, saveFun);
+                                    # 其中的regForm是页面中的表单（的name属性,dom支持直接使用名字引用表单）
+                </SCRIPT>
 
-        hugo由go编写，开源，特点为编译快
-        本文基于hugo0.49
-
-    help
-        hugo help
-        hugo help server    # server代表任何子命令
-
-     生成站点
-        hugo new site blog1 # 站点命令在blog1中执行
-
-     生成文章
-        hugo new about.md
-        hugo new post/first.md
-
-     主题
-        git clone https://github.com/spf13/hyde.git themes/hyde # 更多主题在https://themes.gohugo.io
-
-
-     本地服务器
-        hugo server
-            # 自带watch
-            -s /path/to/codes
-            --theme=hyde
-            --buildDrafts
-            -p 1315
-                # 默认端口1313
-
-     发布
-        hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
-
-     文章
-        开头
-            ---
-            用YAML写内容
-            --- # +++标记可写TOML
-
-            Description = ""
-            Categories = ["a1", "a2"]
-            Tags = ["b1","b2"]
-            draft = true    # 文章隐藏
-            menu = ""
-            title = "a" # 文章标题
-
-     配置
-        打开config.toml   # 可以是config.yaml、config.json
-        baseURL = ""
-        title = ""
-        theme = ""
-        [permalinks]
-            post = "/:year/:month/:title/"  # 生成list页面
-
-        [taxonomies]
-            category = "categories"
-            tag = "tags"
-
-        [params]
-            description = ""
-            author = ""
-
-        ignoreFiles = []
-
-        [blackfriday]   # 设置markdown库
-
-### jekyll
-    介绍
-        ruby静态站点生成器，根据网页源码生成静态文档文件
-        提供模板、变量、插件等功能
-        生成的站点可以直接发布到github上
-    使用
-        curl http://curl.haxx.se/ca/cacert.pem -o cacert.pem
-            # 移动到ruby安装目录
-        安装devkit
-        gem install jekyll
-        git clone https://github.com/plusjade/jekyll-bootstrap.git jekyll
-            # 下载jekyll-bootstrap模版
-        cd jekyll && jekyll serve
-        rake post title = 'Hello'
-            # 生成文章
-            ## 编辑_posts下面生成的文章
-        修改convertible.rb文件编码为utf-8
-        jekyll serve
-        发布到github
-            github上创建新仓库
-            git remote set-url origin git@新仓库
-            git add .
-            git commit -m 'new'
-            git push origin master
-            git branch gh-pages
-                # 新建一个分支，用于发布项目
-            git checkout gh-pages
-            修改_config.yml
-                production_url: http://outrun.github.io
-                BASE_PATH: /jekyll-demo
-
-## 搜索
-    分类
-        垂直搜索引擎
-            针对某一个行业的专业搜索引擎，是搜索引擎的细分和延伸，是对网页库中的某类专门的信息进行一次整合，定向分字段抽取出需要的数据进行处理后再以某种形式返回给用户。
-        通用搜索引擎
-            通过关键字的方式实现的，是语义上的搜索，返回的结果倾向于知识成果，比如文章，论文，新闻等
-            通用搜索引擎的信息量大、查询不准确、深度不够
-            通用搜索引擎的海量信息无序化
-
-    部分
-        １.索引
-        ２.分词
-        ３.搜索
-
-    compass
-        # 基于lucene
-    nutch
-        # 基于lucene
-    elasticsearch
-        # 基于lucene
-    sunspot
-        # 基于Rsolr，以dsl结构用ruby调solr
-    sphinx
-        # 基于sql的全文检索引擎
-### lucene
-    # 原理
-        block k-d tree
-        倒排索引
-            词典
-                排序数组
-                    # 为了二分查找
-                    # 实现简单，性能差
-                哈希表
-                    # 性能好，占内存大
-                跳跃表
-                    # 内存小且可调节, 模糊查询不好
-                B/B+树
-                    # 磁盘索引 ，更新方便，检索慢
-                trie树
-                    # 效率与字符串长度有关，只适合做英文词典
-                dat
-                    # 可做中文词典，内存占用小
-                fst
-                    # 共享前缀，内存占用小，要求输入有序，不易更新
-                    内存存前缀索引、磁盘存后缀词块
-            倒排表
-            正向文件
-                # 行式存储，原始文档
-            doc-values
-                # 列式存储，文档号到值的映射
-        文件指纹
-
-    # 概念
-        index
-            # 一个倒排表，对应一个目录
-        segment
-            # index的存储单元，包含多个文档
-        document
-            # 创建单位
-        field
-            # 文档里的键值对
-        term
-            # 分词后的字符串
-        analyzer
-            tokenizer
-                # 切分文本到索引单元
-            tokenfilter
-                # 对token预处理
-    # 常识
-        特性
-            索引
-            高亮
-            命中率排序
-            分词
-        与数据库的区别：数据库注重存储、全文检索注重查询
-        其它搜索：多媒体搜索
-        索引库(文件夹 或 内存中)：
-            只存储了商品的基本信息
-             索引库与数据库定时同步
-            索引库 -> document -> field                # field是键值对,值只能存数据
-                    同步
-            IndexWriter:addDocumnet(),delteDocument(),updateDocument()
-                    查询
-                            IndexSearch:search(),get()
-            Field的内部结构
-                        # 不存不索引会报错
-            Store:控制此Field字段是否存储到索引库中
-            Index:是否建立索引（索引不区分大小写,过滤词不创建索引）
-                NO:不建立索引，可以通过field的key查到，但是不能通过关键字查询到
-                NOT_ANALYZED:建立索引，但是不分词
-                ANALYZEd:建立索引又分词
-    # 使用到的对象
-        Directory
-        Analyzer
-            TokenStream tokenStream = analyzer.tokenStream("eldName",new StringReader("测试字符串"))
-            while(tokenStream.incrementToken()){
-                    TermAttribute termAttribute = tokenStream.getAttribute(TermAttribute.class);
-                    System.out.println(termAttribute.term());
-            }                # 使用分词器测试分词
-        Document
-            add(Field)
-            document = indexSearcher.doc(ScoreDoc)
-            get(String)                # 通过key查找value
-        IndexWriter
-            IndexWriter(directory,analyzer,MaxFieldLength.LIMITED);       # LIMITED限定Field的数量(源码中规定默认值)
-            addDocument(Document)
-            commit()
-            close()                        # 自带commit()
-            rollback()
-        IndexSearcher
-        QueryParser
-            QueryParser(Version.LUCENE_30,"name",analyzer)
-        Query
-            query = parser.parse(用户传递的字符串);
-            query = parser.parseMultiField(String [], 用户传递的字符串);
-        TopDocs
-            topDocs = indexSearcher.search(query, 10);                # 10是期望的结果数
-                                                                                                            ## 最终查询到的结果数是：期望结果数与实际结果数的最小值
-            totalHits                # 命中的结果数
-        ScoreDoc
-            ScoreDoc [] scoreDocs = topDocs.scoreDocs;
-            scoreDoc.score                # 命中率积分
-            scoreDoc.doc                # 命中文档编号，该编号由lucene自动生成
-        Term                # 索引项
-            Term("field中的key","field中value解析出的关键字")
-    # 索引的结构
-        Term("key","value")[0,3,4]                        # key 为对应的field中的"key",value对应的是解析field的"value"出的关键字
-                                                                                    ## []中的内容为匹配的文档编号，该编号为系统自动生成的
-    # 注意
-        lucene创建索引时field的key都可以重复，没有主键方面的限制。但是实际应用时要求我们为document有唯一的标识“主键”field,便于对每个document进行更新与删除
-    # 使用
-        包：IKAnalyzer,lucence-analyzer(英文分词，不需要),memory,core,highlighter
-        工具：lukeAll 用来查看索引库
-        添加、查询、删除、修改
-        抽取配置类（构造方法私有化）
-            Configuration
-                维护了directory与analyzer
-            DocumentUtil
-                goodsToDocument(Goods)
-                documentToGoods(Document)
-            LuceneUtil
-                维护了indexWriter与indexSearcher
-                注意
-                        1.indexWriter在static代码块中初始化
-                        2.getIndexWriter
-            LuceneService
-                用indexWriter与indexSearcher处理业务逻辑
-                添加
-                    indexWriter.addDocument(Document)
-                    indexWriter.rollback()
-                删除
-                    indexWriter.deleteDocument(Term)
-                    indexWriter.optimize()                # 删除document的时候同步索引库，没有设置的话只是删除document，但是索引中还是可以查到
-                更新
-                    indexWriter.updateDocument(Term,Document)
-                    indexWriter.optimize()                # 更新是先删除再添加（所以如果updateDocument(Term,Document)中匹配多个Document时，会出现删除了多个Document,而添加了一个Document的情况）
-                查询
-                    QueryParser parser = new QueryParser(Version.LUCENE_30, "field中的key", analyzer);
-                    Query query = IKQueryParser.parseMultiField(new String[]{"name","remark"}, "ee");                # 多字段查询，IKAnalyzer特有
-                        #　多字段查询到的第二个字段的结果，在转换高管时（调用getBestFragment时）只会对该方法指定的一个字段进行匹配，如果该字段不匹配时（但是第二个字段匹配），则会返回空。
-                        ## 针对这一个bug,在getBestFragment处理匹配的结果返回空时，不使用空而直接返回没有高亮的字符串即可。
-                    parser.parse(用户传递的字符串);
-                    TopDocs topDocs = indexSearcher.search(query, 3);        # 3是期望结果数
-                    ScoreDoc [] scoreDocs = topDocs.scoreDocs;
-                    Document document = indexSearcher.doc(scoreDoc.doc);                scoreDoc.doc得到文档编号
-                    分页查询：
-                        传递当前页码与一页记录数
-                        利用topDocs.totalHits得到总记录数
-                        查询本页与前面所有页的期望数据量，然后只截取本页的文档编号，得到document并返回数据
-
-    # 分词器
-        IKAnalyzer
-            配置文件
-                src/IKAnalyzer.cfg.xml中配置
-                    <properties>
-                        <entry key="ext_dict">/mydict.dic</entry>                 # 配置自己的字典（不分词）
-                        <entry key="ext_stopwords">/ext_stopword.dic</entry>                 # 配置跳过的字
-                    </properties>
-            Query query = IKQueryParser.parse("name",name);                # IKAnalyzer特有
-    # 排序
-        Directory directory = FSDirectory.open(new File("d:/lucene"));
-        IndexSearcher indexSearcher = new IndexSearcher(directory);
-        Query query = IKQueryParser.parse("name","cc");
-        Sort sort = new Sort(new SortField("id", SortField.INT,true));                # 这里可以排序多个字段
-            # 参数1："id"是排序的field字段,参数2：是字段内容的类型,参数3 true代表降序排列
-            ## 此时命中率不再计算（因为不按命中率排序）
-            ## 排序的field必须建立索引
-        indexSearcher.search(query, null,10,sort);
-    高亮
-        导入包:highlight与memory
-        Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<font color='red'","</font>"),new QueryScorer(query));
-        highlighter.setTextFragmenter(new SimpleFragmenter(10));                # 限制字符长度
-        ..
-        String result = highlighter.getBastFragment(analyzer,"name",doc.get("name"));
-            # 返回高亮处理字符串
-            ## 参数1：解析用户输入词的分词器,参数2：是要查询的field的key(没有用)，参数3：field的value
-### solr
-    介绍
-        基于lucene
-        搜索服务器，http请求提交和返回xml
-    功能
-        丰富了查询语言
-        实现可配置、可扩展
-        优化了性能
-        提供了管理界面
-        缓存功能
-        垂直搜索
-        高亮
-        data schema定义字段
+# 应用框架
 ## 数据
 ### 日志
     scribe
@@ -1865,7 +1707,6 @@ type: docs
                 接收数据，不同topic 的数据发送给不同的store中
             存储系统(store)
                 file, buffer, network, bucket, null, thriftfile, multi
-
     chukwa
         # apache出品，hadoop系列产品
     flume
@@ -1895,6 +1736,16 @@ type: docs
     pandas
         # python数据分析
 ### 计算
+    druid
+        # apache
+        特点
+            分布式, 扩展性强
+            高可用，可回滚
+            内存, 时序数据库
+            亚秒级OLAP,  实时分析
+            多租户
+    spark
+    stream
 #### hadoop
     # 发展
         google
@@ -2153,6 +2004,222 @@ type: docs
                     嵌套型数据的列存储
                     多层查询
                     减少查询的处理数据量，提升查询效率
+## 搜索
+    分类
+        垂直搜索引擎
+            针对某一个行业的专业搜索引擎，是搜索引擎的细分和延伸，是对网页库中的某类专门的信息进行一次整合，定向分字段抽取出需要的数据进行处理后再以某种形式返回给用户。
+        通用搜索引擎
+            通过关键字的方式实现的，是语义上的搜索，返回的结果倾向于知识成果，比如文章，论文，新闻等
+            通用搜索引擎的信息量大、查询不准确、深度不够
+            通用搜索引擎的海量信息无序化
+
+    部分
+        １.索引
+        ２.分词
+        ３.搜索
+
+    compass
+        # 基于lucene
+    nutch
+        # 基于lucene
+    sunspot
+        # 基于Rsolr，以dsl结构用ruby调solr
+    sphinx
+        # 基于sql的全文检索引擎
+### lucene
+    # 原理
+        block k-d tree
+        倒排索引
+            词典
+                排序数组
+                    # 为了二分查找
+                    # 实现简单，性能差
+                哈希表
+                    # 性能好，占内存大
+                跳跃表
+                    # 内存小且可调节, 模糊查询不好
+                B/B+树
+                    # 磁盘索引 ，更新方便，检索慢
+                trie树
+                    # 效率与字符串长度有关，只适合做英文词典
+                dat
+                    # 可做中文词典，内存占用小
+                fst
+                    # 共享前缀，内存占用小，要求输入有序，不易更新
+                    内存存前缀索引、磁盘存后缀词块
+            倒排表
+            正向文件
+                # 行式存储，原始文档
+            doc-values
+                # 列式存储，文档号到值的映射
+        文件指纹
+
+    # 概念
+        index
+            # 一个倒排表，对应一个目录
+        segment
+            # index的存储单元，包含多个文档
+        document
+            # 创建单位
+        field
+            # 文档里的键值对
+        term
+            # 分词后的字符串
+        analyzer
+            tokenizer
+                # 切分文本到索引单元
+            tokenfilter
+                # 对token预处理
+    # 常识
+        特性
+            索引
+            高亮
+            命中率排序
+            分词
+        与数据库的区别：数据库注重存储、全文检索注重查询
+        其它搜索：多媒体搜索
+        索引库(文件夹 或 内存中)：
+            只存储了商品的基本信息
+             索引库与数据库定时同步
+            索引库 -> document -> field                # field是键值对,值只能存数据
+                    同步
+            IndexWriter:addDocumnet(),delteDocument(),updateDocument()
+                    查询
+                            IndexSearch:search(),get()
+            Field的内部结构
+                        # 不存不索引会报错
+            Store:控制此Field字段是否存储到索引库中
+            Index:是否建立索引（索引不区分大小写,过滤词不创建索引）
+                NO:不建立索引，可以通过field的key查到，但是不能通过关键字查询到
+                NOT_ANALYZED:建立索引，但是不分词
+                ANALYZEd:建立索引又分词
+    # 使用到的对象
+        Directory
+        Analyzer
+            TokenStream tokenStream = analyzer.tokenStream("eldName",new StringReader("测试字符串"))
+            while(tokenStream.incrementToken()){
+                    TermAttribute termAttribute = tokenStream.getAttribute(TermAttribute.class);
+                    System.out.println(termAttribute.term());
+            }                # 使用分词器测试分词
+        Document
+            add(Field)
+            document = indexSearcher.doc(ScoreDoc)
+            get(String)                # 通过key查找value
+        IndexWriter
+            IndexWriter(directory,analyzer,MaxFieldLength.LIMITED);       # LIMITED限定Field的数量(源码中规定默认值)
+            addDocument(Document)
+            commit()
+            close()                        # 自带commit()
+            rollback()
+        IndexSearcher
+        QueryParser
+            QueryParser(Version.LUCENE_30,"name",analyzer)
+        Query
+            query = parser.parse(用户传递的字符串);
+            query = parser.parseMultiField(String [], 用户传递的字符串);
+        TopDocs
+            topDocs = indexSearcher.search(query, 10);                # 10是期望的结果数
+                                                                                                            ## 最终查询到的结果数是：期望结果数与实际结果数的最小值
+            totalHits                # 命中的结果数
+        ScoreDoc
+            ScoreDoc [] scoreDocs = topDocs.scoreDocs;
+            scoreDoc.score                # 命中率积分
+            scoreDoc.doc                # 命中文档编号，该编号由lucene自动生成
+        Term                # 索引项
+            Term("field中的key","field中value解析出的关键字")
+    # 索引的结构
+        Term("key","value")[0,3,4]                        # key 为对应的field中的"key",value对应的是解析field的"value"出的关键字
+                                                                                    ## []中的内容为匹配的文档编号，该编号为系统自动生成的
+    # 注意
+        lucene创建索引时field的key都可以重复，没有主键方面的限制。但是实际应用时要求我们为document有唯一的标识“主键”field,便于对每个document进行更新与删除
+    # 使用
+        包：IKAnalyzer,lucence-analyzer(英文分词，不需要),memory,core,highlighter
+        工具：lukeAll 用来查看索引库
+        添加、查询、删除、修改
+        抽取配置类（构造方法私有化）
+            Configuration
+                维护了directory与analyzer
+            DocumentUtil
+                goodsToDocument(Goods)
+                documentToGoods(Document)
+            LuceneUtil
+                维护了indexWriter与indexSearcher
+                注意
+                        1.indexWriter在static代码块中初始化
+                        2.getIndexWriter
+            LuceneService
+                用indexWriter与indexSearcher处理业务逻辑
+                添加
+                    indexWriter.addDocument(Document)
+                    indexWriter.rollback()
+                删除
+                    indexWriter.deleteDocument(Term)
+                    indexWriter.optimize()                # 删除document的时候同步索引库，没有设置的话只是删除document，但是索引中还是可以查到
+                更新
+                    indexWriter.updateDocument(Term,Document)
+                    indexWriter.optimize()                # 更新是先删除再添加（所以如果updateDocument(Term,Document)中匹配多个Document时，会出现删除了多个Document,而添加了一个Document的情况）
+                查询
+                    QueryParser parser = new QueryParser(Version.LUCENE_30, "field中的key", analyzer);
+                    Query query = IKQueryParser.parseMultiField(new String[]{"name","remark"}, "ee");                # 多字段查询，IKAnalyzer特有
+                        #　多字段查询到的第二个字段的结果，在转换高管时（调用getBestFragment时）只会对该方法指定的一个字段进行匹配，如果该字段不匹配时（但是第二个字段匹配），则会返回空。
+                        ## 针对这一个bug,在getBestFragment处理匹配的结果返回空时，不使用空而直接返回没有高亮的字符串即可。
+                    parser.parse(用户传递的字符串);
+                    TopDocs topDocs = indexSearcher.search(query, 3);        # 3是期望结果数
+                    ScoreDoc [] scoreDocs = topDocs.scoreDocs;
+                    Document document = indexSearcher.doc(scoreDoc.doc);                scoreDoc.doc得到文档编号
+                    分页查询：
+                        传递当前页码与一页记录数
+                        利用topDocs.totalHits得到总记录数
+                        查询本页与前面所有页的期望数据量，然后只截取本页的文档编号，得到document并返回数据
+
+    # 分词器
+        IKAnalyzer
+            配置文件
+                src/IKAnalyzer.cfg.xml中配置
+                    <properties>
+                        <entry key="ext_dict">/mydict.dic</entry>                 # 配置自己的字典（不分词）
+                        <entry key="ext_stopwords">/ext_stopword.dic</entry>                 # 配置跳过的字
+                    </properties>
+            Query query = IKQueryParser.parse("name",name);                # IKAnalyzer特有
+    # 排序
+        Directory directory = FSDirectory.open(new File("d:/lucene"));
+        IndexSearcher indexSearcher = new IndexSearcher(directory);
+        Query query = IKQueryParser.parse("name","cc");
+        Sort sort = new Sort(new SortField("id", SortField.INT,true));                # 这里可以排序多个字段
+            # 参数1："id"是排序的field字段,参数2：是字段内容的类型,参数3 true代表降序排列
+            ## 此时命中率不再计算（因为不按命中率排序）
+            ## 排序的field必须建立索引
+        indexSearcher.search(query, null,10,sort);
+    高亮
+        导入包:highlight与memory
+        Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<font color='red'","</font>"),new QueryScorer(query));
+        highlighter.setTextFragmenter(new SimpleFragmenter(10));                # 限制字符长度
+        ..
+        String result = highlighter.getBastFragment(analyzer,"name",doc.get("name"));
+            # 返回高亮处理字符串
+            ## 参数1：解析用户输入词的分词器,参数2：是要查询的field的key(没有用)，参数3：field的value
+### solr
+    介绍
+        基于lucene
+        搜索服务器，http请求提交和返回xml
+    功能
+        丰富了查询语言
+        实现可配置、可扩展
+        优化了性能
+        提供了管理界面
+        缓存功能
+        垂直搜索
+        高亮
+        data schema定义字段
+### elasticsearch
+    介绍
+        基于lucene
+    性能
+        第一次查秒级响应(5-10秒)，放到文件系统缓存(filesystem cache)
+        再查命令缓存毫秒级响应                              # 热点数据要预热
+        文件系统缓存(内存中分配)和数据量同样大，才有效率        # 冷热分离
+
+        分页，会查前面所有数据                              # 用scroll api, 快照 + 游标
 ## 权限
 ### shiro
     功能
@@ -2364,6 +2431,169 @@ type: docs
 
                 user：比如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查
                         # remember me可登录
+## 博客
+### cleaver
+    # 基于node幻灯片
+### hexo
+    介绍
+        简单轻量，基于node的静态博客框架
+        可以部署在自己node服务器上，也可以部署在github上
+    目录结构
+        scaffolds                                        # 脚手架
+        scripts                                            # 写文件的js, 扩展hexo功能
+        source                                            # 存放博客正文内容
+                _drafts                                    # 草稿箱
+                _posts                                        # 文件箱
+        themes                                            # 皮肤
+        _config.yml                                        # 全局配置文件
+        db.json                                            # 静态常量
+    使用
+        npm install -g hexo
+        hexo version
+        hexo init nodejs-hexo
+        cd nodejs-hexo && hexo server
+        hexo new 新博客                            # 产生 source/_posts/新博客.md
+        hexo server                                        # 启动server
+        hexo generate                                    # 静态化处理
+        github中创建一个项目nodejs-hexo, 在_config.yml中找到deploy部分，设置github项目地址
+        hexo deploy
+                # 部署以后，分支是gh-pages, 这是github为web项目特别设置的分支
+        上github，点settings找到github pages, 找到自己发布的站点
+        无法访问静态资源
+                设置域名
+                        申请域名
+                        dnspod 中 绑定ip
+### hugo
+    简介
+
+        hugo由go编写，开源，特点为编译快
+        本文基于hugo0.49
+
+    help
+        hugo help
+        hugo help server    # server代表任何子命令
+
+     生成站点
+        hugo new site blog1 # 站点命令在blog1中执行
+
+     生成文章
+        hugo new about.md
+        hugo new post/first.md
+
+     主题
+        git clone https://github.com/spf13/hyde.git themes/hyde # 更多主题在https://themes.gohugo.io
+
+
+     本地服务器
+        hugo server
+            # 自带watch
+            -s /path/to/codes
+            --theme=hyde
+            --buildDrafts
+            -p 1315
+                # 默认端口1313
+
+     发布
+        hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
+
+     文章
+        开头
+            ---
+            用YAML写内容
+            --- # +++标记可写TOML
+
+            Description = ""
+            Categories = ["a1", "a2"]
+            Tags = ["b1","b2"]
+            draft = true    # 文章隐藏
+            menu = ""
+            title = "a" # 文章标题
+
+     配置
+        打开config.toml   # 可以是config.yaml、config.json
+        baseURL = ""
+        title = ""
+        theme = ""
+        [permalinks]
+            post = "/:year/:month/:title/"  # 生成list页面
+
+        [taxonomies]
+            category = "categories"
+            tag = "tags"
+
+        [params]
+            description = ""
+            author = ""
+
+        ignoreFiles = []
+
+        [blackfriday]   # 设置markdown库
+
+### jekyll
+    介绍
+        ruby静态站点生成器，根据网页源码生成静态文档文件
+        提供模板、变量、插件等功能
+        生成的站点可以直接发布到github上
+    使用
+        curl http://curl.haxx.se/ca/cacert.pem -o cacert.pem
+            # 移动到ruby安装目录
+        安装devkit
+        gem install jekyll
+        git clone https://github.com/plusjade/jekyll-bootstrap.git jekyll
+            # 下载jekyll-bootstrap模版
+        cd jekyll && jekyll serve
+        rake post title = 'Hello'
+            # 生成文章
+            ## 编辑_posts下面生成的文章
+        修改convertible.rb文件编码为utf-8
+        jekyll serve
+        发布到github
+            github上创建新仓库
+            git remote set-url origin git@新仓库
+            git add .
+            git commit -m 'new'
+            git push origin master
+            git branch gh-pages
+                # 新建一个分支，用于发布项目
+            git checkout gh-pages
+            修改_config.yml
+                production_url: http://outrun.github.io
+                BASE_PATH: /jekyll-demo
+## 游戏
+    pomelo
+        # node.js上网易开源的实时性好的游戏类服务器
+## 地理信息
+    ide
+        skylive
+        arcGIS
+        mapInfo
+        mapGIS
+        superMap
+    webglobe
+    arcpy
+## 人工智能
+    tensorflow
+        # 神经网络计算
+    convnet.js
+        # js深度学习
+    scikit-learn
+        # python机器学习
+## CMS
+    # content management system
+### wordpress
+    # php
+### dedecms
+    # 织梦cms, SEO优化
+### 帝国cms
+    # SEO优化
+### phpcms
+### phpwind
+    # 开源, 社区管理系统
+### drupal
+    # 开源, cms
+## 商城
+### ecshop
+    # 开源, 商城系统, 微信商城
 ## 企业资源计划
     # erp
     activiti
@@ -2430,379 +2660,83 @@ type: docs
                 jbpm4_variable
 
         id关联
-## 游戏
-    pomelo
-        # node.js上网易开源的实时性好的游戏类服务器
-
-## 地理信息
-    ide
-            skylive
-            arcGIS
-            mapInfo
-            mapGIS
-            superMap
-
-    webglobe
-    arcpy
-
-## 人工智能
-    tensorflow
-            # 神经网络计算
-    convnet.js
-            # js深度学习
-    scikit-learn
-            # python机器学习
-## 领域语言
-    lex
-            # 生成词法分析程序
-    yacc
-            # 生成自底向上语法分析程序
-    antlr
-
-# 组件
-    # 数件物品组合成一体，每一件没有独立使用价值
-## 高可用 | 性能
-    retry
-        # js retry
-    ehcache
-        # 缓存
-    tagg
-            # node线程池
-    cluster
-            # node单机集群
-    fiber
-            # node协程
-## pc控制
-    later
-        # nodejs corntab
-    glob
-        # nodejs 匹配获得文件
-    rd
-        # node 遍历文件
-    commander
-        # node制作命令
-    mkdirp
-        # node 递归makedir
-    fs-extra
-        # node扩展fs包
-## 生成 | 加密 | 计算特征
-    simhash
-            # google 文档hash
-    pygments
-            # python 生成高亮html
-    mako
-            # python 模板
-    jinja2
-            # python 模板
-    freemarker
-            # java 模板
-    proguard
-        # java 混淆
-## 日志
-    log4j
-        # java
-    log4js
-        # js
-## 客户端
-    c3p0
-        # java rds 连接池
-    dbcp
-        # java rds 连接池
-    druid
-        # java rds 连接池
-    jdbc
-        # java rds client
-    dbutil
-    hibernate
-    ef
-        # .net orm
-    NHibernate
-        # .net orm
-    peewee
-        # python orm
-    node-mysql
-    mongoose
-    httpClient
-        # java http
-    request
-        # js http
-    superagent
-        # js http
-### mybatis
-    # 基础
-        #与$
-            #相当于解析成引号, 防止sql注入
-            $变量引用, 不能防止sql注入，用于传入表名之类
-        特点
-            sql易维护，传参方便
-            orm
-        Mapper接口
-            方法名与配置id相同
-            输入输出参数类型对应定义的parameterType类型和resultType类型
-            类路径是配置的namespace
-        缓存
-            # 基于PerpetualCache的HashMap
-            一级缓存
-                存在本地
-                作用域为session, session flush后清空
-            二级缓存
-                可定义存储服务
-                作用域为namespace
-                配置
-                    <cache/>
-                        readOnly="true" 时，缓存实例单例，false时返回缓存拷贝
-            更新
-                create, update, delete后，作用域下所有select缓存clear
-    # 与hibernate区别
-        都通过SessionFactoryBuilder从配置生成SessionFactory, 再生成Session
-        都支持jdbc和jta
-        mybatis可细致优化sql, hibernate移植性好
-        mybatis学习成本低
-        mybatis本身缓存不好，hibernate对象维护和缓存好
-        hibernate dao层封开发简单(不用维护映射)，crud方便
-
-
-
-    # 使用
-        编程
-            创建SqlSessionFactory
-            创建SqlSession
-            执行数据库操作
-            session.commit()
-            session.close()
-
-
-        导入ibatis jar包
-        配置文件
-            SqlMap.properties        # 属性名可以修改
-                driver=oracle.jdbc.driver.OracleDriver
-                url=jdbc:oracle:thin:@127.0.0.1:1521:orcl
-                username=root
-                password=root
-            SqlMapConfig.xml                # 总配置文件
-                <sqlMapConfig>
-                    <properties recource="SqlMap.properties"/>
-                    <transactionManager type="JDBC">
-                            <dataSource type="SIMPLE">
-                                    <property value="${driver}" name="JDBC.Driver"/>
-                                    <property value="${url}" name="JDBC.ConnectionURL"/>
-                                    <property value="${username}" name="JDBC.Username"/>
-                                    <property value="${password}" name="JDBC.Password"/>
-                            </dataSource>
-                        <sqlMap resource="Student.xml"/>
-                    </transactionManager>
-                </sqlMapConfig>
-            Student.xml                                # 映射xml文件
-                <sqlMap>
-                    <typeAlias alias="Student" type="com.Student"/>
-                        <select id="selectAllStudent" resultClass="Student">
-                            select * from Student
-                        </select>
-                    </typeAlias>
-                </sqlMap>
-            辅助类Student.java                 # 要求有无参构造方法
-                private sid = 0;
-                private String name = null;
-                private String major = null;
-                private Date birth = null;
-                private float score = 0;
-        Xxx.java
-            private static SqlMapClient sqlMapClient = null;
-            static{
-                Reader reader = Resources.getResourceAsReader(总配置文件);
-                sqlMapClient = SqlMapClientBuilder.buildSqlMapClient(reader);
-                reader.close();
-            }
-            public List<Student> queryAllStudent(){
-                List<Student> studentList = sqlMapClient.queryForList("selectAllStudent");
-                return studentList;
-            }
-            @Test
-            public void testHere(){
-                for(Student student: this.queryAllStudent()){
-                    System.out.println(student.getName);
-                }
-            }
-    # 配置
-        sqlMapConfig.xml
-            mybatis加载属性顺序
-                    properties中property中的属性
-                    properties中resource或url中的属性
-                    parameterType中传递一属性
-                            # properties中配的属性会影响到mapper.xml中${}的sql拼接，因为都是ognl
-            配置标签
-                    properties
-                    settings
-                            # ibatis有性能优化的参数，mybatis会自动调优，不用设置了
-                    typeAliases
-                            # 针对parameterType和resultType指定的类型定义别名
-                            # java.lang.Integer在mybatis中默认别名为int
-                    typeHandlers
-                            # 类型处理器，jdbc类型和java类型的转换
-                            ## 一般mybatis提供的类型处理器够用了
-                    objectFactory
-                    plugins
-                    environments
-                    mappers
-        mapper.xml
-            内容
-                    #{}接收简单类型, pojo的ognl属性注入
-                    ${}是字符串的拼接
-
-            SELECT * FROM USER WHERE id=#{id}
-            SELECT * FROM USER WHERE username LIKE '%${value}%'
-                                            # sql 注入
-        输入输出映射
-            parameterType
-                    java类型
-                    hashmap
-                            # #{key}来取value
-                    pojo
-                    包装类型
-            resultType
-                            # 指定一条数据的类型，在java方法的返回类型中list或pojo来体现数据条数
-                            # mybatis判断mapper代理中使用selectOne或者selectType
-                    pojo
-                            # 返回字段可以是别名，但要与pojo中的属性名相同
-                            ## 如果有记录返回但没有pojo中匹配的属性名对应，则直接不创建该对象
-                    java类型
-                            # 在返回结果只有一行一列时，可以是简单类型
-                    hashmap
-                            # key是字段的字，value是字段的值
-                            ## 多条数据时，list里面存hashmap
-            resultMap
-                            # 查询出来的字段名与pojo属性名不一致
-                    定义resultMap
-                    使用resultMap
-        动态sql
-            <where>
-            <if>
-
-            sql片段<sql>
-
-            <foreach>
-        高级映射
-        缓存
-        逆向
-            要求
-                    1. mapper.xml中namespace 写mapper接口
-                            <mapper namespace="com.otr.tea.mapper.UserMapper">
-                    2. mapper.java中方法名与mapper.xml的statementid一致
-                    3. mapper.java中方法的输入类型与mapper.xml中的parameterType一致
-                            # 由于传入的参数只有一个，所以用包装类型的pojo来传多个参数，不利于业务层的可扩展性
-                    4. mapper.java中方法的返回类型与mapper.xml中的resultType一致
-            机制
-                    如果Mapper中返回类型为pojo, 则调用selectOne, 如果是List, 则调用selectList
-    # api
-        sqlSessionFactory
-        sqlSession                        # 是线程不安全的，因为它的类中有数据和属性
-                                                ＃ 是多例的，在方法中局部变量使用
-                Executor                # 执行器操作数据库（基本执行器，缓存执行器）
-        mapped statement                # 封装sql语句、输入参数、输出结果类型
-
-        例子
-            InputStream is = Resources.getResourceAsStream("SqlMapConfig.xml");
-                    # Resources是mybatis提供的资源加载类
-            SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(is);
-            SqlSession sqlSession = factory.openSession();
-            User user = sqlSession.selectOne("test.findUserById", 1);
-                    ＃ selectList()
-                    # insert("test.insertUser", user)
-                    ## sqlSession.commit();
-                    ## user.getId() 会主键返回
-                    ### mysql中LAST_INSERT_ID()在insert语句后接着执行可以得到刚刚自成的id
-            sqlSession.close();
-    # 案例
-        返回id
-            mysql
-                <insert id="insert" parameterType="com.test.User" keyProperty="userId" useGeneratedKeys="true" >
-            oracle
-                <insert id="insert" parameterType="com.test.User">
-                    <selectKey resultType="INTEGER" order="BEFORE" keyProperty="userId">
-                        SELECT SEQ_USER.NEXTVAL as userId from DUAL
-                    </selectKey>
-
-                    insert into user (user_id, user_name, modified, state)
-                    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
-                    #{modified,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER})
-                </insert>
-## 格式
-    moment
-            # js格式化时间
-    iconv
-            # nodejs调用c++ libiconv库来转码
-    iconv-lite
-            # nodejs实现的转码，比调用c++ 的iconv更高效
-    poi
-            # java 文件处理
-    jFreeChart
-            # java图表库
-    jackson
-            # java json序列化
-    xstream
-            # java xml序列化
-## 邮件
-    javamail
-    nodemailer
-## 前端
-### dwr
-    介绍
-        java函数通过ajax映射到前端js调用
-    使用
-        ajax框架
-        1.导入jar包 dwr.jar
-        2.web-inf/下的配置文件
-            web.xml文件
-                <servlet>
-                    <servlet-name>dwr-invoker</servlet-name>
-                    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
-                            # 固定写法
-                    <init-param>
-                            <param-name>debug</param-name>
-                            <param-value>true</param-value>
-                    </init-param>
-                    <init-param>
-                            <param-name>scriptCompressed</param-name>        # 允许在javascript中执行
-                            <param-value>false</param-value>
-                    </init-param>
-                    <load-on-startup>1</load-on-startup>        # web工程启动时加载
-                </servlet>
-                <servlet-mapping>
-                    <servlet-name>dwr-invoker</servlet-name>
-                    <url-pattern>/dwr/*</url-pattern>
-                </servlet-mapping>
-            dwr.xml文件
-                <dwr>
-                    <allow>
-                        <create creator="new" javascript="DWRUserAccess">        # 生成js文件的名（页面中引用）
-                                <param name="class" value="outrun.dwr.DWRUserAccess" />                # 曝露的类
-                        </create>
-                        <convert converter="bean" match="outrun.dwr.User" />        # 注册实体类，可以在js中进行实例化
-                    </allow>
-                </dwr>
-        3.写outrun.dwr.DWRUserAccess中的方法
-        4.页面调用
-            test.html
-                <script src="/outrun/dwr/engine.js"></script>
-                <script src="/outrun/dwr/util.js"></script>
-                <script src="/outrun/dwr/interface/DWRUserAccess.js"></script>
-                <SCRIPT LANGUAGE="JavaScript">
-                    DWRUserAccess.方法(参数,执行完运行的js函数)
-                        # 参数可以是一个map,如
-                            var userMap = {};
-                            userMap.id = regForm.id.value;
-                            userMap.password = regForm.password.value;
-                            userMap.name = regForm.name.value;
-                            userMap.email = regForm.email.value;
-                            DWRUserAccess.save(userMap, saveFun);
-                                    # 其中的regForm是页面中的表单（的name属性,dom支持直接使用名字引用表单）
-                </SCRIPT>
-## 图形
-    ccap
-            # 基于c++的图形CImg库，就是一个CImg.h文件
-    canvas
-            # node canvas
-    tesseract
-            # node 验证码
-
-
+## it服务管理
+    # ITSM(IT service management)
+    sap
+    salesforce
+    servicenow
+    workday
+        # hr平台
+## 工业互联网(IoT)
+    Kaa
+    SiteWhere
+        # tomcat, mongodb, hbase, influxdb, grafana
+    ThingSpeak
+        # matlab可视化
+    DeviceHive
+        # 开源, docker, k8s, es, spark, cassandra, kafka
+    Zetta
+    Thinger.io
+    wso2
+### thingsBoard
+    # java, 社区版、企业版
+    安装
+        docker run -it -p 9090:9090 -p 1883:1883 -p 5683:5683/udp -v ~/.mytb-data:/data -v ~/.mytb-logs:/var/log/thingsboard --name mytb thingsboard/tb-postgres
+    架构
+        device
+        transport
+            MQTT, HTTP, CoAP
+        connectivity
+            MQTT, HTTP, CoAP
+        rule engine
+        core services
+        gateway
+            rest, websockets
+        browser, application
+    模块
+        application
+            common
+                data                        # 数据结构
+                message                     # 消息结构
+                transport                   # 接口结构，适配客户端
+        dao                                 # 交互data, 兼容不同db
+        tools
+            extensions
+                kafka
+                mqtt
+                rabbitmq
+                rest-api-call
+            extensions-api
+                action
+                filter
+                plugin
+                processor
+            extensions-core                 # 实现公用extensions-api
+        transport
+            http                            # rest
+            coap                            # californium
+            mqtt                            # netty
+        规则引擎                             # 基于actors执行
+            filters
+            processors
+            action
+        ui                                  # node.js + yarn
+    功能
+        多租户(tenant)
+            客户
+                资产
+                设备
+        部件(widget)
+            alarm
+        实体视图
+            设备即服务(DaaS)
+            共享资产、设备
+            传感器等权限
+        仪表盘(dashboard)
+        设备属性(attributes)
+        设备数据(telementry)
+        与设备通信(rpc)
+        system
+            general
+            mail
+            security

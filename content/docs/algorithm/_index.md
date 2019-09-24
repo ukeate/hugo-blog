@@ -529,8 +529,96 @@ func BinarySearch2(nums []int, low int, high int, val int) int {
 }
 
 ```
+## topK
+```golang
+
+/*
+	第k大数
+
+	用快排划分
+
+	时间 n, 空间 n
+*/
+func topK(arr []int, low int, high int, k int) {
+	start, end, mid := low, high, arr[low]
+	for low < high {
+		for low < high && arr[high] <= mid {
+			high--
+		}
+		if low < high {
+			arr[low] = arr[high]
+			low++
+		}
+		for low < high && arr[low] >= mid {
+			low++
+		}
+		if low < high {
+			arr[high] = arr[low]
+			high--
+		}
+	}
+	arr[low] = mid
+	if low > k {
+		topK(arr, start, low-1, k)
+	} else if low < k {
+		topK(arr, low+1, end, k)
+	}
+}
+
+/*
+	大顶堆
+	时间 nlog(k), 空间k
+*/
+func topK2(arr []int, k int) []int {
+	heap := make([]int, k)
+	for i := 0; i < k; i++ {
+		heap[i] = arr[i]
+	}
+
+	adjust := func(start int, end int) {
+		parent := start
+		child := parent*2 + 1
+		for child <= end {
+			if child+1 <= end && heap[child+1] < heap[child] {
+				child++
+			}
+
+			if heap[parent] <= heap[child] {
+				return
+			}
+			heap[parent], heap[child] = heap[child], heap[parent]
+			parent = child
+			child = parent*2 + 1
+		}
+	}
+	buildHeap := func() {
+		for i := k / 2; i >= 0; i-- {
+			adjust(i, k-1)
+		}
+	}
+
+	buildHeap()
+	for i := k; i < len(arr); i++ {
+		if arr[i] > heap[0] {
+			heap[0] = arr[i]
+			adjust(0, k-1)
+		}
+	}
+	return heap
+}
+```
+{{< expand >}}
+```golang
+func main() {
+	arr := []int{1, 10, 2, 20, 3, 30, 4, 40, 5, 50, 6, 60, 7, 70, 8, 80, 9, 90}
+	topK(arr, 0, 17, 10)
+	fmt.Print(arr)
+}
+```
+{{< /expand >}}
 ## 倒排索引
 # 数字
+## 斐波那契
 ```golang
 
 /*
@@ -559,32 +647,9 @@ func Fibonacci2(n int) int {
 	}
 	return Fibonacci2(n-2) + Fibonacci2(n-1)
 }
-
-/*
-	猴子吃桃：每天吃一半加1个，第n天剩1个，一共几个
-*/
-func MonkeyEat(n int) int {
-	if n == 1 { //指倒数第一天
-		return 1
-	}
-	return MonkeyEat(n-1)*2 + 2
-}
-
-/*
-	爬楼梯问题：一次走1或2级，爬上n级有多少走法
-
-	要走到n+1层，只能从n层或n-1层走。n+1层方法数为n层与n-1层方法数的和。所以是个斐波那契数列问题
-*/
-func ClimbStairs(n int) int {
-	if n == 1 {
-		return 1
-	}
-	if n == 2 {
-		return 2
-	}
-	return ClimbStairs(n-1) + ClimbStairs(n-2)
-}
-
+```
+## 正整数和
+```golang
 /*
 	正整数和
 	递归
@@ -595,7 +660,9 @@ func CommonSum(n int) int {
 	}
 	return CommonSum(n-1) + n
 }
-
+```
+## 最大公约数/最小公倍数
+```golang
 /*
 	最大公约数
 
@@ -644,7 +711,9 @@ func GCD2(m int, n int) int {
 func LCM(m int, n int) int {
 	return m * n / GCD(m, n)
 }
-
+```
+## 最大子序列和
+```golang
 /*
 	最大子序列和
 
@@ -668,208 +737,50 @@ func SumArr(arr []int) int {
 	return max
 }
 ```
-# 数组
-## 翻转
+## 判断素数
 ```golang
-
 /*
-	翻转数组
+	判断素数
+	合数一定有因子小于sqrt(n)
 
-	双指针
-	时间 n，空间 1
+	时间 n
 */
-func Inverse(arr []int) {
-	for i, j := 0, len(arr)-1; i < j; i, j = i+1, j-1 {
-		arr[i], arr[j] = arr[j], arr[i]
+func isPrime(n int) bool {
+	if n < 2 {
+		return false
 	}
+
+	m := int(math.Sqrt(float64(n)))
+	for i := 2; i <= m; i++ {
+		if n%i == 0 {
+			return false
+		}
+	}
+	return true
 }
 
 /*
-	单指针
-*/
-func Inverse2(arr []int) {
-	length := len(arr)
-	for i, half := 0, length/2; i < half; i++ {
-		j := length - 1 - i
-		arr[i], arr[j] = arr[j], arr[i]
-	}
-}
-```
-## 轮换
-```golang
-/*
-	轮换，如：[1,2,3,4,5],指定2时，结果[4,5,1,2,3]
+	arr中false的是素数
+	j从i开始, 因小于i的数已筛过
 
-	翻转前段，翻转后段，再整体翻转
-
-	时间 n，空间 1
+	时间 n*loglog(n)
+		n(1/2 + 1/3 + ... 1/n)
 */
-func Rotate(arr []int, k int) {
-	if k == 0 {
+func filterPrime(n int) {
+	if n < 2 {
 		return
 	}
 
-	length := len(arr)
-	if k >= length {
-		k = k % length
-	}
-
-	inverse := func(start int, end int) {
-		for i, j := start, end; i < j; i, j = i+1, j-1 {
-			arr[i], arr[j] = arr[j], arr[i]
+	arr := make([]bool, n+1)
+	m := int(math.Sqrt(float64(n)))
+	for i := 2; i <= m; i++ {
+		for j := i; i*j <= n; j++ {
+			arr[i*j] = true
 		}
 	}
-	inverse(0, length-1-k)
-	inverse(length-k, length-1)
-	inverse(0, length-1)
 }
 ```
-## 回文
-```golang
-/*
-	回文
-*/
-func IsPalindrome(s string) bool {
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		if s[i] != s[j] {
-			return false
-		}
-	}
-	return true
-}
-
-/*
-	回文数
-	1. 计算位
-	2. 循环到half
-	2.1 判断高低位余数。
-		如 num = 12321, 则 t = 10000
-		第一步 1 == (12321 / 10000) % 10 == 12321 % 10
-		t /= 10 , 12321 /= 10
-		第二步 2 == (12321 ／ 1000) % 10 == 1232 % 10
-		判断成功
-*/
-func IsPalindromeNum(num int) bool {
-	if num < 10 {
-		return true
-	}
-
-	countWei := func() int {
-		num := num
-		count := 0
-		for num > 0 {
-			num /= 10
-			count++
-		}
-		return count
-	}
-
-	wei := countWei()
-	t := math.Pow(10, float64(wei-1))
-	half := wei / 2
-	n := num
-	for i := 0; i < half; i++ {
-		if (num/int(t))%10 == n%10 {
-			t /= 10
-			n /= 10
-		} else {
-			return false
-		}
-	}
-	return true
-}
-/*
-	最长回文子串
-
-	时间 n^3
-*/
-func LongestPalindrome(s string) string {
-	isPalindrome := func(start int, end int) bool {
-		for start < end {
-			if s[start] != s[end] {
-				return false
-			}
-			start++
-			end--
-		}
-		return true
-	}
-
-	length := len(s)
-	from, to, max := 0, 0, 0
-	for i := 0; i < length; i++ {
-		for j := i; j < length; j++ {
-			if isPalindrome(i, j) && (j-i) > max {
-				from, to = i, j
-				max = to - from
-			}
-		}
-	}
-
-	return s[from : to+1]
-}
-
-/*
-	中心扩展法
-
-	1 循环所有元素i（i为中心）
-	2 循环向两边扩展 start, end。(start=i, end=i+1查找偶数串)
-	2.1 记录left, right回文子串
-	3 记录此i中心边缘子串是否最大
-	*2 ..(start=i-1, end=i+1查找奇数串)
-	*3 ..
-
-	时间 n^2，空间 1
- */
-func LongestPalindrome2(s string) string {
-	maxLeft, maxRight, max := 0, 0, 1
-	length := len(s)
-	for i := 0; i < length; i++ {
-		start, end, length1 := i, i+1, 0
-		left, right := start, end
-		for start >= 0 && end < length {
-			if s[start] == s[end] {
-				left, right, length1 = start, end, length1+2
-				start, end = start-1, end+1
-			} else {
-				break
-			}
-		}
-		if length1 > max {
-			maxLeft, maxRight, max = left, right, length1
-		}
-
-		start, end, length1 = i-1, i+1, 1
-		left, right = start, end
-		for start >= 0 && end < length {
-			if s[start] == s[end] {
-				left, right, length1 = start, end, length1+2
-				start, end = start-1, end+1
-			} else {
-				break
-			}
-		}
-		if length1 > max {
-			maxLeft, maxRight, max = left, right, length1
-		}
-	}
-	return s[maxLeft : maxRight+1]
-}
-```
-{{< expand >}}
-```golang
-func TestLongestPalindrome(t *testing.T) {
-	assert := assert.New(t)
-	assert.Equal("woabcbaow", LongestPalindrome("sdbsdaswoabcbaowe"))
-}
-
-func TestLongestPalindrome2(t *testing.T) {
-	assert := assert.New(t)
-	assert.Equal("woabcbaow", LongestPalindrome2("sdbsdaswoabcbaowe"))
-}
-```
-{{< /expand >}}
-## 连续正整数和为s的序列
+## 连续正整数和
 ```golang
 
 /*
@@ -900,7 +811,7 @@ func SeriesSum(s int) {
 	}
 }
 ```
-## 两元素和为s(升序不重复数组)
+## 有序数组两元素和
 ```golang
 /*
 	升序不重复数组中，所有两个元素和为s的组合
@@ -966,6 +877,193 @@ func TestTwoSum(t *testing.T) {
 }
 ```
 {{< /expand >}}
+## 猴子吃桃
+```golang
+/*
+	猴子吃桃：每天吃一半加1个，第n天剩1个，一共几个
+*/
+func MonkeyEat(n int) int {
+	if n == 1 { //指倒数第一天
+		return 1
+	}
+	return MonkeyEat(n-1)*2 + 2
+}
+```
+## 滑动平均数
+```golang
+/*
+	滑动平均数
+	先算sum数组
+	隔n位的两sum之差即此n位的sum
+	除位数取均值
+*/
+func movingAverage(arr []float64, n int) {
+	sum := 0.0
+	for i, _ := range arr {
+		arr[i] += sum
+		sum = arr[i]
+	}
+
+	result := make([]float64, len(arr))
+	for i, v := range arr {
+		start := i - n
+		count := n
+		if start < 0 {
+			count += start + 1
+			start = 0
+		}
+		result[i] = (v - arr[start]) / float64(count)
+	}
+}
+```
+## 爬楼梯
+```golang
+/*
+	爬楼梯问题：一次走1或2级，爬上n级有多少走法
+
+	要走到n+1层，只能从n层或n-1层走。n+1层方法数为n层与n-1层方法数的和。所以是个斐波那契数列问题
+*/
+func ClimbStairs(n int) int {
+	if n == 1 {
+		return 1
+	}
+	if n == 2 {
+		return 2
+	}
+	return ClimbStairs(n-1) + ClimbStairs(n-2)
+}
+```
+## 几瓶汽水
+```golang
+/*
+	1元两瓶水, 两空瓶一瓶水, n元几瓶水
+*/
+func sodaBottle(n int) int {
+	if n == 0 {
+		return 0
+	}
+
+	bottle := 0
+	sum := 0
+	for i := 1; i <= n; i++ {
+		sum++
+		bottle += 1
+	}
+	return sodaBottle(bottle/2) + sum
+}
+```
+# 数组
+## 翻转
+```golang
+
+/*
+	翻转数组
+
+	双指针
+	时间 n，空间 1
+*/
+func Inverse(arr []int) {
+	for i, j := 0, len(arr)-1; i < j; i, j = i+1, j-1 {
+		arr[i], arr[j] = arr[j], arr[i]
+	}
+}
+
+/*
+	单指针
+*/
+func Inverse2(arr []int) {
+	length := len(arr)
+	for i, half := 0, length/2; i < half; i++ {
+		j := length - 1 - i
+		arr[i], arr[j] = arr[j], arr[i]
+	}
+}
+```
+## 轮换
+```golang
+/*
+	轮换，如：[1,2,3,4,5],指定2时，结果[4,5,1,2,3]
+
+	翻转前段，翻转后段，再整体翻转
+
+	时间 n，空间 1
+*/
+func Rotate(arr []int, k int) {
+	if k == 0 {
+		return
+	}
+
+	length := len(arr)
+	if k >= length {
+		k = k % length
+	}
+
+	inverse := func(start int, end int) {
+		for i, j := start, end; i < j; i, j = i+1, j-1 {
+			arr[i], arr[j] = arr[j], arr[i]
+		}
+	}
+	inverse(0, length-1-k)
+	inverse(length-k, length-1)
+	inverse(0, length-1)
+}
+```
+## 洗牌
+```golang
+
+/*
+	洗牌(shuffle) Fisher-Yates
+	随机选择, 删除, 插入新数组
+*/
+func shuffle(arr []int) {
+	rand.Seed(time.Now().UnixNano())
+	length := len(arr)
+	result := make([]int, length)
+
+	for i := 0; i < length; i++ {
+		k := rand.Intn(len(arr))
+		result[i] = arr[k]
+		arr = append(arr[:k], arr[k+1:]...)
+	}
+}
+
+/*
+	洗牌 Knuth-Durstenfeld
+	随机选择, 放尾部
+*/
+func shuffle2(arr []int) {
+	rand.Seed(time.Now().UnixNano())
+	length := len(arr)
+
+	for i := length - 1; i >= 0; i-- {
+		k := rand.Intn(i + 1)
+		arr[k], arr[i] = arr[i], arr[k]
+	}
+	fmt.Print(arr)
+}
+
+/*
+	洗牌 Inside-Out Algorithm
+	复制到新数组
+	遍历原数组位置i, 随机插入新数组(新数组位置i存插入前数据)
+*/
+func shuffle3(arr []int) {
+	rand.Seed(time.Now().UnixNano())
+	length := len(arr)
+	result := make([]int, length)
+
+	for i, v := range arr {
+		result[i] = v
+	}
+
+	for i := 0; i < length; i++ {
+		k := rand.Intn(i + 1)
+		result[i] = result[k]
+		result[k] = arr[i]
+	}
+	fmt.Print(result)
+}
+```
 ## 有序数组去重
 ```golang
 /*
@@ -1033,6 +1131,19 @@ func RemoveDuplicates2(arr []int) int {
 }
 ```
 # 字符串
+## 字符统计
+```golang
+/*
+	字符统计
+*/
+func charSum(s string) {
+	sumMap := make([]int, 26)
+	for _, c := range s {
+		sumMap[c-97]++
+	}
+	fmt.Print(sumMap)
+}
+```
 ## 最后一词长度
 ```golang
 func LastWordLen(s string) int {
@@ -1185,6 +1296,151 @@ func CountAndSay(n int) string {
 	return s
 }
 ```
+## 回文
+```golang
+/*
+	回文
+*/
+func IsPalindrome(s string) bool {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		if s[i] != s[j] {
+			return false
+		}
+	}
+	return true
+}
+
+/*
+	回文数
+	1. 计算位
+	2. 循环到half
+	2.1 判断高低位余数。
+		如 num = 12321, 则 t = 10000
+		第一步 1 == (12321 / 10000) % 10 == 12321 % 10
+		t /= 10 , 12321 /= 10
+		第二步 2 == (12321 ／ 1000) % 10 == 1232 % 10
+		判断成功
+*/
+func IsPalindromeNum(num int) bool {
+	if num < 10 {
+		return true
+	}
+
+	countWei := func() int {
+		num := num
+		count := 0
+		for num > 0 {
+			num /= 10
+			count++
+		}
+		return count
+	}
+
+	wei := countWei()
+	t := math.Pow(10, float64(wei-1))
+	half := wei / 2
+	n := num
+	for i := 0; i < half; i++ {
+		if (num/int(t))%10 == n%10 {
+			t /= 10
+			n /= 10
+		} else {
+			return false
+		}
+	}
+	return true
+}
+/*
+	最长回文子串
+
+	时间 n^3
+*/
+func LongestPalindrome(s string) string {
+	isPalindrome := func(start int, end int) bool {
+		for start < end {
+			if s[start] != s[end] {
+				return false
+			}
+			start++
+			end--
+		}
+		return true
+	}
+
+	length := len(s)
+	from, to, max := 0, 0, 0
+	for i := 0; i < length; i++ {
+		for j := i; j < length; j++ {
+			if isPalindrome(i, j) && (j-i) > max {
+				from, to = i, j
+				max = to - from
+			}
+		}
+	}
+
+	return s[from : to+1]
+}
+
+/*
+	中心扩展法
+
+	1 循环所有元素i（i为中心）
+	2 循环向两边扩展 start, end。(start=i, end=i+1查找偶数串)
+	2.1 记录left, right回文子串
+	3 记录此i中心边缘子串是否最大
+	*2 ..(start=i-1, end=i+1查找奇数串)
+	*3 ..
+
+	时间 n^2，空间 1
+ */
+func LongestPalindrome2(s string) string {
+	maxLeft, maxRight, max := 0, 0, 1
+	length := len(s)
+	for i := 0; i < length; i++ {
+		start, end, length1 := i, i+1, 0
+		left, right := start, end
+		for start >= 0 && end < length {
+			if s[start] == s[end] {
+				left, right, length1 = start, end, length1+2
+				start, end = start-1, end+1
+			} else {
+				break
+			}
+		}
+		if length1 > max {
+			maxLeft, maxRight, max = left, right, length1
+		}
+
+		start, end, length1 = i-1, i+1, 1
+		left, right = start, end
+		for start >= 0 && end < length {
+			if s[start] == s[end] {
+				left, right, length1 = start, end, length1+2
+				start, end = start-1, end+1
+			} else {
+				break
+			}
+		}
+		if length1 > max {
+			maxLeft, maxRight, max = left, right, length1
+		}
+	}
+	return s[maxLeft : maxRight+1]
+}
+```
+{{< expand >}}
+```golang
+func TestLongestPalindrome(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal("woabcbaow", LongestPalindrome("sdbsdaswoabcbaowe"))
+}
+
+func TestLongestPalindrome2(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal("woabcbaow", LongestPalindrome2("sdbsdaswoabcbaowe"))
+}
+```
+{{< /expand >}}
 ## 模式匹配
 ```golang
 /*
@@ -1342,7 +1598,7 @@ func Count(x uint64) int {
     return count
 }
 ```
-# 资源
+# 资源分配
     token bucket
         # 令牌桶
         通过多少流量，删除多少令牌
@@ -1361,7 +1617,7 @@ func Count(x uint64) int {
         作用
             强行限制数据传输速率
     max-min fairness
-        # 加权分配资源
+        # 最大最小公平算法, 加权分配
         dominant resource fairness (DRF)
             # 一种 max-min fairness实现，可以多资源分配
 # 分布式算法

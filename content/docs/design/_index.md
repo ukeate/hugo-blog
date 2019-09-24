@@ -38,5 +38,84 @@ type: docs
         红辣椒的分镜
     网站效果
         图片向下拉，上面模糊小，下面清晰大，有一种震撼感
+# 知识库
+    confluence
+        # 收费
+    tiddlyWiki
+        # 可在线定义目录树
+    github
+        # 用wiki页面
+    gitboot
+    mediaWiki
+        # 维基百科样式，只有单页目录树
+    dokuWiki
+        # 只有网站地图
+    xwiki
+        # 目录树, acl
+    tapd
+        # 腾讯
+    语雀
+    hdwiki
+        # 百科, 已停更
+    notion
+        # 任务管理
+    minidoc
+        # 原smartWiki(php), 改成golang开发的minidoc
+# 团队协作
+    jira
+        # 进度管理
+    rational
+        # IBM, 进度管理
+    teambition
+        # 进度管理
+    basecamp
+        # 进度管理
+    testlink
+        # 测试收集, 进度管理
+    zeplin
+        # 设计和前端协同工具
+    redmine
+        # ror开发, 项目管理, 把成员、任务、文档、讨论等资源整合在一起。支持git, svn, cvs等
 
+    trello
+        # 进度管理
 
+    team
+        # 微软, 聊天
+    slack
+        # 聊天
+    hipChat
+        # Atlassian, 聊天
+    企业微信
+    钉钉
+
+    shimo
+        # 文档协作
+    etherpad.org
+        # 在线协作无缝编辑
+    dropbox
+        # 文档协作
+    坚果云
+        # 文档协作
+
+# 工具
+    http://tool.lu/coderunner/
+        # 在线repl
+    http://lpaste.net/
+        # 粘代码
+    https://pastee.org/
+        # 粘贴代码
+    http://editor.method.ac/
+        # 在线ps
+    https://www.processon.com/
+        # 在线思维导图, uml等
+    https://www.gliffy.com/go/html5/launch
+        # 在线画图
+    http://plantuml.com/
+        # plantuml在线画图
+        画图指南: https://deepu.js.org/svg-seq-diagram/Reference_Guide.pdf
+
+    http://www.lmgtfy.com/?q=Linux#seen
+        # let me google this for you
+    codility.com
+        # 招聘在线做题

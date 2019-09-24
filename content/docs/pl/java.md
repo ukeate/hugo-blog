@@ -104,17 +104,6 @@ date: 2018-10-09T08:48:07+08:00
             # eclipse MAT插件分析dump文件
 # 语法
 ## 基础
-    面向对象
-        继承
-        封装
-        多态
-            overload 编译时多态
-            override 运行时多态
-        抽象
-    对象关系
-        has-a       # 关联
-        use-a       # 依赖
-        is-a        # 继承
     类型
         基本类型
             # 作为面向对象语言，为了方便引入了基本类型
@@ -149,6 +138,11 @@ date: 2018-10-09T08:48:07+08:00
                 str指向地址, 所以str保存了一个指向栈中数据的引用
             "a"+"b" 会编译成使用StringBuilder
                 # 循环中会重复创建
+        泛型
+            字面量
+                Map<String, Integer> a = new HashMap<>();               # 后面的菱形操作符做了类型推断
+                f(new HashMap<>)                                        # 传值使用菱形操作符
+
     引用
         强引用(strong reference)
             String s = new String("")
@@ -204,12 +198,44 @@ date: 2018-10-09T08:48:07+08:00
                 1.7可以String
                 long目前不可以
     表达式
-        java 赋值语句返回被赋值的对象
+        java赋值语句返回被赋值的对象
         & 与 &&
             &是 按位与，逻辑与(后面会计算)
             &&是 短路与
         | 与 ||
             # 同上
+        lambda表达式                                                     # 为了便于并行编程, 提高语法的抽象级别
+            字面量
+                () -> o.f()
+                () -> {
+                    o.f()
+                }
+                event -> o.f()
+                (x, y) -> x + y
+                (Long x, Long y) -> x + y
+
+                f(O::f1)                                                # 简化 f((o) -> o.f1())
+            类型
+                Predicate<T>
+                    Predicate<String> condition = (s) -> s.length() > 4);
+                    if (condition.test(s)) {}
+
+                    Predicate<String> a = (s) -> s.length() > 1; b = (s) -> s.length() > 2;
+                    Predicate<String> c = a.and(b)
+                Consumer<T>
+                Function<T, R>
+                Supplier<T>
+                UnaryOperator<T>
+                BinaryOperator<T>
+            特点
+                参数类型推断
+                作为匿名内部类
+                    button.addListener(event -> o.f())
+                引用外部变量时，不一定声明final, 但要是即成事实(effectively)的final变量(不能重复赋值)
+                重载解析参数类型时，找最具体类型。
+                    无法推断时报错, 如                                    # 重定义方法名或传入时做强转
+                        f(Predicate<Integer> p)
+                        f(IntPredicate p)
     声明
         静态导入(1.5)
             import static java.lang.Math.max
@@ -217,11 +243,13 @@ date: 2018-10-09T08:48:07+08:00
                 # 导入的是方法，该方法就可以直接使用
     方法
         修饰
-            修饰符     当前类     同包      子类      其他包
-            public       √        √        √          √
-            protected    √        √        √
-            default      √        √
-            private      √
+            开放性
+                修饰符     当前类     同包      子类      其他包
+                public       √        √        √          √
+                protected    √        √        √
+                无           √        √
+                private      √
+            default修饰接口默认方法(虚方法)
         方法参数都是值传递，无法改变外部的参数本身
         可变参数(1.5)
             public void sum(int x, int... args)
@@ -242,6 +270,16 @@ date: 2018-10-09T08:48:07+08:00
         finally
             # return前走finally, catch块中也一样
     类
+        字面量
+            public class A {{
+                ...
+            }}
+                这是匿名构造函数，相当于:
+                    public class A {
+                        public A() {
+                            ...
+                        }
+                    }
         接口
             不能定义构造函数
             只定义抽象方法
@@ -249,6 +287,14 @@ date: 2018-10-09T08:48:07+08:00
             定义的实际上都是常量
             不能定义静态方法
             类可实现多接口
+            函数接口，接口声明默认方法
+            default方法
+                Collection中添加stream()会打破前版本二进制兼容性(原版本找不到stream而报错)，默认方法指定找不到时使用的方法, 维护兼容性
+                可被其它接口继承重写
+                多重继承
+                    继承代码块，不继承类状态(属性)                         # 有些人认为多重继承的问题在于状态的继承
+                    冲突报错, 可子类重写解决
+                优先级: 子类 > 类 > 接口
         抽象类
             # 有抽象方法的类
             可定义构造函数
@@ -272,6 +318,8 @@ date: 2018-10-09T08:48:07+08:00
             静态嵌套类(static nested class), 可不依赖外部类实例被实例化
             内部类，外部类实例化后才能实例化
                 new Outer().new Inner()     # 在Outer类中也不能new Innter()
+    注解
+        @FunctionalInterface                        # 检查是否符合函数接口标准
     安全性
         安全沙箱机制
             类加载体系
@@ -404,36 +452,8 @@ date: 2018-10-09T08:48:07+08:00
         java.util.function包
             # 声明于function包内的接口可接收lambda表达式
             Predicate
-                Predicate<String> condition = (s) -> s.length() > 4);
-                if (condition.test(s)) {}
-
-                Predicate<String> a = (s) -> s.length() > 1; b = (s) -> s.length() > 2;
-                Predicate<String> c = a.and(b)
             Stream
-                void filter(list list, Predicate condition)
-                list1.stream().filter((s) -> (condition.test(s))).forEach((s) -> { System.out.println(s)})
-
-                list1.stream().map((n) -> n + 1).forEach(System.out::println)
-
-                list1.stream().reduce((sum, cost) -> sum + cost).get()
-
-                list1.stream().distinct().collect(Collectors.joining(", "))
-
-                IntSummaryStatistics stats = list1.stream().mapToInt((x) -> x).summaryStatistics();
-                stats.getAverage();
         Optional
-            Optional<String> s = Optional.of("a")   # 传null报错
-            Optional empty = Optional.ofNullable(null)
-            if (s.isPresent()) {
-                s.get()     # 空时抛NoSuchElementException
-            }
-            s.ifPresent((s) -> {})
-            empty.orElse("b")   # 空时返回"b", 不空反原值
-            empty.orElseGet(() -> "b")
-            empty.orElseThrow(ValueAbsentException::new)
-            s.map((s) -> s + "b")   # map非空值，返回Optinal
-            s.flatMap((s) -> Optinal.of(s + "b"))
-            s.filter((s) -> s.length() > 6)
         Jigsaw
             # jdk上的模块系统，使大块的代码更易于管理
 
@@ -960,13 +980,6 @@ date: 2018-10-09T08:48:07+08:00
         java.util.EnumSet    # 集合中的元素不重复
         java.util.EnumMap    # key是enum类型，而value则可以是任意类型。
 ## Collection
-    Arrays
-        这个类提供了5个功能：
-        1，将数组转换成java.util.ArrayList类型；【asList()】
-        2，数组的排序；【sort()】
-        3，数组的二分查找；【binarySearch()】
-        4，两个数组的比较；【equals()】
-        5，给数组赋初值；【fill()】
     继承结构
         <<Collection>>
             <<Queue>>
@@ -988,6 +1001,15 @@ date: 2018-10-09T08:48:07+08:00
             LinkedHashMap
             <<SortedMap>>
                 TreeMap
+    Arrays
+        fill()                      # 赋初值
+        asList()                    # 数组转List
+        sort()
+        binarySearch()
+        equals()                    # 数组比较
+        parallelPrefix()            # 前值和，如0, 1, 2, 3 处理后为 0, 1, 3, 6。
+        parallelSetAll()            # 修改值
+        parallelSort()
     ArrayList
         # 用数组实现，查询快，增删慢
         toArray() # 返回list中的所有元素作为一个Object []
@@ -995,6 +1017,8 @@ date: 2018-10-09T08:48:07+08:00
 
         trimToSize()    # 优化掉删除出现的空位
 
+        stream()
+        parallelStream()  # 并行流
         实现
             public ArrayList() {
                 array = EmptyArray.OBJECT;
@@ -1075,6 +1099,9 @@ date: 2018-10-09T08:48:07+08:00
             扩容要rehash
         类
             Entry
+
+        computeIfAbsent()                                               # 无值时用计算新值
+        forEach()
     LinkedHashMap
         # 继承HashMap，hash表和链表实现，保存了插入顺序
     HashTable
@@ -1104,7 +1131,103 @@ date: 2018-10-09T08:48:07+08:00
         synchronizedMap()
         synchronizedSet()
 ## 流
-    分类
+    函数流特点
+        Iterator是外部迭代，串行化操作。Stream是内部迭代, 自动并行处理
+        方法分惰性和及早执行
+        有序集合有序处理，无序集合无序处理
+    Stream
+        of()                                                            # 静态方法，产生流
+
+        forEach()
+        collect()                                                       # 用收集器, 转出结构化数据
+            collect(Collectors.toList())                                # 转出List
+        map()
+            map(s -> s.toUpperCase())
+        reduce()
+            reduce(0, (acc, element) -> acc + element)                  # acc是累加器
+        filter()
+            filter(s -> isDigit(s.charAt(0)))
+        flatMap()                                                       # 平铺多stream
+            flatMap(numbers -> numbers.stream())
+        min()
+            min(Comparator.comparing(track -> track.getLength()))
+        max()
+        peek()
+        get()                                                           # 执行得到结果
+        count()
+
+        mapToInt()                                                      # IntStream, LongStream, DoubleStream, 对基本类型做特殊优化(如不装箱占内存)
+    IntStream
+        range(0, N)
+        sequential()                                                    # 串行
+        parallel()                                                      # 并行, fork-join结构。注意数据结构(arrayList快于linkedList)。有状态操作会线程通信, 如sorted, distinct, limit
+        mapToObj()
+        summaryStatistics()
+    IntSummaryStatistics
+        getAverage()
+    Optional
+        of("a")
+        ofNullable(null)
+        empty()
+
+        get()                                                           # 空时抛异常
+        isPresent()
+        ifPresent((s) -> {})
+        orElse("b")                                                     # 空返回b
+        orElseGet(() -> "b")
+        orElseThrow(ValuesAsentException::new)
+        map((s) -> s + "b")                                             # map非空值，返回Optional
+        flatMap((s) -> Optinal.of(s + "b"))
+        filter((s) -> s.length() > 6)
+    Collectors
+        toList()
+        toSet()
+        toCollection(TreeSet::new)
+        minBy()
+        maxBy()
+        averagingInt()
+        summingInt()
+        partitioningBy()                                                # 按true, false分两组
+        groupingBy()                                                    # 分多组
+        joining(",", "[", "]")                                          # 拼字符串, 传参是分隔符、前缀、后缀
+
+        o-> 自定义收集器
+        public class StringCombiner {
+            public StringCombiner add(String element) {
+                if (atStart()) {
+                    builder.append(prefix);
+                } else {
+                    builder.append(delim);
+                }
+                builder.append(element);
+                return this;
+            }
+            public StringCombiner merge(StringCombiner other) {
+                builder.append(other.builder);
+                return this;
+            }
+        }
+        public class StringCollector implements Collector<String, StringCombiner, String> {
+            public Supplier<StringCombiner> supplier(){
+                return () -> new StringCombiner(delim, prefix, suffix);
+            }
+            public BiConsumer<StringCombiner, String> accumulator(){
+                return StringCombiner::add;
+            }
+            public BinaryOperator<StringCombiner> combiner(){
+                return StringCombiner::merge;
+            }
+            public Function<StringCombiner, String> finisher(){
+                return StringCombiner::toString;
+            }
+            characteristics()                                           # 描述特征
+        }
+        o-> predicate
+            void filter(list list, Predicate condition)
+            list1.stream().filter((s) -> (condition.test(s))).forEach((s) -> { System.out.println(s)})
+
+
+    io流分类
         输入、输出
         节点流(如FileReader)、处理流(抽象处理方法)
         字节流(InputStream)、字符流(InputStreamReader)
@@ -1154,8 +1277,9 @@ date: 2018-10-09T08:48:07+08:00
         wait(), sleep(), notify(), notifyAll()
     ThreadLocal
         # 线程内数据共享，线程隔离
-        set(T t)        ＃ 向当前线程对象放入泛型对象
-        get()            # 得到当前线程已放入的对象
+        withInitial(() -> new SimpleDateFormat())                       # 直接get()时返回调用结果
+        set(T t)                                                        # 向当前线程对象放入泛型对象
+        get()                                                           # 得到当前线程已放入的对象
 
     InheritableThreadLocal<T>
         # 继承ThreadLocal, 子线程可使用父线程变量

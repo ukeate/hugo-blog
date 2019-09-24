@@ -208,7 +208,7 @@ date: 2018-10-11T18:47:57+08:00
         send -- "asdf"
         send -- "\n"
 
-        expect eof
+        interact            # interact留下交互, exit退出
 
         o-> 后台执行        # 不要expect eof
         if [fork]!=0 exit
@@ -321,6 +321,20 @@ date: 2018-10-11T18:47:57+08:00
     killall Xorg            # kill 所有包含
     xkill                   # 运行后 在xwindow点击kill窗口
 ## 网络
+    mtr                     # myTrace, 合并ping与traceroute，默认发送ICMP包, 做持续探测, 避免节点波动的影响
+                            # Loss%丢包率, Snt每秒包数, Last最近一次延迟, Avg平均值, Best最小值, Worst最大值, StDev标准差
+        -u                  # 使用udp包
+        --no-dns            # 不对ip做域名反解析
+        -4                  # 只用ipv4
+        -6                  # 只用ipv6
+
+        结果
+            1,2,3,4 本地网络
+            5,6 运营商骨干网络
+            7,8,9,10 目标服务器本地网络
+                8 链路负载均衡
+    traceroute              # 做一次探测, 默认UDP包, 发包TTL值逐渐增大
+        -I                  # 使用ICMP包
     ufw                     # 简化防火墙
     iptables
         -L                  # list 显示
@@ -552,16 +566,50 @@ date: 2018-10-11T18:47:57+08:00
         -ql 包名, 查看安装的文件
         -qc 包名, 查看软件的配置文件
     pacman
-        -Qeq | pacman -S -                  # 重新安装所有包
-        -S $(pacman -Qnq)                   # 重新安装所有包
-        -Ss ^ibus-*                         # 通配search
-        -S $(pacman -Ssq fcitx*)            # 通配安装
-        -R $(pacman -Qsq fcitx)             # 通配删除
-        -Rcns plasma                        # 删除plasma
-        -Sc                                 # 清除缓存
-        -Qii zsh                            # 包信息
-        -Ql zsh                             # 查看安装的文件
-        -Qo /bin/zsh                        # 查看文件属于的包
+        命令 pacman<操作> [选项] [目标]
+            操作
+                -Q                      # 查询
+                -S                      # 安装
+                -R                      # 删除
+                -D                      # 数据库
+                -F                      # 文件
+            选项
+            选项-S, -R, -U
+                -s
+            选项-S, -U
+            选项-Q
+                -s                      # 搜索
+                -e                      # 明确指定的
+                -n                      # 本地的
+                -q                      # 静默
+                -i                      # 详情, 两个i显示备份文件和修改状态
+                -l                      # 列出文件
+                -o                      # 显示拥有此文件的包名
+            选项-R
+                -s                      # 递归
+                -c                      # 级联依赖此包的包
+                -n                      # 不记录备份信息
+            选项-S
+                -s                      # 搜索
+                -y                      # 刷新, 两个y强制升级所有包数据库
+                -q                      # 静默
+                -u                      # 系统升级
+                -c                      # 清理, 一个c清理未安装包, 两个c清理所有cache
+            选项-D
+            选项-F
+            目标
+
+        常用
+            -Qeq | pacman -S -                  # 重新安装所有包
+            -S $(pacman -Qnq)                   # 重新安装所有包
+            -Ss ^ibus-*                         # 通配search
+            -S $(pacman -Ssq fcitx*)            # 通配安装
+            -R $(pacman -Qsq fcitx)             # 通配删除
+            -Rcns plasma                        # 删除plasma
+            -Scc                                # 清除缓存
+            -Qii zsh                            # 包信息
+            -Ql zsh                             # 查看安装的文件
+            -Qo /bin/zsh                        # 查看文件属于的包
 
         源
             mirrors.163.com
@@ -795,32 +843,91 @@ date: 2018-10-11T18:47:57+08:00
     itrace                  # linux系统编程中跟踪进程的库函数调用
         -S ./hello          # 跟踪所有系统调用
     dtrace                  # 应用程序动态跟踪
+    bpftrace                # btrace2.0
     gdb
-# 桌面用户
+    SystemTap               # 内核动态探针
+# 图形程序
 ## 桌面
-    gnome
-        gnome3应用程序列表
-            /usr/share/applications
-        取消ctrl+alt+down/up
-            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['']"
-            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "['']"
-        gnome-shell
-            alt + f2后输入lg
-        gnome terminate
-            ctrl + shift + c/v                  # 复制/粘贴
-            ctrl + shift + t/n                  # 打开新标签/新窗口
-            ctrl + w 或 alt + backspace          # 删除最后的word
-            ctrl + shift + w/q                  # 关闭当前term/所有term
-            ctrl + shift + f/g/h                # 搜索/搜索下一个/搜索上一个
-            ctrl + pageUp/pageDown              # 切换标签
-            ctrl + shift + pageUp/pageDown      # 移动标签
-            alt + 1/2/3/..../0                  # 切换到第1/2/3/....../10个标签
-        系统快捷键
-            右键快捷键
-                shift + f10
     kde
-    awesome
-    i3
+### gnome
+    启动
+        .xinitrc
+            exec gnome-session
+        startx
+    gnome3应用程序列表
+        /usr/share/applications
+    取消ctrl+alt+down/up
+        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down "['']"
+        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up "['']"
+    gnome-shell
+        alt + f2后输入lg
+    gnome terminate
+        ctrl + shift + c/v                  # 复制/粘贴
+        ctrl + shift + t/n                  # 打开新标签/新窗口
+        ctrl + w 或 alt + backspace          # 删除最后的word
+        ctrl + shift + w/q                  # 关闭当前term/所有term
+        ctrl + shift + f/g/h                # 搜索/搜索下一个/搜索上一个
+        ctrl + pageUp/pageDown              # 切换标签
+        ctrl + shift + pageUp/pageDown      # 移动标签
+        alt + 1/2/3/..../0                  # 切换到第1/2/3/....../10个标签
+    系统快捷键
+        右键快捷键
+            shift + f10
+### i3
+    启动
+        .xinitrc
+            exec i3
+### awesome
+    启动
+        .xinitrc
+            exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
+    配置
+        .config/awesome/rc.lua
+            Variable definitions            # 可定义布局优先级
+            Menu                            # 右键菜单
+            Wibar                           # 生成screen, 设壁纸
+            Mounse bindings                 # 鼠标键绑定函数
+            Key bindings                    # 快捷键
+            Rules                           # client规则, 如在哪个screen显示
+            Signals                         # client启动信号触发动作
+            自定义
+            awful.util.spawn_with_shell("~/.config/awesome/autorun.sh")
+                # 随桌面启动脚本
+        autorun.sh
+            #!/usr/bin/env bash
+
+            # nothing to use
+            function run {
+                if ! pgrep $1 ; then
+                    $@&
+                fi
+            }
+
+            if randr | grep -q 'eDP1 connected' ; then
+                run xrandr --output VIRTUAL1 --off --output eDP1 --mode 1920x1080 --pos 0x720 --rotate normal --output DP1 --off --output DP2-1 --mode 2560x1080 --pos 3360x720 --rotate normal --output DP2-2 --off --output DP2-3 --off --output HDMI2 --off --output HDMI1 --primary --mode 2560x1440 --pos 1920x0 --rotate left --output DP2 --off
+            fi
+
+            run ibus-daemon -d -x
+            run nm-applet
+## 显示
+    xrandr
+        # 多显示器布局
+        -q                         # 列出所有屏幕
+        --verbose                   # 列出所有屏幕详情
+        --output eDP1               # 指定屏幕
+        --off                       # 禁用屏幕
+        --primary                   # 指定主显示器
+        --mode                      # 分辨率
+        --pos                       # 指定屏幕在背景板的位置, 根据各屏幕分辨率、位置算
+        --rotate                    # 旋转屏幕
+            normal
+            left
+            right
+            inverted
+
+## 任务栏
+    nm-applet
+        # 联网
 ## 输入法
     fcitx
     ibus

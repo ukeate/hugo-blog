@@ -131,6 +131,8 @@
                 默认可重复读repeatable, 使用next-key locking的策略避免幻读
             索引组织表(Clustered)的方式进行存储     # 类oracle
             内存池维护并发线程
+        注意
+            自增id最大值放在内存中，重启后会再查找。MyISAM的自增id最大值在文件中，重启不丢失。
 # 函数
     count(*)
     count(name)                        # 不统计null，所以不推荐，会漏数据

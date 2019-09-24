@@ -84,7 +84,30 @@ type: docs
         一致性(correspondence)     # 事务前后数据库状态一致, 事务中断时也不会有暂时状态
         隔离性(isolation)          # 事务间不干扰
         持久性(durability)         # 提交结果是永久的
-
+    索引存储
+        B+ tree
+        LSM(log-structured merge) tree
+        fractal tree
+    OLTP和OLAP
+        CAP(一致性、可用性、分区容错性)中, OLTP要求ca或cp, OLAP要求ap
+        OLTP要求写优化, OLAP要求查优化
+        OLTP要求优化latency, OLAP要求优化throughput
+        OLTP基于row, OLAP基于column
+        OLTP看中IOPS, OLAP看中data-size传输
+    分布式数据库
+        面临问题
+            ACID
+            CAP
+            scale out
+            self-healing
+            运维友好
+            sql
+            事务
+            性能
+            api用明文或二进制
+            升级方案
+            硬件，网络，网络模型，存储模型，语言
+            分布式协议，压缩方案，ha，api，运维方案，存储计算分离，缓存方案
 # rds(relational database service)
     缺点
         阻抗失谐    # 和内存中的模型存在差异
@@ -105,15 +128,21 @@ type: docs
         mysql
         mariadb
         percona
-                # mysql分支
+            # mysql分支
         drizzle
-                # mysql分支
+            # mysql分支
         oracle
-        sqlite
         db2
         oceandb
         h2database
+            # java编写，可嵌入java使用
         tidb
+## sqlite
+    命令
+        sqlite3 数据库文件
+    语法
+        .table              # 查看所有表
+        .schema             # 查看建表语句
 ## sql
     语法
         注释
@@ -123,9 +152,7 @@ type: docs
             字符串大小写敏感
         双引号
             转日期时, 双引号直接显示。to_char(sysdate,'yyyy "年" mm "月" dd "日" day')
-        
         表别名不加as关键字, 有别名后原名无效
-
         oracle
             ||      # 管道符号
                 select ename || '的薪水是' || sal from emp;
@@ -758,6 +785,8 @@ type: docs
         infiniteGraph
         allegroGraph
         orientdb
+        pregel
+            # google图数据库
 ### neo4j
     # 介绍
         使用zookeeper
@@ -790,8 +819,11 @@ type: docs
         amazon simpleDB
         hypertable
         bigtable
+        clickhouse
+            # 用于OLAP, 实时分析
 ### cassandra
     特点
+        适用大规模数据
         良好的分布式扩展性
         功能比key-value丰富，不如mongo
         写快于读

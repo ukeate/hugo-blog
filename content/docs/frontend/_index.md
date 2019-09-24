@@ -46,445 +46,7 @@ type: docs
                 跨域服务器以文本方式写js函数, 并构造应传的json数据, 函数中调用f(json)
             运行时
                 动态添加<script>标签, 请求跨域服务器的js函数
-
-# 写法
-    jquery
-    prototype
-        $()     # 简写document.getElementById()
-        $F()    # 返回表单
-        $A()    # 参数转成数组对象
-    mootools
-        # 浏览器原生对象扩展
-    underscore
-        # 函数式
-    underscore-contrib
-        # 扩展underscore
-    ramda
-        # 函数式，较正确
-    lodash
-        # 函数式
-    functional javascript
-    bilby
-        # 函数式库，包含dispatch, 蹦床, monadic, validator等
-    allong.es
-        # 提供函数组合子
-    sweet
-        # 支持宏
-    zepto
-        # 小型jquery
-    kissy
-        # 小型jquery
-    rxjs
-        # 微软开发，将异步流捕获成值的库
-    tangram
-        # 百度前端工具集
-    qwrap
-        # 360前端工具集
-# 套件
-## 显示
-    bootstrap
-    extjs
-        介绍
-            2.0之前是免费的，但有内在泄漏总是
-            GPLv3版本后收费
-
-        Sencha
-            1.是ExtJS、jQTouch(一个用于手机浏览器的jquery插件) 以及 Raphael（一个网页上绘制矢量图形的js库） 三个项目合并而成的一个开源项目。
-            2.Sencha Touch 是全球领先的应用程序开发框架，其设计旨在充分
-                利用HTML5、CSS3 和Javascript 来实现最高级别的功能、灵活性和优化。
-                Sencha Touch 是针对下一代具有触摸屏设备的跨平台框架。
-    jquery ui
-    dojo
-            # 语法较难用
-    easy ui
-        文件
-            jquery.js
-            easyui.js
-            easyui-lang-zh_CN.js
-            easyui.css
-            icon.css
-    mini ui
-        # 收费
-    wijmo
-        # 收费
-    dwz
-        # 卖文档
-    vaadin
-        # apache webkit
-    foundation
-        # 响应式，移动优先
-    boilerplate
-        # h5模板
-    meteor
-        # 融合前后端, 后端node
-    knockout
-        # mvvm, 利于单页应用
-
-    jingle
-        # 手机
-    ionic
-        # angular手机框架
-    framework7
-        # ios(兼容android)组件
-    mui
-        # 手机
-    zui
-        # 手机，类bootstrap
-    frozenui
-        # 手机
-    flutter
-        # google移动端框架
-## 富应用
-    react
-    angular
-        # google开发, mvvm
-        ng(core module)包含的核心组件
-            directive   # 指令
-                ngClick
-                ngInclude
-                ngRepeat
-            service     # 服务, 依赖注入后使用
-                $compile
-                $http
-                $location
-            filter      # 过滤器，转换模板数据
-                filter
-                date
-                currency
-                lowercase
-            function    # 函数
-                angular.copy()
-                angular.equals()
-                angular.element()
-        组件
-            ngRoute     # url后#地址(hash) 来实现单面路由
-                使用
-                    引入angular-route.js
-                    依赖注入ngRoute模块
-                服务
-                    $routeParams    # 解析路由参数
-                    $route          # 构建url, view, controller的关系
-                    $routeProvider  # 配置
-                指令
-                    ngView      # 路由模板插入视图
-            ngAnimate   # 动画效果
-                使用
-                    引入angular-animate.js
-                    注入ngAnimate
-                服务
-                    $animate    # 触发
-                css动画   # 用nganimate结构定义，通过引用css到html模板触发
-                js动画    # 用module.animation注册，通过引用css到html模板触发
-            ngResource  # 动画
-            ngMock      # 动画
-            ngTouch     # 触摸
-            ngAria      # 帮助制作自定义模块
-            ngCookies
-    riot
-    ember
-    vue
-        <div id="app">
-            {{ message }}
-        </div>
-
-        var app = new Vue({
-            el: '#app',
-            data: {
-                message: "hi"
-            },
-            created: function () {}
-        })
-    backbone
-## 效果
-    three.js
-### createjs
-    # easeljs
-        介绍
-            处理canvas
-        使用
-            var stage = new createjs.Stage("canvasName");
-            stage.x = 100;
-            stage.y = 100;
-            var text = new createjs.Text("Hello", "36px Arial", "#777");
-            stage.addChild(text);
-            stage.update();
-    # tweenjs
-        介绍
-            处理动画调整和js属性
-        使用
-            var circle = new createjs.Shape();
-            circle.graphics.beginFill("#FF0000").drawCircle(0, 0, 50);
-            stage.addChild(circle);
-            createjs.Tween.get(circle, {loop: true})
-                .wait(1000)
-                .to({scaleX: 0.2, scaleY: 0.2})
-                .wait(1000)
-                .to({scaleX:1, scaleY:1}, 1000, createjs.Ease.bounceInOut)
-            createjs.Ticker.setFPS(20);
-            createjs.Ticker.addEventListener("tick", stage);
-    # soundjs
-        介绍
-            简化处理音频
-        使用
-            var displayStatus;
-            displayStatus = document.getElementById("status");
-            var src = "1.mp3";
-            createjs.Sound.alternateExtensions = ["mp3"];
-            createjs.Sound.addEventListener("fileload", playSound());
-            createjs.Sound.registerSound(src);
-            displayStatus.innerHTML = "Waiting for load to complete";
-
-            function playSound(event){
-                soundIntance = createjs.Sound.play(event.src);
-                displayStatus.innerHTML = "Playing source: " + event.src;
-            }
-
-    # preloadjs
-        介绍
-            协调程序加载项的类库
-        使用
-            var preload = new createjs.LoadQueue(false, "assets/");
-            var plugin= {
-                getPreloadHandlers: function(){
-                    return{
-                        types: ["image"],
-                        callback: function(src){
-                            var id = src.toLowerCase().split("/").pop().split(".")[0];
-                            var img = document.getElementById(id);
-                            return {tag: img};
-                        }
-                    }
-                }
-            }
-            preload.installPlugin(plugin);
-            preload.loadManifest([
-                "Autumn.png",
-                "BlueBird.png",
-                "Nepal.jpg",
-                "Texas.jpg"
-            ]);
-# 组件
-
-## 显示
-    highcharts
-    nvd3.js
-            # svg报表
-    echarts
-### d3
-    介绍
-            数据可视化, 使用svg, css3
-    使用
-        node
-                npm install d3
-                //
-                var d3 = require('d3'), jsdom = require('jsdom');
-                var document = jsdom.jsdom(),
-                    svg = d3.select(document.body).append('svg');
-        web
-                <script src="//d3js.org/d3.v3.min.js"></script>
-                <script>d3.version</script>
-
-    d3对象
-            // 选择器
-            event
-            mouse
-            select
-            selectAll
-            selection
-            touch
-            touches
-            // 过渡
-            ease
-                    # ease对象
-            timer
-                    flush
-            interpolate
-                    # interpolate对象
-            interpolateArray
-            interpolateHcl
-            interpolateHsl
-            interpolateLab
-            interpolateNumber
-            interpolateObject
-            interpolateRgb
-            interpolateRound
-            interpolateString
-            interpolateTransform
-            interpolateZoom
-            interpolators
-            transition
-            // 数组
-            ascending
-            bisectLeft
-            bisector
-            bisectRight
-            bisect
-            descending
-            deviation
-            entries
-            extent
-            keys
-            map
-            max
-            mean
-            median
-            merge
-            min
-            nest
-            pairs
-            permute
-            quantile
-            range
-            set
-            shuffle
-            sum
-            transpose
-            values
-            variance
-            zip
-            // 数学
-            random
-            transform
-            // 请求
-            csv
-            html
-            json
-            text
-            tsv
-            xhr
-            xml
-            // 格式化
-            format
-            formatPrefix
-            requote
-            round
-            // 本地化
-            locale
-            // 颜色
-            hcl
-            hsl
-            lab
-            rgb
-            // 命名空间
-            ns
-            // 内部
-            dispatch
-            functor
-            rebind
-            // 比例尺
-            scale
-            // 时间
-            time
-            // 布局
-            layout
-            // 地理
-            geo
-            // 几何
-            geom
-            // 行为
-            behavior
-## 效果
-    touch.js
-        # 触摸
-    move.js
-        # div运动
-    swiper
-        # 滑动效果
-
-    cordova
-        # 访问原生设备，如摄像头、麦克风等
-    egret.js
-        # 使用TypeScript的HTML5开发引擎, 一套完整的HTML5游戏开发解决方案
-    tweenMax
-        # 扩展TweenLite, 用于制作html5动画
-    juliusjs
-        # 语音识别
-    babylon
-        # microsoft webgl框架
-    cubicVR
-        # 高性能webgl框架, paladin游戏引擎的一部分
-    scenejs
-        # webgl模型
-    glge
-        # webgl框架
-## 模板
-    介绍
-        引擎的一个优点就是可以直接把数据渲染到js中使用
-    优点
-        可以把动态页面的模板缓存起来，第一次请求之后，只需要更新数据
-            # 应该可以后端nginx缓存静态模板来提高性能
-
-    velocity
-        # java模板
-    ejs
-    hogan.js
-    handlebars
-        # 写法类似anglarjs模板
-    jstl
-        # java模板
-    less
-        # css模板
-    stylus
-        # css模板
-### swig
-    {% autoescape true %} {{ myvar }} {% endautoescape %}
-
-    {% block body %} ... {% endblock %}
-
-    {% if false %}
-    {% elseif true%}
-    {% else %}
-    {% endif %}
-
-    {% extends "./layout.html" %}
-
-    {% filter uppercase %} oh hi, {{ name }} {% endfilter %}                # => OH HI, PAUL
-    {% filter replace(".", "!", 'g") %} Hi. My name is Paul. {% endfilter %}        # => Hi! My name is Paul!
-
-    {% for x in obj %}
-            {% if loop.first %}<ul>{% endif %}
-            <li>{{ loop.index }} - {{ loop.key }}: {{ x }}</li>
-            {% if loop.last %}</ul>{% endif %}
-    {% endfor %}
-    {% for key, val in arr|reverse %}
-    {{ key }} -- {{ val }}
-    {% endfor %}
-
-    {% import './formmacros.html' as forms %}
-    {{ form.input("text", "name") }}                        # => <input type="text" name="name">
-    {% import "../shared/tags.html" as tags%}
-    {{ tags.stylesheet('global')}}                        // => <link rel="stylesheet" href="/global.css">
-
-    {% include "./partial.html" %}
-    {% include "./partial.html" with my_obj only%}
-    {% include "/this/file/does/not/exist" ignore missing%}
-
-    {% macro input(type, name, id, label, value, error)%}
-            <label for="{{ name }}">{{ label }}</label>
-            <input type="{{ type }}" name="{{ name }}" id="{{ id }}" value="{{ value }}" {% if error%} class="error" {% endif %}>
-    {% endmacro %}
-    {{ input("text", "fname",  "fname", "First Name", fname.value, fname.errors) }}
-
-    {% extends "./foo.html" %}
-    {% block content %}
-            My content
-            {% parent %}
-    {% endblock %}
-
-    {% raw %}{{ foobar }}{% endraw %}
-
-    {% set foo = "anything!"%}
-    {{ foo }}
-
-    {% spaceless %}
-            {% for num in foo %}
-            <li>{{ loop.index }}</li>
-            {% endfor %}
-    {% endspaceless %}                                # 除去空白
-## 格式
-    uglifyjs2
-        # 序列化
-# 工具
+# 开发框架
 ## 模块化
     bower
     browserify
@@ -897,17 +459,126 @@ type: docs
                             # 'modules.parser.less'表示后缀名less的文件，'less'表示用fis-parser-less编译
                     fis.config.set('roadmap.ext.less', css)
                             # 将less文件编译为css
-# 终端
-## 跨终端
-    cocos2dx
-        # 跨平台游戏
+## 写法
+    jquery
+    prototype
+        $()     # 简写document.getElementById()
+        $F()    # 返回表单
+        $A()    # 参数转成数组对象
+    mootools
+        # 浏览器原生对象扩展
+    underscore
+        # 函数式
+    underscore-contrib
+        # 扩展underscore
+    ramda
+        # 函数式，较正确
+    lodash
+        # 函数式
+    functional javascript
+    bilby
+        # 函数式库，包含dispatch, 蹦床, monadic, validator等
+    allong.es
+        # 提供函数组合子
+    sweet
+        # 支持宏
+    zepto
+        # 小型jquery
+    kissy
+        # 小型jquery
+    rxjs
+        # 微软开发，将异步流捕获成值的库
+    tangram
+        # 百度前端工具集
+    qwrap
+        # 360前端工具集
+### 解释器
+    typescript
+        # 扩展语言
+    coffeescript
+        # 扩展语言
+    system.js
+        介绍
+            一个垫片库, 浏览器端l加载es6模块、AMD模块、CommonJS模块 到es5。内部调用traceur
+
+        <script src='system.js'></script>
+        <script>
+            System.import('./app').then(function(m) {
+                # app.js是一个es6模块
+                m.f()
+            })
+        </script>
+    traceur
+        介绍
+            在线转换，将ES6代码编译为ES5
+        使用
+            npm install -g traceur
+            traceur /path/es6                                # 运行ES6文件
+            traceur --script /path/es6 --out /path/es5        # 转换
+    babel
+        使用
+            npm install -g babel-cli
+            npm install --save babel-core babel-preset-es2015
+            // .babelrc
+            {
+                "presets": ["es2015"],
+                "env": {
+                    "dev": {
+                        # 在NODE_ENV=dev时使用特性
+                        "presets": ["react-hmre"]
+                    }
+                }
+            }
+            babel-node
+            babel es6.js
+                # babel es6.js -o es5.js
+                # babel -d build source -s
+                ## -s 是产生source-map
+        插件
+            babel-preset-react-hmre
+                # react热加载
+                .babelrc中配置 "react-hmre"
+    transpiler
+        介绍
+            google的es6模块加载转为CommonJS或AMD模块加载的工具
+        使用
+            npm install -g es6-module-transpiler
+            compile-modules convert es6.js es5.js
+                # compile-modules convert -o out.js file1.js
+## 数据绑定
+    mobx
+        # 状态管理，应用(ui, 数据, 服务器)状态可自动获得
+## 终端
+### 跨平台
     atom electron
     node-webkit
     atom-shell
     nw.js
     polymer
-            # 构建在底层的html扩展，构建跨desktop, mobile等平台的web应用
-## android
+        # 构建在底层的html扩展，构建跨desktop, mobile等平台的web应用
+    mpx
+        # 小程序框架
+    wepy
+        # 小程序
+    taro
+        # 生成多端
+    chameleon
+    uniapp
+        # vue到多端
+    mpvue
+        # vue小程序
+    megalo
+        # vue小程序
+#### 运行时跨平台
+    微信小程序
+    华为快应用
+    react native
+    rax
+    weex
+    fuse
+    nativeScript
+    tabris
+### android
     结构
         applications:                                                        如browser
         application framework(相当于api):                        如window manager
@@ -928,6 +599,466 @@ type: docs
             tools/emulator-arm @test                                    # 启动一个模拟器
     框架
         atlas
-                # 阿里开源的android native容器化组件框架
+            # 阿里开源的android native容器化组件框架
         webview
+        litho
+            # 声明式ui
+        jetpack compose
+            # 声明式ui
+### ios
+    componentKit
+        # 声明式ui
+# 功能
+## 格式
+    uglifyjs2
+        # 序列化
+## 模板
+    介绍
+        引擎的一个优点就是可以直接把数据渲染到js中使用
+    优点
+        可以把动态页面的模板缓存起来，第一次请求之后，只需要更新数据
+            # 应该可以后端nginx缓存静态模板来提高性能
 
+    velocity
+        # java模板
+    ejs
+    hogan.js
+    handlebars
+        # 写法类似anglarjs模板
+    jstl
+        # java模板
+    less
+        # css模板
+    stylus
+        # css模板
+### swig
+    {% autoescape true %} {{ myvar }} {% endautoescape %}
+
+    {% block body %} ... {% endblock %}
+
+    {% if false %}
+    {% elseif true%}
+    {% else %}
+    {% endif %}
+
+    {% extends "./layout.html" %}
+
+    {% filter uppercase %} oh hi, {{ name }} {% endfilter %}                # => OH HI, PAUL
+    {% filter replace(".", "!", 'g") %} Hi. My name is Paul. {% endfilter %}        # => Hi! My name is Paul!
+
+    {% for x in obj %}
+            {% if loop.first %}<ul>{% endif %}
+            <li>{{ loop.index }} - {{ loop.key }}: {{ x }}</li>
+            {% if loop.last %}</ul>{% endif %}
+    {% endfor %}
+    {% for key, val in arr|reverse %}
+    {{ key }} -- {{ val }}
+    {% endfor %}
+
+    {% import './formmacros.html' as forms %}
+    {{ form.input("text", "name") }}                        # => <input type="text" name="name">
+    {% import "../shared/tags.html" as tags%}
+    {{ tags.stylesheet('global')}}                        // => <link rel="stylesheet" href="/global.css">
+
+    {% include "./partial.html" %}
+    {% include "./partial.html" with my_obj only%}
+    {% include "/this/file/does/not/exist" ignore missing%}
+
+    {% macro input(type, name, id, label, value, error)%}
+            <label for="{{ name }}">{{ label }}</label>
+            <input type="{{ type }}" name="{{ name }}" id="{{ id }}" value="{{ value }}" {% if error%} class="error" {% endif %}>
+    {% endmacro %}
+    {{ input("text", "fname",  "fname", "First Name", fname.value, fname.errors) }}
+
+    {% extends "./foo.html" %}
+    {% block content %}
+            My content
+            {% parent %}
+    {% endblock %}
+
+    {% raw %}{{ foobar }}{% endraw %}
+
+    {% set foo = "anything!"%}
+    {{ foo }}
+
+    {% spaceless %}
+            {% for num in foo %}
+            <li>{{ loop.index }}</li>
+            {% endfor %}
+    {% endspaceless %}                                # 除去空白
+## 显示
+    highcharts
+    nvd3.js
+        # svg报表
+    echarts
+### d3
+    介绍
+        数据可视化, 使用svg, css3
+    使用
+        node
+            npm install d3
+            //
+            var d3 = require('d3'), jsdom = require('jsdom');
+            var document = jsdom.jsdom(),
+                svg = d3.select(document.body).append('svg');
+        web
+            <script src="//d3js.org/d3.v3.min.js"></script>
+            <script>d3.version</script>
+    d3对象
+        // 选择器
+        event
+        mouse
+        select
+        selectAll
+        selection
+        touch
+        touches
+        // 过渡
+        ease
+                # ease对象
+        timer
+                flush
+        interpolate
+                # interpolate对象
+        interpolateArray
+        interpolateHcl
+        interpolateHsl
+        interpolateLab
+        interpolateNumber
+        interpolateObject
+        interpolateRgb
+        interpolateRound
+        interpolateString
+        interpolateTransform
+        interpolateZoom
+        interpolators
+        transition
+        // 数组
+        ascending
+        bisectLeft
+        bisector
+        bisectRight
+        bisect
+        descending
+        deviation
+        entries
+        extent
+        keys
+        map
+        max
+        mean
+        median
+        merge
+        min
+        nest
+        pairs
+        permute
+        quantile
+        range
+        set
+        shuffle
+        sum
+        transpose
+        values
+        variance
+        zip
+        // 数学
+        random
+        transform
+        // 请求
+        csv
+        html
+        json
+        text
+        tsv
+        xhr
+        xml
+        // 格式化
+        format
+        formatPrefix
+        requote
+        round
+        // 本地化
+        locale
+        // 颜色
+        hcl
+        hsl
+        lab
+        rgb
+        // 命名空间
+        ns
+        // 内部
+        dispatch
+        functor
+        rebind
+        // 比例尺
+        scale
+        // 时间
+        time
+        // 布局
+        layout
+        // 地理
+        geo
+        // 几何
+        geom
+        // 行为
+        behavior
+## 效果
+    touch.js
+        # 触摸
+    move.js
+        # div运动
+    swiper
+        # 滑动效果
+
+    cordova
+        # 访问原生设备，如摄像头、麦克风等
+    egret.js
+        # 使用TypeScript的HTML5开发引擎, 一套完整的HTML5游戏开发解决方案
+    tweenMax
+        # 扩展TweenLite, 用于制作html5动画
+    juliusjs
+        # 语音识别
+    babylon
+        # microsoft webgl框架
+    cubicVR
+        # 高性能webgl框架, paladin游戏引擎的一部分
+    scenejs
+        # webgl模型
+    glge
+        # webgl框架
+    pose
+        # mvvm
+    react-motion
+        # mvvm
+    react-transition-group
+        # mvvm
+## 视频
+    ezuikit
+        # 萤石sdk, 直播, 监控, 支持多平台
+# 应用框架
+## 显示
+    bootstrap
+    extjs
+        介绍
+            2.0之前是免费的，但有内在泄漏总是
+            GPLv3版本后收费
+
+        Sencha
+            1.是ExtJS、jQTouch(一个用于手机浏览器的jquery插件) 以及 Raphael（一个网页上绘制矢量图形的js库） 三个项目合并而成的一个开源项目。
+            2.Sencha Touch 是全球领先的应用程序开发框架，其设计旨在充分
+                利用HTML5、CSS3 和Javascript 来实现最高级别的功能、灵活性和优化。
+                Sencha Touch 是针对下一代具有触摸屏设备的跨平台框架。
+    jquery ui
+    dojo
+        # 语法较难用
+    easy ui
+        文件
+            jquery.js
+            easyui.js
+            easyui-lang-zh_CN.js
+            easyui.css
+            icon.css
+    layui
+        # 模块化ui
+    mini ui
+        # 收费
+    wijmo
+        # 收费
+    dwz
+        # 卖文档
+    vaadin
+        # apache webkit
+    foundation
+        # 响应式，移动优先
+    boilerplate
+        # h5模板
+    meteor
+        # 融合前后端, 后端node
+    knockout
+        # mvvm, 利于单页应用
+
+    jingle
+        # 手机
+    ionic
+        # angular手机框架
+    framework7
+        # ios(兼容android)组件
+    mui
+        # 手机
+    zui
+        # 手机，类bootstrap
+    frozenui
+        # 手机
+    flutter
+        # google移动端框架, 声明式ui
+### 数据可视化
+    highcharts
+    chart.js
+        # api不好用
+    three.js
+    d3
+        # 太底层, 概念已陈旧
+    mapbox
+        # 地图
+    echarts
+        # 开源
+    recharts
+        # 新出现
+    v-charts
+        # vue+echarts, 饿了么开发
+    superset
+        # apache
+    antv
+        # 蚂蚁金服, 图表丰富
+    thingJS
+        # 3d建模
+    cityBuilder
+        # 3d建模
+    dataV
+        # 收费, 阿里
+    sugar
+        # 收费, 百度
+    云图
+        # 收费, 腾讯
+    fineReport
+        # 收费, 帆软, 大屏
+    tableau
+        # 收费, 大屏
+    easyV
+        # 收费, 袋鼠云
+
+    gitDataV
+        # https://github.com/HongqingCao/GitDataV
+## 富应用
+    react
+    angular
+        # google开发, mvvm
+        ng(core module)包含的核心组件
+            directive   # 指令
+                ngClick
+                ngInclude
+                ngRepeat
+            service     # 服务, 依赖注入后使用
+                $compile
+                $http
+                $location
+            filter      # 过滤器，转换模板数据
+                filter
+                date
+                currency
+                lowercase
+            function    # 函数
+                angular.copy()
+                angular.equals()
+                angular.element()
+        组件
+            ngRoute     # url后#地址(hash) 来实现单面路由
+                使用
+                    引入angular-route.js
+                    依赖注入ngRoute模块
+                服务
+                    $routeParams    # 解析路由参数
+                    $route          # 构建url, view, controller的关系
+                    $routeProvider  # 配置
+                指令
+                    ngView      # 路由模板插入视图
+            ngAnimate   # 动画效果
+                使用
+                    引入angular-animate.js
+                    注入ngAnimate
+                服务
+                    $animate    # 触发
+                css动画   # 用nganimate结构定义，通过引用css到html模板触发
+                js动画    # 用module.animation注册，通过引用css到html模板触发
+            ngResource  # 动画
+            ngMock      # 动画
+            ngTouch     # 触摸
+            ngAria      # 帮助制作自定义模块
+            ngCookies
+    riot
+    ember
+    vue
+        <div id="app">
+            {{ message }}
+        </div>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: "hi"
+            },
+            created: function () {}
+        })
+    backbone
+## 效果
+    three.js
+### createjs
+    # easeljs
+        介绍
+            处理canvas
+        使用
+            var stage = new createjs.Stage("canvasName");
+            stage.x = 100;
+            stage.y = 100;
+            var text = new createjs.Text("Hello", "36px Arial", "#777");
+            stage.addChild(text);
+            stage.update();
+    # tweenjs
+        介绍
+            处理动画调整和js属性
+        使用
+            var circle = new createjs.Shape();
+            circle.graphics.beginFill("#FF0000").drawCircle(0, 0, 50);
+            stage.addChild(circle);
+            createjs.Tween.get(circle, {loop: true})
+                .wait(1000)
+                .to({scaleX: 0.2, scaleY: 0.2})
+                .wait(1000)
+                .to({scaleX:1, scaleY:1}, 1000, createjs.Ease.bounceInOut)
+            createjs.Ticker.setFPS(20);
+            createjs.Ticker.addEventListener("tick", stage);
+    # soundjs
+        介绍
+            简化处理音频
+        使用
+            var displayStatus;
+            displayStatus = document.getElementById("status");
+            var src = "1.mp3";
+            createjs.Sound.alternateExtensions = ["mp3"];
+            createjs.Sound.addEventListener("fileload", playSound());
+            createjs.Sound.registerSound(src);
+            displayStatus.innerHTML = "Waiting for load to complete";
+
+            function playSound(event){
+                soundIntance = createjs.Sound.play(event.src);
+                displayStatus.innerHTML = "Playing source: " + event.src;
+            }
+
+    # preloadjs
+        介绍
+            协调程序加载项的类库
+        使用
+            var preload = new createjs.LoadQueue(false, "assets/");
+            var plugin= {
+                getPreloadHandlers: function(){
+                    return{
+                        types: ["image"],
+                        callback: function(src){
+                            var id = src.toLowerCase().split("/").pop().split(".")[0];
+                            var img = document.getElementById(id);
+                            return {tag: img};
+                        }
+                    }
+                }
+            }
+            preload.installPlugin(plugin);
+            preload.loadManifest([
+                "Autumn.png",
+                "BlueBird.png",
+                "Nepal.jpg",
+                "Texas.jpg"
+            ]);
+## 游戏
+    cocos2dx
+        # 跨平台游戏

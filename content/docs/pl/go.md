@@ -128,6 +128,8 @@ date: 2018-10-09T16:10:44+08:00
             fix                 # 同go fix
             vet                 # 同go vet
             cgo                 # 生成能够调用c语言代码的go源码文件
+            compile
+                -help           # 可传给编译器的参数
     godoc                       # 提供html页面
         -http=:6060             # 运行本地帮助网站
         -analysis=type          # 提供静态分析结果
@@ -564,7 +566,8 @@ date: 2018-10-09T16:10:44+08:00
                 q[:1]; q[1:]; q[:]
             轻量级数据结构，用来访问数组的部分
             零值是nil, 行为和slice一样，不用特殊判断
-            slice后标访问越界时，会自动扩展，越界超过数组长度时，会panic
+            slice后标访问越界时，会自动扩展，越界超过数组长度+1时，会panic
+                append(arr[:i], arr[i+1:]...)删除元素, i为最后元素时, i+1不越界
             不可比较, 只有写函数实现。只能和nil比较
                 因为slice的元素不是直接的
                     有可能包含它自身
@@ -1518,9 +1521,29 @@ date: 2018-10-09T16:10:44+08:00
         version: 5.0.0
         repo:git@github.com:go-redis/redis
     常见问题
-        vcs
-            glide mirror set a a --vcs git
-                # 改~/.glide/mirrors.yaml文件
+        o-> cannot detect vcs
+            glide.lock或vendor依赖旧版本
+                清理glide.lock和vendor, 检查glide.yaml旧版本
+            glide.yaml子目录处理不完善
+                subpackages:
+                - cloudsql
+            glide mirror找不到包
+                glide mirror set a a --vcs git
+                    # 改~/.glide/mirrors.yaml文件
+        o-> does not appear to be a git repository
+            加速服务没有项目
+        o-> glide up依赖不是最新
+            ~/.glide/cache中缓存了旧版本
+        o-> cannot find package "." in
+            glide对非git协议自有域名处理歧义，子目录分析不准确
+                清理缓存
+                    ~/.glide/cache/src/包名
+                    ~/.glide/cache/info/包名
+                glide.yaml添加repo重定向及subpackages
+                    package: github.com/grpc-ecosystem/grpc-gateway
+                    repo: git@github.com:grpc-ecosystem/grpc-gateway.git
+                    subpackages:
+                    - internal
 ## govendor
     介绍
         包管理

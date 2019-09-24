@@ -16,47 +16,74 @@ date: 2018-10-10T15:25:12+08:00
         最终一致性(eventually consistent)
 # cpu
     介绍
-        单cpu串行工作，前任务完成，后任务才开始
-            # 串行不适合图形处理(多点，线，面要同时乘投影矩阵)
+        单cpu串行工作，前任务完成，后任务才开始                             # 串行不适合图形处理(多点，线，面要同时乘投影矩阵)
         cpu把大量空间和电量分配给控制器和缓存，不能集成太多计算单元
         cpu内存通过cpu总线连接, cpu总线与pci总线通过主桥(北桥)连接
-            # 显卡在pci总线上
-            ## 控制逻辑在cpu中运行, 生成渲染数据, 到内存, 再到显存显卡计算。
-            ### 内存到显存数据传输最花费时间。
-    进程: 独有内存
-    线程: 共享进程内存(地址空间、文件描述符)
-        一个进程下的轻量进程
-        POSIX线程api是对已有unix进程模型扩展, 与进程多方面类似
-            自己的信号掩码
-            cpu affinity(倾向在某cpu尽量长时间运行)
-            cgroups
-    并行架构
-        位级(bit-level): 32位, 64位计算机
-        指令级(instruction-level)
-            # 处理器内部并行度很高
-            流水线
-            乱序执行
-            猜测执行
-        数据级, 单指令多数据(SIMD)架构
-            # 图像处理
-        任务级(task-level)
-            # 多处理器
-            # 超线程, 虽只有4个核，但可用核返回8
-            共享内存模型
-            分布式内存模型
+            gpu在pci总线上
+            控制逻辑在cpu中运行, 生成渲染数据, 到内存, 再到显存显卡计算。
+            内存到显存数据传输最花费时间。
+    原理
+        处理单元(processing unit)
+            算术逻辑单元(arithmetic logic unit)
+            处理寄存器(processor register)
+        控制单元(control unit)
+            指令寄存器(instruction register)
+            程序计数器(program counter)
+        指令集架构(ISA, instruction set architecture)                   # 机器码易兼容, 软件易编程, 易升级cpu
+            精简指令集RISC(reduced instruction set computing)
+            复杂指令集CISC(complex instruction set computer)
+        时钟频率(clock speed)
+        生产
+            生产线散热决定生存率，决定cpu型号
+        多级缓存
+            L1, L2, L3, L4
+        虚拟化
+            虚拟机监视器(VMM, virtual machine monitors)
     分类
         指令流的重数分类
-                SI(single instruction stream)单指令流
-                MI(multiple instruction stream)多指令流
+            SI(single instruction stream)单指令流
+            MI(multiple instruction stream)多指令流
         操作数流的重数分类
-                SD(single data stream)单数据流
-                MD(multiple data stream)多数据流
+            SD(single data stream)单数据流
+            MD(multiple data stream)多数据流
         SISD 串行计算机
         SIMD 阵列机(多处理单元)
         MISD 很少
         MIMD
             多处理机
             多计算机
+    硬件并行
+        位级(bit-level): 32位, 64位计算机
+        指令级(instruction-level)              # 处理器内部并行度很高
+            流水线
+                指令分步骤(指令流), 每步专门部件处理
+                多指令流并行, 部件不空闲等待单指令流结束
+                六级流水线步骤
+                    取指(FI), 译码(DI), 计算操作数地址(CO), 取操作数(FO), 执行指令(EI), 写操作数(WO)
+            多发射(超标量)
+                一时钟周期处理多指令
+            超线程
+                模拟多个逻辑线程
+            乱序执行
+            猜测执行
+        数据级
+            向量体系结构、图形处理器
+            单指令多数据(SIMD)架构
+        线程级                                 # 紧耦合硬件模型中开发数据级或任务级并行，线程间有交互
+        请求级                                 # OS或程序耦合任务间并行
+    程序并行
+        数据级(DLP, data-level parallel)
+        任务级(TLP, task-level parallel)       # 多处理器, 超线程, 虽只有4个核，但可用核返回8
+            内存
+                共享内存模型
+                分布式内存模型
+            进程: 独有内存
+            线程: 共享进程内存(地址空间、文件描述符)
+                一个进程下的轻量进程
+                POSIX线程api是对已有unix进程模型扩展, 与进程多方面类似
+                    自己的信号掩码
+                    cpu affinity(倾向在某cpu尽量长时间运行)
+                    cgroups
 ## 进程调度
     等级
         高级调度(High-Level Scheduling)
@@ -80,9 +107,24 @@ date: 2018-10-10T15:25:12+08:00
                     分时系统中,都采用时间片轮转法
 # gpu
     介绍
-            gpu控制单元少, 计算单元多
-            显卡在pci总线上
+        gpu控制单元少, 计算单元多
+        显卡在pci总线上
+    原理
+        数据级并行
+            单条指令并行应用于数据集(SIMD)
+        CUDA(compute unified device architecutre)                       # nvidia推出的通用并行计算架构
+            多网格(grid)组织，每网格多(512-1536)线程块
+            线程块线程相同指令地址, 通过共享存储器(shared memory)和栅栏(barrier)块内通信
+                不同块不通信，粗粒度并行
+                同块通信，细粒度并行
 # 内存
+    原理
+        虚拟内存(virtual memory)
+        页表(page table)
+            控制寄存器(control register)
+                CR3保存页目录表内存基地址
+            4级页表(PML4)
+            转换检测缓冲区(TLB, translation lookaside buffer)
     dma
         # direct memory access 不依赖cpu的内存存取
     栈
@@ -110,15 +152,7 @@ date: 2018-10-10T15:25:12+08:00
         表示层
         应用层
     ABR(area border router)：区域边界路由器
-## 安全
     子网隔离
-    CSRF (Cross-site request forgery)
-        客户端登录A, 本地生成cookie
-        客户端登录B, B给客户端参数，使客户端请求A
-        避免
-            token验证     # 放
-            入自定义头域
-            验证Referer头域
 ## 状态
 ### cookie
     介绍
@@ -709,8 +743,7 @@ date: 2018-10-10T15:25:12+08:00
         服务网格
         容器调度编排
         容器runtime
-        基础设施
-                # 云服务器
+        基础设施 # 云服务器
     分层
         服务
             对外网关
@@ -737,6 +770,27 @@ date: 2018-10-10T15:25:12+08:00
             授权(OAuth2)
             安全传输协议(tls)
             限流(quota)   # 网络数据、api调用
+## 一致性
+### 分布式事务
+#### TCC
+    # Try Confirm Cancel
+#### 队列
+    # 同步数据用队列传输
+#### 两阶段提交
+    过程
+        表决(voting)
+            同意或取消
+        提交(commit)
+            提交或取消
+    问题
+        所有节点同步阻塞
+        协调者单点故障
+        协调者commit中网络故障, 部分节点未提交
+#### 三阶段提交
+    过程                        # 每步引入超时
+        询问(can commit)
+        锁资源(pre commit)
+        提交(do commit)
 ## 高可用(high available)
 ### 负载均衡与反向代理
     外网dns做gslb(全局负载均衡)                    # 有缓存，切换时间长
