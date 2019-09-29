@@ -128,35 +128,37 @@ type: docs
     # java，类spring boot
 ## 写法
     traits-decorator
-            # js mixin
+        # js mixin
     q
-            # js 流程控制
+        # js 流程控制
     co
-            # js generator to async
+        # js generator to async
     async
-            # js 流程控制
+        # js 流程控制
     thunkify
-            # js函数Thunk化, 确保回调调用一次
+        # js函数Thunk化, 确保回调调用一次
     step
-            # async轻量库
+        # async轻量库
     wind
-            # js定义的宏
+        # js定义的宏
     streamline
-            # 基于源代码编译来实现流程控制简化
+        # 基于源代码编译来实现流程控制简化
     eventproxy
-            # js event回调
+        # js event回调
     spring
-            # java ioc
+        # java ioc
     guice
-        # google的java ioc轻量框架
+    # google的java ioc轻量框架
     castle
-            # .net ioc
+        # .net ioc
     spring.net
-            # .net ioc
+        # .net ioc
     anko
-            # go 代码解释器
+        # go 代码解释器
     antlr
-            # java dsl
+        # java dsl
+    aopalliance
+        # java aop
 ### ejb
     特点
         分布式，j2ee一部分
@@ -1537,9 +1539,13 @@ type: docs
 ## 日志
     log4j
         # java
+    logback
+        # log4j后续版本
+    slf4j
+        # java
     log4js
         # js
-## 格式/模板
+## 格式|模板
     moment
         # js格式化时间
     iconv
@@ -1552,27 +1558,46 @@ type: docs
         # java图表库
     jackson
         # java json序列化
+    json-smart
+        # java json
     xstream
         # java xml序列化
     pango2
         # 国际化模板
-## 生成 | 加密 | 计算特征
+    snakeyaml
+        # java yaml
+    js-beautify
+        # js, html格式化
+    xmlbeans
+        # java xml
+    joda-time
+        # java日期
+    dom4j
+        # java dom 
+## 生成|压缩|加密|计算特征
     simhash
-            # google 文档hash
+        # google 文档hash
     pygments
-            # python 生成高亮html
+        # python 生成高亮html
     mako
-            # python 模板
+        # python 模板
     jinja2
-            # python 模板
+        # python 模板
     freemarker
-            # java 模板
+        # java 模板
     proguard
         # java 混淆
-## 邮件
+    snappy
+        # google java 压缩
+    jbcrypt
+        # java加密, scrypt更强
+## 客户端|邮件
     javamail
+        # java mail
     nodemailer
-## 客户端
+        # node mail
+    mailapi
+        # java mail
     c3p0
         # java rds 连接池
     dbcp
@@ -1598,6 +1623,13 @@ type: docs
     superagent
         # js http
     mybatis
+    hsqldb
+        # java内置, 单文件/内存数据库
+    mqttv
+        # java mqtt客户端
+    libthrift
+        # java thrift
+    kafka-clients
 ## 领域语言
     lex
         # 生成词法分析程序
@@ -1606,12 +1638,12 @@ type: docs
     antlr
 ## 图形
     ccap
-            # 基于c++的图形CImg库，就是一个CImg.h文件
+        # 基于c++的图形CImg库，就是一个CImg.h文件
     canvas
-            # node canvas
+        # node canvas
     tesseract
-            # node 验证码
-## pc控制
+        # node 验证码
+## 运维控制
     later
         # nodejs corntab
     glob
@@ -1624,6 +1656,17 @@ type: docs
         # node 递归makedir
     fs-extra
         # node扩展fs包
+    testcontainers
+        # java, 运行docker
+    jOptSimple
+        # java, 命令解析
+## 协议
+    spring-websocket
+        # java
+    httpcore-nio
+        # java
+    grpc-context
+        # java
 ## 高可用 | 性能
     retry
         # js retry
@@ -2680,19 +2723,86 @@ type: docs
     wso2
 ### thingsBoard
     # java, 社区版、企业版
+    文档
+        github.com/thingsboard/thingsboard
+        thingsboard.io/docs
+        localhost:8080/swagger-ui.html      # 本地swagger
     安装
-        docker run -it -p 9090:9090 -p 1883:1883 -p 5683:5683/udp -v ~/.mytb-data:/data -v ~/.mytb-logs:/var/log/thingsboard --name mytb thingsboard/tb-postgres
-    架构
-        device
-        transport
-            MQTT, HTTP, CoAP
-        connectivity
-            MQTT, HTTP, CoAP
-        rule engine
-        core services
-        gateway
-            rest, websockets
-        browser, application
+        docker
+            docker run -it -p 9090:9090 -p 1883:1883 -p 5683:5683/udp -v ~/.mytb-data:/data -v ~/.mytb-logs:/var/log/thingsboard --name mytb thingsboard/tb-postgres
+        maven
+            确定ui/pom.xml中<nodeVersion>
+            mvn install -DskipTests
+        配置
+            application
+                zk
+                    ZOOKEEPER_ENABLED
+                    ZOOKEEPER_URL
+                cassandra
+                    CASSANDRA_URL
+                    CASSANDRA_USERNAME
+                    CASSANDRA_PASSWORD
+                redis
+                    REDIS_HOST
+                    REDIS_PORT
+                    REDIS_DB
+                    REDIS_PASSWORD
+                postgresql
+                    SPRING_DATASOURCE_URL
+                    SPRING_DATASOURCE_USERNAME
+                    SPRING_DATASOURCE_PASSWORD
+                kafka
+                    TB_KAFKA_SERVERS
+        运行
+            application
+                server
+            transport
+                http
+        demo数据
+            admin
+                sysadmin@thingsboard.org    sysadmin
+            tenant
+                tenant@thingsboard.org  tenant
+            customer
+                customer@thingsboard.org或customerA@thingsboard.org  customer
+                customerB@thingsboard.org   customer
+                customerC@thingsboard.org   customer
+            device
+                A1, A2, A3  A1_TEST_TOKEN,...   customerA
+                B1  B1_TEST_TOKEN   customerB
+                C1  C1_TEST_TOKEN   customerC
+                'DHT11 Demo Device'     DHT11_DEMO_TOKEN
+                'Raspberry Pi Demo Device'  RASPBERRY_PI_DEMO_TOKEN
+    包结构
+        application                         # 可改, 网关
+            server
+                install
+                config                      # 同源策略、swagger、websocket、消息、安全
+                exception
+                controller                  # 页面调用
+                service
+        common                              # 不可改, 功能代理
+            data                            # 数据结构
+            message                         # 消息类型
+            transport                       # 客户端调用
+        dao                                 # 可改, 业务, 适配db
+            model                           # 数据库对象
+            resources
+                sql                         # 表结构
+        netty-mqtt                          # 不可改, 数据通信协议
+        rule-engine                         # 不可改, 规则引擎
+        transport                           # 不可改, 应用层协议
+            http                            # 启动http传输协议
+            coap
+            mqtt
+        tools                               # 可改, 工具
+        ui                                  # 可改, 页面, angular, react, webpack
+        docker                              # 不可改, 打包
+        msa                                 # 不可改，分布式
+            black-box-tests                 # 黑盒测试
+            js-executor                     # 执行js
+        log
+        img         
     模块
         application
             common
@@ -2721,22 +2831,156 @@ type: docs
             processors
             action
         ui                                  # node.js + yarn
-    功能
-        多租户(tenant)
-            客户
-                资产
-                设备
-        部件(widget)
-            alarm
-        实体视图
-            设备即服务(DaaS)
-            共享资产、设备
-            传感器等权限
-        仪表盘(dashboard)
-        设备属性(attributes)
-        设备数据(telementry)
-        与设备通信(rpc)
+    表结构
+        tenant
+        customer                            # 关联tenant
+        tb_user                             # user信息、角色
+        user_credentials                    # user密码
+        admin_settings                      # admin信息, key value形式
+        audit_log                           # 登录日志
+
+        asset
+        entity_view     
+        attribute_kv                        # entity attribute
+        component_descriptor                # node类
+
+        device                              # 设备, label
+        device_credentials                  # 设备ACCESS_TOKEN
+        ts_kv                               # 设备事件
+        ts_kv_latest                        # 设备当前状态
+
+        rule_chain                          # rule root chain
+        rule_node                           # rule节点
+        relation                            # rule关系
+        event                               # rule事件
+        alarm                               # alarm事件
+
+        dashboard                           # dashboard设置
+        widget_type                         # widget, 别名
+        widgets_bundle
+    api
+        host:port/api/v1/$ACCESS_TOKEN/
+            telementry                      # 上传遥测数据
+                post {"key1":"value1"}
+                post [{"key1":"value1"}]
+                post {"ts":1451649600512, "values":{"key1":"value1"}}
+            attributes
+                post {"attribute1":"value1"}          # 更新属性
+                get                         # 请求属性
+            attributes/updates
+                get ?timeout=20000          # 订阅属性
+            rpc
+                get ?timeout=20000          # 要求订阅，返回id, method, params
+                post {"method": "getTime", "params":{}}     # 执行method
+            rpc/{$id}
+                post
+            claim                           # 用户认领设备
+                post
+    服务架构
+    产品架构
+        设备接入: MQTT、CoAP、HTTP
+        规则引擎                             # 处理设备消息
+            消息(message)
+                设备传入数据
+                设备生命周期事件
+                rest api事件
+                rpc请求
+            规则节点(node)                   # 过滤消息
+                filter
+                enrichment
+                transformation
+                action
+                external
+                rule chain
+            规则链                           # 连接节点
+        核心服务
+            设备认证: token、X.509
+            规则和插件
+            多租户(tenant)
+                客户
+                    资产
+                    设备
+            部件(widget)仪表盘(dashboard)
+                alarm
+                实体视图
+                    设备即服务(DaaS)
+                    共享资产、设备
+                    传感器等权限
+            告警和事件
+        网关: rest api, websocket
+        actor模型: 用于并发
+        集群: zookeeper服务发现, 一致性哈希
+        安全: SSL
+        第三方
+            akka
+            zookeeper
+            grpc
+            cassandra
+
         system
             general
             mail
             security
+    功能模块
+        admin
+        tenant
+            rule chain
+                filter
+                enrichment
+                transformation
+                action
+                *analytics
+                external
+                rule chain
+            *data converters
+            *integrations
+            *roles
+            *customers hierarchy
+            *user groups
+            customers
+            *customer groups
+            assets
+            *asset groups
+            devices
+            *device groups
+            entity views
+            *entity view groups
+            widgets library
+            dashboards
+            *dashboard groups
+            *scheduler
+                report
+                send rpc
+                update attributes
+            *white labeling
+                main server
+                mail templates
+                custom translation
+                custom menu
+                white labeling
+                login white labeling
+                self registration
+            audit logs
+        entities
+            包含
+                tenants
+                customers
+                users
+                devices
+                assets
+                alarms
+                dashboards
+                rule node
+                rule chain
+            操作
+                detail
+                assigned to customer
+                attributes
+                    client
+                    server
+                    shared
+                telemetry
+                alarms
+                events
+                relations
+                audit logs

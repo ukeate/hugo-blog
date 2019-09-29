@@ -505,6 +505,114 @@ date: 2018-10-11T18:18:21+08:00
         # xpack.security.audit.enabled: false
         # xpack.monitoring.enabled=false
     docker-compose up -d
+## cassandra
+    docker-compose.yml
+        version: '3'
+        services:
+            cassandra:
+                image: cassandra:latest
+                restart: always
+                command: /bin/bash -c "sleep 1 && echo ' -- Pausing to let system catch up ... -->' && /docker-entrypoint.sh cassandra -f"
+                environment:
+                - MAX_HEAP_SIZE=300M
+                - HEAP_NEWSIZE=100M
+                ports:
+                - 7000:7000
+                - 7001:7001
+                - 7199:7199
+                - 9042:9042
+                - 9160:9160
+                volumes:
+                - ./n1data:/var/lib/cassandra
+    docker-compose up -d
+## haproxy
+    docker-compose.yml
+        version: '3'
+        services:
+        haproxy:
+            image: haproxy
+            volumes:
+            - ./haproxy:/usr/local/etc/haproxy
+            ports:
+            - "10001:80"
+    ./haproxy/haproxy.cfg
+        global
+            log 127.0.0.1 local0
+            log 127.0.0.1 local1 notice
+        defaults
+            log global
+            mode http
+            option httplog
+            option dontlognull
+            timeout connect 5000ms
+            timeout client 50000ms
+            timeout server 50000ms
+            stats uri /status
+        frontend balancer
+            bind 0.0.0.0:80
+            default_backend web_backends
+        backend web_backends
+            balance roundrobin
+            # server web1 apache:80 check
+            # server web2 nginx:80 check
+    docker-compose up -d
+## zookeeper
+    docker-compose.yml
+        version: '3'
+        services:
+            zookeeper:
+                image: zookeeper:latest
+                ports:
+                - "2181:2181"
+    docker-compose up -d
+## kafka
+    docker-compose.yml
+        version: '3'
+        services:
+            zookeeper:
+                image: zookeeper
+                ports:
+                - "2181:2181"
+            kafka:
+                image: wurstmeister/kafka
+                ports:
+                - "9092:9092"
+                environment:
+                KAFKA_ADVERTISED_HOST_NAME: 172.27.0.1
+                KAFKA_CREATE_TOPICS: "outrun1:1:1:compact"
+                KAFKA_MESSAGE_MAX_BYTES: 2000000
+                KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+                volumes:
+                - ./kafka/logs:/kafka
+                - ./kafka/docker.sock:/var/run/docker.sock
+            kafka-manager:
+                image: sheepkiller/kafka-manager
+                ports:
+                - 9020:9000
+                environment:
+                ZK_HOSTS: zookeeper:2181
+
+    docker-compose up -d
+## emq
+    配置
+        18083: 管理控制台
+            admin public
+        1883: mqtt/tcp
+        8883: mqtt/ssl
+        8083: mqtt/websocket
+        8084: mqtt/websocket ssl
+    docker-compose up -d
+        version: '3'
+        services:
+        emqttd:
+            image: devicexx/emqttd
+            ports:
+            - 10010:18083
+            - 10011:1883 
+            - 10012:8084 
+            - 10013:8883 
+            - 10014:8083
+    docker-compose.yml
 ## dokuwiki
     docker-compose.yml
         version: '3'

@@ -189,6 +189,7 @@ date: 2018-10-11T18:47:57+08:00
     cmatrix                 # 终端黑客帝国
     sl                      # 火车
     cal 9 1752              # 打印日历
+    jq . a.json             # 验证json格式
 # 控制
     script/scriptreply      # 终端录制
     source
@@ -474,6 +475,10 @@ date: 2018-10-11T18:47:57+08:00
     iotop                   # 实时监视io
     iostat                  # 负载情况
     lsof -i:8080            # 列出当前系统打开的文件，必须root运行才准确
+        -i                  # 端口
+        -P                  # 显示端口号而非名称
+        -n                  # 显示ip而非域名
+        -i -n -P            # 查看进程句柄数
     nicstat                 # 网络流量统计
     netstat
         -a                  # 显示所有
@@ -976,7 +981,7 @@ date: 2018-10-11T18:47:57+08:00
             wget --post-data="username=u1&password=asdf" --save-cookies=cookie --keep-session-cookies "http://www.abc.com/logging.php"
             wget -x -P curSite -r -l 1 -k -L -np --load-cookies=cookie --keep-session-cookies "https://www.abc.com/display/1"
     递归查找所有内容
-        grep -nr 'a' .
+        grep -nr --exclude-dir={.git, res, bin} 'a' .
 
     终端录制
         script -t 2>timing.log -a output.log

@@ -85,6 +85,8 @@ date: 2018-10-10T17:39:31+08:00
             服务层
         sharing-nothing                     # cpu之间不共享内存和磁盘
     DDD(domain driven design)
+        本质
+            维护概念完整性，避免腐化
         entity
             主存储(可变)
             互相派生                         # 如命令和事件派生状态, 事件派生状态等

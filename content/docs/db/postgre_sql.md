@@ -61,6 +61,9 @@ date: 2018-10-11T15:34:29+08:00
         \i a.sql                    # 执行sql文件
         \o a.log                    # 日志文件
         \password                   # 更换密码
+        \x                          # 开启/关闭竖排显示
+
+        [sql] \gdesc                # 快速显示结果列名和类型
     数据类型
         serial                      # 4字节，自增序列
             bigserial               # 8字节

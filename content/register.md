@@ -67,8 +67,14 @@ type: docs
 
     1315 blog
 
+    7000,7001,7199,9042,9160 cassandra
+    9092 kafka
+    2181 kafka zookeeper
+    9020 kafka-manager
     8001 nginx
     3306 mysql
+    5432 postgres
+    54321 timescaledb
     8002 adminer
     27017 mongo
     8003 mongo-express
@@ -78,6 +84,7 @@ type: docs
     9200 es
     9100 es-head
     5601 kibana
+    10001 haproxy
 
     8004 dokuwiki
     8005 wordpress
@@ -122,6 +129,7 @@ type: docs
         thunderbird
         tmux
         vim
+        mplayer
 
         # 运维需要
         openssh
@@ -138,9 +146,13 @@ type: docs
         g++
         python2.7
             python3.5
+            ansible
         php
             php-cgi
             php-fpm
+        node
+        nvm
+            babel-cli
         lua
         ruby
         cmake
@@ -156,6 +168,8 @@ type: docs
             nsq
             rabbitmq
             es
+            kafka
+            cassandra
 
             dokuwiki
             tiddlywiki
@@ -199,6 +213,7 @@ type: docs
         mariadb
         neo4j
         pgsql
+        cassandra
 
         # 工具
         go
@@ -207,7 +222,6 @@ type: docs
         flame-graph
         jdk1.8
         jdk12
-        node
         protoc
     diy
         blog

@@ -68,6 +68,8 @@
                 HandleLidSwitch=ignore          # 关闭盖子不执行操
             /system                             # units位置
                 /default.target                 # 启动级别
+        /security
+            /limits.conf                        # 设置系统限制，如文件句柄数
         /issue                                  # 发行版信息
         /hosts                                  # 修改localhost
         /ld.so.conf                             # lib设置,加入so文件的配置路径如:/usr/local/lib
@@ -364,4 +366,4 @@
         sysctl -w fs.nr_open=11000000
 
         /etc/security/limits.conf
-            nofile=10000000
+            nofile=10000000         # 文件句柄数

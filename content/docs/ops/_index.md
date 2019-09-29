@@ -335,7 +335,7 @@ type: docs
     服务器
         server.json
             {
-                "server":"172.21.223.196",
+                "server":"0.0.0.0",
                 "server_port":443,
                 "local_address":"127.0.0.1",
                 "local_port":1080,
@@ -883,6 +883,7 @@ type: docs
             install                             # compile, package后， 保存到本地仓库
                 -X                              # 显示依赖
                 -Dmaven.test.skip=true          # 跳过测试
+                -rf 模块名                       # 从指定模块从新开始
             clean                               # 清除编译
                 install-U                       # 强制更新
                 package                         # 编译成jar包
@@ -949,6 +950,9 @@ type: docs
         eclipse插件
             m2e
     方案
+        新项目安装
+            mvn clean install -DskipTests
+            mvn install -rf :模块名 -DskipTests     # 指定模块开始
         ojdbc14本地加载
             ＃ oracle是收费的，所以不能直接下载到驱动
             o-> mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.4.0 -Dpackaging=jar -Dfile=ojdbc14-10.2.0.4.0.jar
@@ -1054,6 +1058,8 @@ type: docs
         # 分布式监控
     nagios
         # 监控
+    emq
+        # mqtt broker, erlang开发, 管理控制台
 # 个人操作
 ## vsftp
     介绍

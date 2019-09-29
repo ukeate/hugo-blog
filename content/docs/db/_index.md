@@ -832,6 +832,8 @@ type: docs
         查询语言CQL
         列TTL(秒)
     命令
+        cqlsh localhost 9042
+    数据库命令
         use aaa
             # 用aaa键空间
 ### hbase

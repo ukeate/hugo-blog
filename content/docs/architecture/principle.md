@@ -156,115 +156,112 @@ date: 2018-10-10T15:25:12+08:00
 ## 状态
 ### cookie
     介绍
-            cookie的弊端
-                    数据在客户端可以被修改，所以不能存重要数据
-                    cookie中字段太多会影响传输效率
-
+        cookie的弊端
+            数据在客户端可以被修改，所以不能存重要数据
+            cookie中字段太多会影响传输效率
     请求头
-            set-cookie
-                    # 规定cookie的格式为name = value
+        set-cookie
+            # 规定cookie的格式为name = value
     响应
-            path
-                    # cookie发送的相对路径
-            expires和maxAge
-                    # expires是UTC时间, maxAge是cookie多久后过期
-                    ## 不设置这两个时产生的是session cookie, 它是transient的，用户关闭浏览器时清除。一般用来保存session_id
-            secure
-                    # true时, cookie在HTTP中是无效的, 在HTTPS中才有效
-            httpOnly
-                    # 通知浏览器不允许脚本操作document.cookie。一般都应设置为true, 可以避免被xss攻击拿到cookie
+        path
+            # cookie发送的相对路径
+        expires和maxAge
+            # expires是UTC时间, maxAge是cookie多久后过期
+            ## 不设置这两个时产生的是session cookie, 它是transient的，用户关闭浏览器时清除。一般用来保存session_id
+        secure
+            # true时, cookie在HTTP中是无效的, 在HTTPS中才有效
+        httpOnly
+            # 通知浏览器不允许脚本操作document.cookie。一般都应设置为true, 可以避免被xss攻击拿到cookie
     签名( 信息摘要算法)
-            原user='alsotang'
-            现user=sha1('my_secret' + 'alsotang') === 'xxxx...xxx'
+        原user='alsotang'
+        现user=sha1('my_secret' + 'alsotang') === 'xxxx...xxx'
 ### session
     介绍
-            session通过cookie中存放session_id来实现
-            可以存放在
-                    1. 内存
-                    2. cookie本身
-                            # 不用担心集群的状态共享问题，安全性可以遵照最佳实践来，也是有保证的，最大的弊端在于增大了数据量传输。有受到回放攻击的危险
-                    3. redis或memcached等缓存
-                            # 常用
-                    4. 数据库中
+        session通过cookie中存放session_id来实现
+        可以存放在
+            1. 内存
+            2. cookie本身
+                # 不用担心集群的状态共享问题，安全性可以遵照最佳实践来，也是有保证的，最大的弊端在于增大了数据量传输。有受到回放攻击的危险
+            3. redis或memcached等缓存
+                # 常用
+            4. 数据库中
 ## 数据链路层
     分层
-            数据链路层分为两层
-                    llc上层子层                                                # Logical Link Control 逻辑链路控制。
-                    mac下层子层                                                # Media Access Control 介质访问控制层
+        数据链路层分为两层
+            llc上层子层                # Logical Link Control 逻辑链路控制。
+            mac下层子层                # Media Access Control 介质访问控制层
 
     帧(frame)传输
-            网络驱动程序成型帧,  网卡发送到网线上，到达目的机器，以网络驱动程序解析
+        网络驱动程序成型帧,  网卡发送到网线上，到达目的机器，以网络驱动程序解析
     协议
-            以太网
-            令牌环
-            HDLC
-            帧中继
-            ISDN
-            ATM
-            IEEE 802.11
-            FDDI
-            PPP
+        以太网
+        令牌环
+        HDLC
+        帧中继
+        ISDN
+        ATM
+        IEEE 802.11
+        FDDI
+        PPP
     mac
         Media Access Control
-                mac帧结构
+            mac帧结构
 ![""](/docs/architecture/mac.jpg)
-
-                    单位
-                            字节
-                    帧类型/长度（TYPE/LEN）：
-                            该字段的值大于1500时，表示上层数据使用的协议类型。例如0x0806表示ARP请求或应答，0x0800表示IP协议。
-                            该字段的值小于1500时表示以太网数据的长度，上层携带LLC-PDU。
-                    帧校验FCS：
-                            以太网采用32位CRC冗余校验。
+                单位
+                    字节
+                帧类型/长度（TYPE/LEN）：
+                    该字段的值大于1500时，表示上层数据使用的协议类型。例如0x0806表示ARP请求或应答，0x0800表示IP协议。
+                    该字段的值小于1500时表示以太网数据的长度，上层携带LLC-PDU。
+                帧校验FCS：
+                    以太网采用32位CRC冗余校验。
     llc
         Logical Link Control
-                llc-pdu结构
+            llc-pdu结构
 ![""](/docs/architecture/llc1.jpg)
 ![""](/docs/architecture/llc2.jpg)
 
-                    pdu : 协议数据单元
-                    dsap : 目标服务访问点
-                    ssap : 源服务访问点
-                    控制位 : 三种
+                pdu : 协议数据单元
+                dsap : 目标服务访问点
+                ssap : 源服务访问点
+                控制位 : 三种
 
 
     arp
-        Address Resolution Protocol                                                                # arp属于中间层，为ip层服务协议
-                arp帧结构
+        Address Resolution Protocol                    # arp属于中间层，为ip层服务协议
+            arp帧结构
 ![""](/docs/architecture/arp1.jpg)
 
-                arp协议的分组格式
+            arp协议的分组格式
 ![""](/docs/architecture/arp2.jpg)
 
-                arp在windows命令提示行下的命令
-                        arp -a                                         查看arp缓存表中的内容
-                        arp -d                                        清空arp缓存表
+            arp在windows命令提示行下的命令
+                arp -a                                         查看arp缓存表中的内容
+                arp -d                                        清空arp缓存表
 
 ## 网络层
     数据包
-            接收
-                    # 一般情况下，网络上所有的机器都可以“听”到通过的流量, 但对不属于自己的数据包则不予响应
-                    ## 网卡到混杂模式，可以捕获网络上所有的数据包和帧
-                    广播包
-                            可达到局域网中的所有机器
-                    单播包
-                            到达处于同一碰撞域中的机器
+        接收
+            # 一般情况下，网络上所有的机器都可以“听”到通过的流量, 但对不属于自己的数据包则不予响应
+            ## 网卡到混杂模式，可以捕获网络上所有的数据包和帧
+            广播包
+                可达到局域网中的所有机器
+            单播包
+                到达处于同一碰撞域中的机器
     协议
-            IP        Internet Protocol 网际协议
-            ICMP        Internet Control Message Protocol internet控制报文
-            IGMP        Internet Group Management Protocol internet群组管理协议 
-            IPX
-            BGP        Border Gateway Protocol 边界网关协议
-            OSPF        Open Shortest Path First 开放式最短路径优先
-            RIP        Routing Information Protocol 选路信息协议
-            IGRP
-            EIGRP
-            ARP
-            RARP        Reverse Address Resolution Protocol 反向地址解析协议
-            X.25
-            NAPT        Network Address Port Translation 网络地址端口转换
-            ASBR        Autonomous System Border Router  自治系统边界路由器
-
+        IP        Internet Protocol 网际协议
+        ICMP        Internet Control Message Protocol internet控制报文
+        IGMP        Internet Group Management Protocol internet群组管理协议 
+        IPX
+        BGP        Border Gateway Protocol 边界网关协议
+        OSPF        Open Shortest Path First 开放式最短路径优先
+        RIP        Routing Information Protocol 选路信息协议
+        IGRP
+        EIGRP
+        ARP
+        RARP        Reverse Address Resolution Protocol 反向地址解析协议
+        X.25
+        NAPT        Network Address Port Translation 网络地址端口转换
+        ASBR        Autonomous System Border Router  自治系统边界路由器
     icmp
         Internet Control Message Protocol   # Internet控制报文协议
             是ip层的子协议
@@ -282,59 +279,57 @@ date: 2018-10-10T15:25:12+08:00
 
             重定向报文举例
 ![""](/docs/architecture/icmp5.jpg)
-
     igmp
-        Internet Group Management Protocol                                                        # Internet组管理协议
-                报文格式
-                        8位IGMP类型    8位响应时间    16位检验和
-                        32位组地址(D类IP地址)）
+        Internet Group Management Protocol            # Internet组管理协议
+            报文格式
+                8位IGMP类型    8位响应时间    16位检验和
+                32位组地址(D类IP地址)）
     ospf
-        Open Shortest Path First                                                        # 开放式最短路径优先。是一种典型的链路状态路由协议。
-                                                                                        ## 采用OSPF的路由器彼此交换并保存整个网络的链路信息，从而掌握全网的拓扑结构，独立计算路由。
-                报文
-                        版本    类型    报文长度
-                        路由器标识符
-                        区域标识符
-                        检验和          鉴别类型
-                        鉴别
-                        鉴别
-                        OSPF报文（有五种类型）
-                                问候(Hello)报文：发现及维持邻居关系，选举DR、BDR。
-                                数据库描述(Database Description)报文：描述本地LSDB的情况。
-                                链路状态请求(Link State Request)报文：向对端请求本端没有或对端更新的LSA。
-                                链路状态更新(Link State Update)报文：向对方更新LSA。
-                                链路状态确认(Link State Acknowledgment)报文：收到LSU报文后，进行确认。
+        Open Shortest Path First                        # 开放式最短路径优先。是一种典型的链路状态路由协议。
+                                                        ## 采用OSPF的路由器彼此交换并保存整个网络的链路信息，从而掌握全网的拓扑结构，独立计算路由。
+            报文
+                版本    类型    报文长度
+                路由器标识符
+                区域标识符
+                检验和          鉴别类型
+                鉴别
+                鉴别
+                OSPF报文（有五种类型）
+                    问候(Hello)报文：发现及维持邻居关系，选举DR、BDR。
+                    数据库描述(Database Description)报文：描述本地LSDB的情况。
+                    链路状态请求(Link State Request)报文：向对端请求本端没有或对端更新的LSA。
+                    链路状态更新(Link State Update)报文：向对方更新LSA。
+                    链路状态确认(Link State Acknowledgment)报文：收到LSU报文后，进行确认。
     bgp
         介绍　
-                border gateway protocol 边界网关协议
+            border gateway protocol 边界网关协议
 ### ip
     Internet Protocol                                # ip地址是互联网主机的唯一标识
 ![""](/docs/architecture/ip1.jpg)
-
         ip地址分类
-                 A类 : 0.0.0.0 -- 127.255.255.255 (0段和127段不使用)
-                B类 : 128.0.0.0 -- 191.255.255.255
-                C类 : 192.0.0.0 -- 223.255.255.255
-                D类 : 224.0.0.0 -- 239.255.255.255
-                E类 : 240.0.0.0 -- 254.255.255.255
+            A类 : 0.0.0.0 -- 127.255.255.255 (0段和127段不使用)
+            B类 : 128.0.0.0 -- 191.255.255.255
+            C类 : 192.0.0.0 -- 223.255.255.255
+            D类 : 224.0.0.0 -- 239.255.255.255
+            E类 : 240.0.0.0 -- 254.255.255.255
 
         特殊ip地址
-                主机地址全0 : 作为网络本身的标识 , 称为网地址
-                主机地址全1 : 广播地址 ， 称为直接广播地址
-                32位全1 : 称为受限广播地址
-                内部地址
-                        10.0.0.0 -- 10.255.255.255 : 一个A类
-                        172.16.0.0 -- 172.32.255.255 : 16个B类
-                        192.168.0.0 -- 192.168.255.255 : 256个C类
-        子网                                        # 把ip划分为网络地址和主机地址
-                作用
-                        便于网络管理、提高系统性能
-                子网掩码                        # 同ip地址一样长 ， 不分离部分为1，分离部分为0
-                        知道子网掩码后算出
-                                网络地址
-                                广播地址
-                                地址范围
-                                本网有几台主机
+            主机地址全0 : 作为网络本身的标识 , 称为网地址
+            主机地址全1 : 广播地址 ， 称为直接广播地址
+            32位全1 : 称为受限广播地址
+            内部地址
+                10.0.0.0 -- 10.255.255.255 : 一个A类
+                172.16.0.0 -- 172.32.255.255 : 16个B类
+                192.168.0.0 -- 192.168.255.255 : 256个C类
+        子网                                # 把ip划分为网络地址和主机地址
+            作用
+                便于网络管理、提高系统性能
+            子网掩码                        # 同ip地址一样长 ， 不分离部分为1，分离部分为0
+                知道子网掩码后算出
+                    网络地址
+                    广播地址
+                    地址范围
+                    本网有几台主机
         ip数据报文格式
 ![""](/docs/architecture/ip2.jpg)
 
@@ -342,40 +337,40 @@ date: 2018-10-10T15:25:12+08:00
         利用PING命令中的参数–l 可以设置数据部分的字节数
 ### 抓包
     sniffer(嗅探器)
-            # 网络层
-            # 硬件sniffer称为 协议分析仪
-            原理
-                    利用Ethernet特性, 把nic(网络适配卡，一般为以太网卡), 设为promiscuous(混杂)
-                    几乎能得到任何以太网上传送的数据包
-            需求
-                    windows
-                            BPF
-                    linux
-                            socket-packet
-                            root权限来激活内核支持的Bpfilter(伪设备)
-            限制
-                    只能抓取同物理网段的包，即与监听的目标中间不能有路由或其他屏蔽广播包的设备
-                            # 对一般拨号上网的用户来说, 不可能利用sniffer窃听其他人通信内容
-                    数据包内容的过滤有一定难度
-            分类
-                    软件
-                    硬件
-            举例
-                    NetXray, Packetboy, Net monitor
-            应用场景
-                    攻陷一台主机后，安装sniffer, 侦听同网段数据包，存到log文件(通常是包含username或password的包)，截获其他主机密码后，登入这台主机。
-                            # 属于第M层攻击，即 在攻击者已经进入了目标系统的情况下
-                            ## 也可以截获金融信息
+        # 网络层
+        # 硬件sniffer称为 协议分析仪
+        原理
+            利用Ethernet特性, 把nic(网络适配卡，一般为以太网卡), 设为promiscuous(混杂)
+            几乎能得到任何以太网上传送的数据包
+        需求
+            windows
+                BPF
+            linux
+                socket-packet
+                root权限来激活内核支持的Bpfilter(伪设备)
+        限制
+            只能抓取同物理网段的包，即与监听的目标中间不能有路由或其他屏蔽广播包的设备
+                # 对一般拨号上网的用户来说, 不可能利用sniffer窃听其他人通信内容
+            数据包内容的过滤有一定难度
+        分类
+            软件
+            硬件
+        举例
+            NetXray, Packetboy, Net monitor
+        应用场景
+            攻陷一台主机后，安装sniffer, 侦听同网段数据包，存到log文件(通常是包含username或password的包)，截获其他主机密码后，登入这台主机。
+                # 属于第M层攻击，即 在攻击者已经进入了目标系统的情况下
+                ## 也可以截获金融信息
 ## 传输层
     协议
-            TCP        Transmission Control Protocol 传输控制协议
-            UDP        User Datagram Protocol 用户数据报协议
-            RTP
-            SCTP
-            SPX
-            ATP
-            IL
-            rts/cts    视频数据传输
+        TCP        Transmission Control Protocol 传输控制协议
+        UDP        User Datagram Protocol 用户数据报协议
+        RTP
+        SCTP
+        SPX
+        ATP
+        IL
+        rts/cts    视频数据传输
     udp
         User Datagram Protocol
             封装
@@ -411,110 +406,108 @@ date: 2018-10-10T15:25:12+08:00
     socket
         socket可以基于tcp或udp
         一个socket对应系统中一个端口
-                # 操作系统中可用端口65535, 所以只能有65535个socket连接
+            # 操作系统中可用端口65535, 所以只能有65535个socket连接
     ssl
         ssl加密(消息, node模块)
-                非对称生成公私钥(慢)
-                对称传数据(快)
+            非对称生成公私钥(慢)
+            对称传数据(快)
 ## 会话层
     udp传输
         netBIOS
-            Network Basic Input Output System                                        # 网络基本输入输出系统 由ibm开发
-                                                                                    ## 定义了一种软件接口以及在应用程序和连接介质之间提供通信接口的标准方法。
+            Network Basic Input Output System                           # 网络基本输入输出系统 由ibm开发
+                                                                        ## 定义了一种软件接口以及在应用程序和连接介质之间提供通信接口的标准方法。
             wins
-                Windows Internet Name Server                                                # Windows网际名字服务 WINS为NetBIOS名字提供名字注册、更新、释放和转换服务，
-                                                                                                ## 这些服务允许WINS服务器维护一个将NetBIOS名链接到IP地址的动态数据库，大大减轻了对网络交通的负担。
+                Windows Internet Name Server                            # Windows网际名字服务 WINS为NetBIOS名字提供名字注册、更新、释放和转换服务，
+                                                                        ## 这些服务允许WINS服务器维护一个将NetBIOS名链接到IP地址的动态数据库，大大减轻了对网络交通的负担。
             smb/cifs
-                smb        Sever Message Block                                                                # 服务信息块协议 , 用于计算机间共享文件系统、打印机和其他资源。
-                cifs        Common Internet File System）                                                # 通用互联网文件系统。
-                                                                                                        ## 微软将原有的几乎没有多少技术文档的SMB协议进行整理， 重新命名为CIFS
-                                                                                        ## 成为Internet上计算机之间相互共享数据的一种标准。
+                smb        Sever Message Block                          # 服务信息块协议 , 用于计算机间共享文件系统、打印机和其他资源。
+                cifs        Common Internet File System）                # 通用互联网文件系统。
+                                                                        ## 微软将原有的几乎没有多少技术文档的SMB协议进行整理， 重新命名为CIFS
+                                                                        ## 成为Internet上计算机之间相互共享数据的一种标准。
 ## 表示层
     协议
-            XDR
-            ASN.1
-            SMB
-            AFP
-            NCP
+        XDR
+        ASN.1
+        SMB
+        AFP
+        NCP
 ## 应用层
     协议
-            HTTP        Hypertext transfer protocol 超文本传输协议
-            HSTS        HTTP Strict Transport Security HTTP安全传输
-            DNS        Domain Name System 域名系统
-            SMTP
-            SNMP
-            FTP        File Transfer Protocol 文件传输协议
-            Telnet
-            SIP
-            SSH
-            NFS        Network File System 网络文件系统
-            RTSP
-            XMPP
-            MQTT
-            SIP
-            Whois
-            ENRP
-            DHCP        Dynamic Host Configuration Protocol 动态主机配置
-            BOOTP        Bootstrap Protocol 自举协议
+        HTTP        Hypertext transfer protocol 超文本传输协议
+        HSTS        HTTP Strict Transport Security HTTP安全传输
+        DNS        Domain Name System 域名系统
+        SMTP
+        SNMP
+        FTP        File Transfer Protocol 文件传输协议
+        Telnet
+        SIP
+        SSH
+        NFS        Network File System 网络文件系统
+        RTSP
+        XMPP
+        SIP
+        Whois
+        ENRP
+        DHCP        Dynamic Host Configuration Protocol 动态主机配置
+        BOOTP        Bootstrap Protocol 自举协议
 ### tcp传输
     telnet
         telnet                                        # 一个简单的远程终端协议。用户可以通过TCP连接登录到远程的一个主机上，好象使用远程主机一样。
-                采用客户机/服务器计算模式。在本地系统上运行TELNET客户机进程，在远程主机上运行TELNET服务器进程。
-                用于远程管理一台主机
-                命令
-                        >telnet 192.168.1.200
-                        >Login: group1_1
-                        >Password: group1_1
-                        >按“CTRL+]”回到telnet提示符下
-                        >quit 退出telnet
-
+            采用客户机/服务器计算模式。在本地系统上运行TELNET客户机进程，在远程主机上运行TELNET服务器进程。
+            用于远程管理一台主机
+            命令
+                >telnet 192.168.1.200
+                >Login: group1_1
+                >Password: group1_1
+                >按“CTRL+]”回到telnet提示符下
+                >quit 退出telnet
     ftp
         File Transfer Protocol
-                一个客户机/服务器系统。
-                端口 : 20或21                                                                        # 21用于控制，20传输数据流
+            一个客户机/服务器系统。
+            端口 : 20或21                                # 21用于控制，20传输数据流
 
     smtp
-        simple mail transfer protocol                                                # SMTP协议的最大特点是简单，它规定了发送程序和接收程序之间的命令和应答格式。
-                基于DNS中的邮件交换（MX）记录路由电子邮件。
-                通过用户代理程序（UA）完成邮件的编辑、收取和阅读等功能；通过邮件传输代理程序（MTA）将邮件传送到目的地。
-                传输协议
-                        tcp
-                常用命令
-                        HELO  <domain> <CRLF>
-                        MAIL FROM：<邮件地址><CRLF>
-                        RCPT TO：<邮件地址><CRLF>
-                        DATA <CRLF>邮件内容，以＜CRLF＞.＜CRLF＞标识数据的结尾;
-                        REST <CRLF>退出/复位当前的邮件传输QUIT <CRLF>关闭传输;
+        simple mail transfer protocol                    # SMTP协议的最大特点是简单，它规定了发送程序和接收程序之间的命令和应答格式。
+            基于DNS中的邮件交换（MX）记录路由电子邮件。
+            通过用户代理程序（UA）完成邮件的编辑、收取和阅读等功能；通过邮件传输代理程序（MTA）将邮件传送到目的地。
+            传输协议
+                tcp
+            常用命令
+                HELO  <domain> <CRLF>
+                MAIL FROM：<邮件地址><CRLF>
+                RCPT TO：<邮件地址><CRLF>
+                DATA <CRLF>邮件内容，以＜CRLF＞.＜CRLF＞标识数据的结尾;
+                REST <CRLF>退出/复位当前的邮件传输QUIT <CRLF>关闭传输;
 
     pop
-        Post Office Protocol                                                                # 邮局协议 是一个脱机协议，它是一个具有存储转发功能的中间服务器。
-                采用客户/服务器工作模式。
-                传输协议
-                        tcp
-                功能
-                        允许本地检索邮件服务器上的邮件
-                命令
-                        USER <用户邮件地址>指出用户正在连接的邮箱;
-                        PASS <口令>输入邮箱的口令;
-                        STAT请求服务器发回关于邮箱的统计资料;
-                        LIST<邮件编号>返回邮件数量和每个邮件的大小;
-                        RETR<邮件编号>返回由参数标识的邮件的文本;
-                        DELE<邮件编号>删除邮件编号;
-                        QUIT退出;
+        Post Office Protocol                            # 邮局协议 是一个脱机协议，它是一个具有存储转发功能的中间服务器。
+            采用客户/服务器工作模式。
+            传输协议
+                tcp
+            功能
+                允许本地检索邮件服务器上的邮件
+            命令
+                USER <用户邮件地址>指出用户正在连接的邮箱;
+                PASS <口令>输入邮箱的口令;
+                STAT请求服务器发回关于邮箱的统计资料;
+                LIST<邮件编号>返回邮件数量和每个邮件的大小;
+                RETR<邮件编号>返回由参数标识的邮件的文本;
+                DELE<邮件编号>删除邮件编号;
+                QUIT退出;
     imap
-        Internet Mail Access Protocol                                                        # 交互邮件访问协议 ， 本地对邮件服务器中的邮件进行管理
+        Internet Mail Access Protocol                    # 交互邮件访问协议 ， 本地对邮件服务器中的邮件进行管理
             端口 : 143
     rtmp
         介绍　
             adobe专利, flash支持,
     http-flv
         介绍　
-                开源流式传输协议，优于RTMP
+            开源流式传输协议，优于RTMP
     hls
         介绍　
-                http live streaming 苹果创建, 延迟较高
-                html5原生支持
-                m3u8扩展名，里面封装ts小视频
+            http live streaming 苹果创建, 延迟较高
+            html5原生支持
+            m3u8扩展名，里面封装ts小视频
 #### http
     1.0与1.1区别
         扩展性
@@ -647,9 +640,9 @@ date: 2018-10-10T15:25:12+08:00
         Last-Modified: Tue, 11 Jul 2000 18:23:51 GMT
         Refresh: 1; url=http://www.itcast.cn
         Content-Disposition: attachment; filename=aaa.zip       # 设置响应类型是下载文件，文件名是aaa.zip
-                    # inline   表示在浏览器中显示,非w3c标准，像innerHTML一样。但是主流浏览器都支持。
-                    ## appllication/octet-stream    表示任意二进制文件（有的浏览器也会解析成文件下载，但是没有指定文件名）
-                    ## attachment;filename=文件名   附件，文件下载
+                # inline   表示在浏览器中显示,非w3c标准，像innerHTML一样。但是主流浏览器都支持。
+                ## appllication/octet-stream    表示任意二进制文件（有的浏览器也会解析成文件下载，但是没有指定文件名）
+                ## attachment;filename=文件名   附件，文件下载
         Transfer-Encoding: chunked   //标记以分块传输
         Set-Cookie:SS=QQ=5Lb_nQ; path=/search
         Expires: -1
@@ -659,11 +652,11 @@ date: 2018-10-10T15:25:12+08:00
     dns
         domain name system
             分类
-                    位于最右端的域称为顶级域。接下来是二级域名和三级域名。如www.jlu.edu.cn
+                位于最右端的域称为顶级域。接下来是二级域名和三级域名。如www.jlu.edu.cn
             端口
-                    53
+                53
             过程
-                    本机缓冲区 -> 本地域名服务器(缓冲区与数据库) -> 其它域名服务器
+                本机缓冲区 -> 本地域名服务器(缓冲区与数据库) -> 其它域名服务器
             报文格式
 ![""](/docs/architecture/dns1.jpg)
 
@@ -671,66 +664,78 @@ date: 2018-10-10T15:25:12+08:00
 ![""](/docs/architecture/dns2.jpg)
 
             命令
-                    windows下命令提示行
-                            正向解析
-                                    nslookup 域名
-                            反向解析
-                                    nslookup -qt=ptr ip地址
-                                            # ptr Pointer Recore 指针记录
-                                            ## 是电子邮件系统中的一种数据类型，被互联网标准文件RFC1035所定义。
-                                            ## 与其相对应的是A记录、地址记录。二者组成邮件交换记录。
-                                            ## A记录解析名字到地址，而PTR记录解析地址到名字。
-                                            ## 另外两个与ptr平行的参数为mx和a
-                                    或
-                                    nslookup
-                                    set q=ptr
-                                    ip地址
+                windows下命令提示行
+                    正向解析
+                        nslookup 域名
+                    反向解析
+                        nslookup -qt=ptr ip地址
+                            # ptr Pointer Recore 指针记录
+                            ## 是电子邮件系统中的一种数据类型，被互联网标准文件RFC1035所定义。
+                            ## 与其相对应的是A记录、地址记录。二者组成邮件交换记录。
+                            ## A记录解析名字到地址，而PTR记录解析地址到名字。
+                            ## 另外两个与ptr平行的参数为mx和a
+                        或
+                        nslookup
+                        set q=ptr
+                        ip地址
         ldns
-
     dhcp
         Dynamic Host Configuration Protocol
             基于 客户端/服务器模式
             报文
-                    操作代码(1字节)    硬件类型(1字节)    硬件长度(1字节)    跳数(1字节)
-                    事务ID(4字节)
-                    秒 (2字节)                                      标志 (2字节)
-                    客户端IP地址 (4字节)
-                    您(客户端)的IP地址 (4字节)
-                    服务器IP地址 (4字节)
-                    网关IP地址 (4字节)
-                    客户端硬件地址 (16字节)
-                    服务器名 ( 64字节)
-                    引导文件名 (128字节)
-                    选项 (64字节)
-
-
-
+                操作代码(1字节)    硬件类型(1字节)    硬件长度(1字节)    跳数(1字节)
+                事务ID(4字节)
+                秒 (2字节)                                      标志 (2字节)
+                客户端IP地址 (4字节)
+                您(客户端)的IP地址 (4字节)
+                服务器IP地址 (4字节)
+                网关IP地址 (4字节)
+                客户端硬件地址 (16字节)
+                服务器名 ( 64字节)
+                引导文件名 (128字节)
+                选项 (64字节)
     rip
         Routing Information Protocol                                        # 路由信息协议
-                RIP通过广播UDP报文来交换路由信息，默认每30秒发送一次路由信息更新报文。
-                RIP提供跳跃计数(hop count)作为尺度来衡量路由距离
-                        跳跃计数是一个数据报到达目标设备所必须经过的路由器的数目。
-                        RIP最多支持的跳数为15，即在源和目的网间所要经过的最多路由器的数目为15， 跳数16表示不可达。
-                RIP协议的特点：
-                        1．仅和相邻路由器交换信息。
-                        2．交换的信息是当前本路由器所知道的全部信息，即自己的路由表。
-                        3．按固定的时间间隔交换路由信息，例如:每隔 30 秒。
-                        4.  设置一个180秒地超时时间。如果180秒没有任何更新信息，路由的跳数设为16。
-
+            RIP通过广播UDP报文来交换路由信息，默认每30秒发送一次路由信息更新报文。
+            RIP提供跳跃计数(hop count)作为尺度来衡量路由距离
+                跳跃计数是一个数据报到达目标设备所必须经过的路由器的数目。
+                RIP最多支持的跳数为15，即在源和目的网间所要经过的最多路由器的数目为15， 跳数16表示不可达。
+            RIP协议的特点：
+                1．仅和相邻路由器交换信息。
+                2．交换的信息是当前本路由器所知道的全部信息，即自己的路由表。
+                3．按固定的时间间隔交换路由信息，例如:每隔 30 秒。
+                4.  设置一个180秒地超时时间。如果180秒没有任何更新信息，路由的跳数设为16。
     snmp
-        Simple Network Management Protocol                                        # 简单网络管理协议 ， 使网络管理员能够管理网络效能,发现并解决网络问题以及规划网络增长。
-                                                                                        ## 通过SNMP接收随机消息及事件报告网络管理系统获知网络出现问题。
-                端口 : 161
+        Simple Network Management Protocol                      # 简单网络管理协议 ， 使网络管理员能够管理网络效能,发现并解决网络问题以及规划网络增长。
+                                                                ## 通过SNMP接收随机消息及事件报告网络管理系统获知网络出现问题。
+            端口 : 161
     rtp
         介绍
-                real-time transport protocol 传输流媒体
-                udp传输, 实时性好
+            real-time transport protocol 传输流媒体
+            udp传输, 实时性好
     rtcp
         介绍
-                RTP Control Protocol 交互控制RTP传输
+            RTP Control Protocol 交互控制RTP传输
     radius
         介绍
-                拨号认证用的AAA协议
+            拨号认证用的AAA协议
+    coap
+        介绍
+            constrained application protocol
+            请求、响应, 非长连接。REST, 有url, POST, GET, PUT, DELETE
+            二进制格式, 最小长度4B
+            订阅观察, 接收通知
+            支持可靠传输、数据重传、块传输, 确保到达
+            支持ip多播
+### mqtt
+    介绍
+        消息队列遥测传输(message queuing telemetry transport)
+        针对硬件性能低、网络状态差的远程设备, 如卫星链路通信
+        需要一个消息中间件
+    qos级别             # quality of service
+        尽力转发(best effort service)           # 没有保障
+        区分服务(differentiated service)        # soft qos优先级
+        确保服务(guaranteed service)            # hard qos专有带宽
 # 电话
     cti 
         computer telephony integration
