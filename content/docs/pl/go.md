@@ -86,7 +86,8 @@ date: 2018-10-09T16:10:44+08:00
 
         get                     # 下载依赖, 默认目录是GOPATH下的pkg。下载后自动install
             go get gopl.io/...  # ...通配
-            -u                  # update最新版本
+            go get gopl.io@2    # 指定mod版本号
+            -u                  # 更新到mod最新版本
             -v                  # 查看进度
         list                    # 列出指定代码包的信息
             go list ...         # ...通配
@@ -130,18 +131,28 @@ date: 2018-10-09T16:10:44+08:00
             cgo                 # 生成能够调用c语言代码的go源码文件
             compile
                 -help           # 可传给编译器的参数
+        mod
+            init packageName1   # 生成go.mod
+            download            # 下载mod
+            tidy                # 下载缺少，删除多余
+            edit                # 编辑go.mod
+            graph               # 打印依赖图
+            vendor              # 复制依赖到vendor
+            verify              # 验证mod
+            why                 # 打印依赖原因
+
     godoc                       # 提供html页面
         -http=:6060             # 运行本地帮助网站
         -analysis=type          # 提供静态分析结果
             -analysis=pointer
     gofmt
-    golint                      # 检查风格
+    golint                          # 检查风格
 # 语法
-    包                      # 路径引用，命名空间
+    包                              # 路径引用，命名空间
         不能循环依赖
-        main包              # 入口包, 产生可执行文件，也可当库导入
-            main()          # 入口函数
-        包名最好匹配目录名     # 导入路径的最后一段
+        main包                      # 入口包, 产生可执行文件，也可当库导入
+            main()                  # 入口函数
+        包名最好匹配目录名          # 导入路径的最后一段
         import
             逐行import或import(多行)
             import 别名 包路径
@@ -151,18 +162,31 @@ date: 2018-10-09T16:10:44+08:00
         var和const
             逐行或var(多行), const(多行)
         包文件函数
-            init            # 文件在编译前排序，按依赖顺序和文件名，也是init的调用顺序。init不能调用和引用
+            init                    # 文件在编译前排序，按依赖顺序和文件名，也是init的调用顺序。init不能调用和引用
         包依赖排序依次初始化
         工作空间
             src
-            bin             # 编译后的执行文件
-            pkg             # 编译后的包, 重复使用加快编译
+            bin                     # 编译后的执行文件
+            pkg                     # 编译后的包, 重复使用加快编译
         vendor目录放本地依赖
         文档注释影响编译
             // +build linux darwin                  # linux和darwin才编译
             // +build ignore                        # 任何时候都不编译
-        内部包               # 路径有internal的包, 只能被父目录导入
+        内部包                      # 路径有internal的包, 只能被父目录导入
             net/http/internal/chunked
+        mod
+            环境变量
+                GO111MODULE
+                    off             # 总关闭
+                    on              # 总开启
+                    auto            # 默认，有go.mod开启
+            路径
+                $GOPATH/pkg         # 保存多版本依赖, 被多项目引用
+                go.mod              # 被go命令维护, 融入了go命令的各个模块
+                go.sum              # 记录lock
+            依赖加载顺序
+                最新release tag
+                最新commit
     注释
         //或/**/
         package前写文档注释，可出现在任何文件中，但一个包约定一个

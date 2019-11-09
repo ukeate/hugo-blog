@@ -81,6 +81,8 @@
         /lib
             /systemd
                 /system                         # units位置
+        /share
+            /applications                        # desktop文件
     /run
         /systemd
             /system                             # units位置
@@ -95,6 +97,9 @@
         /.profile                               # 在登录时执行一次, 先.bash_profile, 再bash_login, 再.profile
         /.bashrc
         /.bash_logout
+        /.local
+            /share
+                /applications                   # desktop文件
 
 
     initd

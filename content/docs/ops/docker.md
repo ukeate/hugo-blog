@@ -75,7 +75,10 @@ date: 2018-10-11T18:18:21+08:00
 
 
         login
-        build -t="nginx/test" .         # 用当前目录Dockerfile创建新镜像
+        build .                         # 用当前目录Dockerfile创建新镜像
+            -t="nginx/test"             # target
+            --no-cache                  # 不用cache
+            -f a.dockerfile             # 指定文件
         tag nginx/test:test1 outrun11/test:nginx1
             # 远程docker基站创建repository, 名字test
         push outrun11/test:nginx1
@@ -120,16 +123,17 @@ date: 2018-10-11T18:18:21+08:00
             ps
             rm
 # Dockerfile
-    FROM nginx                          # 基于镜像
-    MAINTAINER outrun                   # 指定维护者信息
-    EXPOSE 80                           # 内部服务开启的端口
-    ENV NODE_ENV test                   # 环境变量
-    WORKDIR /src
-    COPY ./bin /data/a                  # 复制外部文件到内部
-    VOLUME ["/data/log"]                # 创建挂载点
-    ENTRYPOINT ["/data/a/a"]            # 容器启动命令，只有一个
-    CMD ["-config", "config.toml"]      # 启动命令，只有一个。可为entrypoint指定参数
-    RUN echo 'test'                     # 在当前镜像基础上执行命令，提交为新的镜像
+    指令
+        FROM nginx                          # 基于镜像
+        MAINTAINER outrun                   # 指定维护者信息
+        EXPOSE 80                           # 内部服务开启的端口
+        ENV NODE_ENV test                   # 环境变量
+        WORKDIR /src                        # 指定工作目录
+        COPY ./bin /data/a                  # 复制外部文件到内部
+        VOLUME ["/data/log"]                # 创建挂载点
+        ENTRYPOINT ["/data/a/a"]            # 启动命令，只有一个
+        CMD ["-config", "config.toml"]      # docker run 时运行
+        RUN echo 'test'                     # build过程中执行的命令
 # docker-compose
     docker-compose
         -h                              # 帮助
@@ -525,6 +529,26 @@ date: 2018-10-11T18:18:21+08:00
                 volumes:
                 - ./n1data:/var/lib/cassandra
     docker-compose up -d
+## neo4j
+    docker-compose.yml
+        version: '3'
+        services:
+            neo4j:
+                image: neo4j:latest
+                volumes:
+                - ./conf:/var/lib/neo4j/conf
+                - ./mnt:/var/lib/neo4j/import
+                - ./plugins:/plugins
+                - ./data:/data
+                - ./logs:/var/lib/neo4j/logs
+                restart: always
+                ports:
+                - 7474:7474
+                - 7687:7687
+                environment:
+                - NEO4J_dbms_memory_heap_maxSize=512M
+                - NEO4J_AUTH=neo4j/123456           # 用户密码改不了
+    docker-compose up -d
 ## haproxy
     docker-compose.yml
         version: '3'
@@ -593,6 +617,19 @@ date: 2018-10-11T18:18:21+08:00
                 ZK_HOSTS: zookeeper:2181
 
     docker-compose up -d
+## consul
+    docker-compose.yml
+        version: "3.0"
+        services:
+        consul:
+            image: progrium/consul:latest
+            ports:
+            - "8300"
+            - "8400"
+            - "8500:8500"
+            - "53"
+            command: -server -ui-dir /ui -data-dir /tmp/consul --bootstrap-expect=1
+    docker-compose up -d
 ## emq
     配置
         18083: 管理控制台
@@ -601,7 +638,7 @@ date: 2018-10-11T18:18:21+08:00
         8883: mqtt/ssl
         8083: mqtt/websocket
         8084: mqtt/websocket ssl
-    docker-compose up -d
+    docker-compose.yml
         version: '3'
         services:
         emqttd:
@@ -612,7 +649,36 @@ date: 2018-10-11T18:18:21+08:00
             - 10012:8084 
             - 10013:8883 
             - 10014:8083
+    docker-compose up -d
+## confluence
     docker-compose.yml
+        version: '3'
+        services:
+            postgres:
+                container_name: postgres
+                image: postgres:latest
+                restart: always
+                environment:
+                POSTGRES_DB: confluence
+                POSTGRES_USER: root
+                POSTGRES_PASSWORD: asdf
+                ports:
+                - 5433:5432
+                volumes:
+                - ./postgresql:/var/lib/postgresql/data
+
+            confluence:
+                container_name: confluence
+                restart: always
+                image: atlassian/confluence-server:latest
+                ports:
+                - 8090:8090
+                - 8091:8091
+                volumes:
+                - ./confluence:/var/atlassian/application-data/confluence
+                links:
+                - postgres:postgres
+    docker-compose up -d
 ## dokuwiki
     docker-compose.yml
         version: '3'

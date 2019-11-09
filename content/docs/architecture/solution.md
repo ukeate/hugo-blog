@@ -456,8 +456,20 @@ date: 2018-10-10T16:49:27+08:00
                 超时处理
                     订阅应用事件, 应用时间触发器
         基础组件
+# 企业
 ## erp
+    # enterprise resource planning, 企业资源计划
     元数据驱动去抽象和设计
+## mes
+    # manufacturing execution system, 制造生产过程执行系统
+## wms
+    # warehouse management system, 仓库管理系统
+## oms
+    # 订单管理系统
+## tms
+    # 物流管理系统
+## cmp
+    # campaign management platform, 营销活动管理平台
 # 前端模板渲染
     layout
         layout service
@@ -573,4 +585,6 @@ date: 2018-10-10T16:49:27+08:00
             驱动
                 websocket、modbus、lightSensor、light、opcua,
         合作
-
+# 优秀项目借鉴
+    thingsBoard
+    confluence, jira

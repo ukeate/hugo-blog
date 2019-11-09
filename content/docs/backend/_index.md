@@ -1678,12 +1678,13 @@ type: docs
         # node单机集群
     fiber
         # node协程
-    akka
-        # scala并发、分布式、容错工具
     driud
         # 连接池，阿里开源
-## 前端
-### dwr
+# akka
+    # scala并发、分布式、容错工具
+    使用
+        system = ActorSystem.create("hello")
+        system.actorOf() ## 前端 ### dwr
     介绍
         java函数通过ajax映射到前端js调用
     使用
@@ -2781,6 +2782,15 @@ type: docs
                 exception
                 controller                  # 页面调用
                 service
+                actors
+                    service
+                        DefaultActorService
+                            actorContext
+                                actorService(this)
+                                actorSystem
+                                appActor
+                                statsActor
+                            rpcManagerActor
         common                              # 不可改, 功能代理
             data                            # 数据结构
             message                         # 消息类型
@@ -2791,7 +2801,7 @@ type: docs
                 sql                         # 表结构
         netty-mqtt                          # 不可改, 数据通信协议
         rule-engine                         # 不可改, 规则引擎
-        transport                           # 不可改, 应用层协议
+        transport                           # 不可改, 设备端运行
             http                            # 启动http传输协议
             coap
             mqtt

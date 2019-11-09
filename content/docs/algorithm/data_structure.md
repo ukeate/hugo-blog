@@ -4,6 +4,114 @@ title: "数据结构"
 date: 2018-10-07T13:46:46+08:00
 ---
 
+# 线性
+    列表(list)
+        数组(array)
+            # 相同数据类型元素的序列，下标(index)访问
+            low high
+            字符串
+                二进制串(binary string)
+                    # 位串(bit string)
+        链表(linked list)
+            节点(node)
+                指针(pointer)
+            表头(header)
+            单链表(singly linked list)
+            双链表(doubly linked list)
+        栈(stack)
+            # 插入和删除只能在端部进行的列表，应用于递归
+            栈顶(top)
+            LIFO last-in-first-out
+        队列(queue)
+            队头(front)
+            队尾(rear)
+            入队(enqueue)
+            FIFO first-in-first-out
+            优先队列(priority queue)
+                # 数据项多来自于全序域(常整数或实数)
+                查找最大元素，删除最大元素，插入新元素
+                堆(heap)实现
+## 散列表
+    介绍
+        有序输入时，树效率低，如果不要求查找有序结果，可以用散列
+    概念
+        hash table
+        hashing(散列)
+        item(项)
+        key(关键字)
+            # 项中某部分
+        hash function(散列函数)
+            # 映射函数
+        collsion(冲突)
+            # 多个关键字散列到同项的状况
+        load factor(装填因子)
+            # λ 元素个数对表长度的比，
+            # 如果散列是均匀的，表示了一个项中关键字的平均长度
+            # 一次成功查找要遍历约1 + (λ / 2)个链，1表示被匹配的项
+        rehashing(再散列)
+            一半时进行
+            直到插入失败再进行
+            middle-of-the-road
+                # 到达某load factor时进行
+        caching the hash code(闪存散列代码)
+    算法
+        separate chaining(分离链接法)
+            # 解决冲突
+        probing hash table(探测散列表)
+            线性探测法
+                primary clustering(聚集)
+                    # 线性探测法中形成数据区块
+            平方探测法
+                secondary clustering(二次聚集)
+                    # 模拟结果指出，对每次查找，会引起另外的少于一半的探测
+            double hashing(双散列)
+                # 模拟表明, 两个散列都mod质数时，探测次数几乎和随机冲突解决方法相同
+        extendible hashing(可扩散列)
+            D directory(目录)
+                # 一个分区中bit的个数，所以M最多2^D
+            性质
+                # 基于位模式(bit patterm)是均匀分布的事实, 是"分支系数(branch factor)", N 是记录总数(随时间变化)
+                树叶期望个数为(N/M)log(2)(e)
+                    所以平均树叶满的程度为ln2 = 0.69, 同B树
+                目录期望大小为O(N^(1 + 1 / M) / M)
+            叶子可以指向实际记录的链表(内存装不下太大目录时)，这样得到实际数据就需要第二次磁盘访问
+## 队列
+    介绍
+        queue 先进先出
+    概念
+        enqueue(入队)
+        dequeue(出队)
+        priority queue(优先队列)
+            insert
+            deleteMin
+        binomial queue(二项队列)
+            merge, insert, deleteMin 最坏时间为O(logN), 插入花费常数时间
+            堆序树(二项树)的森林实现
+            B0 = 2^0, B1 = 2^1, B2 = 2^2 ...
+            Bn = B0 + B1 + ... B(n-1)
+# 集合
+    概念
+        set(集合)，互不相同项的无序组合(可空)
+        element(元素)
+        dictionary(字典)，能够查找，增加，删除元素的集合
+            # 实现时要达到效率的平衡
+        set union problem(集合合并问题)
+            # 动态地把n个元素集合划分为一系列不相交的子集
+        ADT abstract data type(抽象数据类型)
+            # 由表示数据项的抽象对象集合和一系列对它的操作构成
+    实现
+        universal set(通用集合)
+            通用集合的子集，用长度为n(通用集合的长度)的位向量(bit vector)表示
+                # 占用大量存储空间
+        线性列表
+            # 去除包含的重复元素
+            # 列表是有序的，但这差别并不重要
+            多重集(multiset)、包(bag)
+                # 可重复项的无序组合
+
+    表示
+        S = {2, 3, 5, 7}
+        S = {n: n 为小于0的质数}
 # 树
     概念
         tree
@@ -152,114 +260,6 @@ date: 2018-10-07T13:46:46+08:00
     算法
         heapsort(堆排序)
         merge(合并)
-# 线性
-    列表(list)
-        数组(array)
-            # 相同数据类型元素的序列，下标(index)访问
-            low high
-            字符串
-                二进制串(binary string)
-                    # 位串(bit string)
-        链表(linked list)
-            节点(node)
-                指针(pointer)
-            表头(header)
-            单链表(singly linked list)
-            双链表(doubly linked list)
-        栈(stack)
-            # 插入和删除只能在端部进行的列表，应用于递归
-            栈顶(top)
-            LIFO last-in-first-out
-        队列(queue)
-            队头(front)
-            队尾(rear)
-            入队(enqueue)
-            FIFO first-in-first-out
-            优先队列(priority queue)
-                # 数据项多来自于全序域(常整数或实数)
-                查找最大元素，删除最大元素，插入新元素
-                堆(heap)实现
-## 散列表
-    介绍
-        有序输入时，树效率低，如果不要求查找有序结果，可以用散列
-    概念
-        hash table
-        hashing(散列)
-        item(项)
-        key(关键字)
-            # 项中某部分
-        hash function(散列函数)
-            # 映射函数
-        collsion(冲突)
-            # 多个关键字散列到同项的状况
-        load factor(装填因子)
-            # λ 元素个数对表长度的比，
-            # 如果散列是均匀的，表示了一个项中关键字的平均长度
-            # 一次成功查找要遍历约1 + (λ / 2)个链，1表示被匹配的项
-        rehashing(再散列)
-            一半时进行
-            直到插入失败再进行
-            middle-of-the-road
-                # 到达某load factor时进行
-        caching the hash code(闪存散列代码)
-    算法
-        separate chaining(分离链接法)
-            # 解决冲突
-        probing hash table(探测散列表)
-            线性探测法
-                primary clustering(聚集)
-                    # 线性探测法中形成数据区块
-            平方探测法
-                secondary clustering(二次聚集)
-                    # 模拟结果指出，对每次查找，会引起另外的少于一半的探测
-            double hashing(双散列)
-                # 模拟表明, 两个散列都mod质数时，探测次数几乎和随机冲突解决方法相同
-        extendible hashing(可扩散列)
-            D directory(目录)
-                # 一个分区中bit的个数，所以M最多2^D
-            性质
-                # 基于位模式(bit patterm)是均匀分布的事实, 是"分支系数(branch factor)", N 是记录总数(随时间变化)
-                树叶期望个数为(N/M)log(2)(e)
-                    所以平均树叶满的程度为ln2 = 0.69, 同B树
-                目录期望大小为O(N^(1 + 1 / M) / M)
-            叶子可以指向实际记录的链表(内存装不下太大目录时)，这样得到实际数据就需要第二次磁盘访问
-## 队列
-    介绍
-        queue 先进先出
-    概念
-        enqueue(入队)
-        dequeue(出队)
-        priority queue(优先队列)
-            insert
-            deleteMin
-        binomial queue(二项队列)
-            merge, insert, deleteMin 最坏时间为O(logN), 插入花费常数时间
-            堆序树(二项树)的森林实现
-            B0 = 2^0, B1 = 2^1, B2 = 2^2 ...
-            Bn = B0 + B1 + ... B(n-1)
-# 集合
-    概念
-        set(集合)，互不相同项的无序组合(可空)
-        element(元素)
-        dictionary(字典)，能够查找，增加，删除元素的集合
-            # 实现时要达到效率的平衡
-        set union problem(集合合并问题)
-            # 动态地把n个元素集合划分为一系列不相交的子集
-        ADT abstract data type(抽象数据类型)
-            # 由表示数据项的抽象对象集合和一系列对它的操作构成
-    实现
-        universal set(通用集合)
-            通用集合的子集，用长度为n(通用集合的长度)的位向量(bit vector)表示
-                # 占用大量存储空间
-        线性列表
-            # 去除包含的重复元素
-            # 列表是有序的，但这差别并不重要
-            多重集(multiset)、包(bag)
-                # 可重复项的无序组合
-
-    表示
-        S = {2, 3, 5, 7}
-        S = {n: n 为小于0的质数}
 # 图
     概念
         graph

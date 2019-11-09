@@ -82,7 +82,8 @@ date: 2018-10-11T18:47:57+08:00
     du -d 1 -h
         -s                  # 只返回汇总情况
         -k                  # 统一单位
-    chmod ugo+rwx           # 所有人(u), 群组(g), 其他人(o)以读、写、执行权限
+    chmod ugo+rwx           # u拥有者, g群组, o其他人, +添加, -删除, r读、w写、x执行
+        chmod a+rwx         # a指所有人
     chattr +i file          # 改变属性
     lsattr file
     chown -R outrun:outrun .
@@ -224,6 +225,8 @@ date: 2018-10-11T18:47:57+08:00
     top
         top -d 1 -p pid [,pid ...]
     htop
+        按键
+            h               # 帮助
     vmstat                  # 获得有关进程、swap、内存、cpu等系统信息
     dstat                   # 定时收集系统信息
     sar                     # 全面的系统活动情况
@@ -245,6 +248,9 @@ date: 2018-10-11T18:47:57+08:00
 
     amixer set Master 100%  # 调节音量
     alsamixer               # 调节声音
+    alsactl                 # 设置alsamixer
+        sudo alsactl store                      # 保存
+        sudo alsactl restore                    # 加载
     powertop                # intel电源管理
 
 
@@ -422,6 +428,9 @@ date: 2018-10-11T18:47:57+08:00
     ping
     telnet
     nmblookup -A ip             # 查询域名
+    nmcli                       # 设置网络连接
+        sudo nmcli c mod 'Wired connection 1' ipv4.never-default false
+            # 解决manual ip不能设置路由的问题
     ifconfig
         打开, 关闭网卡
             ifconfig eth0 up

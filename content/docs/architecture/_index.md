@@ -7,7 +7,13 @@ date: 2018-10-11T10:33:48+08:00
 # 名词
     Alb        automaticLoopBack 自动回环，虚拟接口
     sdn        software defined network 软件定义网络
-
+# serverless
+    knative
+        # google开源，serverless标准化方案，基于k8s和istio
+        模块
+            build
+            serving
+            eventing
 # 服务网格
     # service mesh
 ## service fabric
@@ -140,34 +146,62 @@ date: 2018-10-11T10:33:48+08:00
                 监控label                # 筛选pod得到数量
     命令
         kubectl
+            --help                      # 帮助, 各命令之后都可加
+            version
+            cluster-info
             logs
                 kubectl logs --tail=1000 appID1
                     # 查看日志
+            run
             exec
                 kubectl exec -it appID1 /bin/sh
                     # 交互命令进入app
             create
                 -f mysql-rc.yaml        # 创建rc
                 -f mysql-svc.yaml       # 创建service
+            set 
+                image
             get
                 rc                      # 查看rc
                 pods
                 pod
+                    -o
+                        wide            # 显示详情，有node name
+                    o->
                     kubectl get pod -l app=app1 -o wide
                         # 查看pod app状态
                 services
                 svc                     # 查看service, 包含cluster ip
                 nodes
                 endpoints               # service pod的ip:端口
+                deployments
             describe                    # 详情
                 node
+                pods
                 deployments
+            expose
+            label
+            delete
             scale                       # pod扩容或缩容
+                --replicas=2
             autoscale                   # 创建hpa对象
                 deployment
             rolling-update              # pod滚动升级
+            rollout
+                status
+                undo
             apply                       # 应用配置
                 -f
+            proxy
+        kubelet
+        kube-apiserver
+        kube-proxy
+        kube-scheduler
+        kubeadm
+        kube-controller-manager
+        hyperkube
+        apiextensions-apiserver
+        mounter
     配置
         用yaml或json定义
         pod

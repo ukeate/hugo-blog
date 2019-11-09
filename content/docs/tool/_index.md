@@ -180,7 +180,20 @@ type: docs
         Xmanager                # 可运行图形界面如vnc
         teamViewer                # 可图形界面
         cmder          # windows命令行工具
-
+## ipados
+    截图、导出pdf
+        主按键 + 电源键
+    手势
+        键盘：两指缩小浮动
+        分屏: 一指拉出dock, 一指拖出程序
+    图片
+        可识别：地点(沙滩)、对象(蛋糕，狗)
+    siri
+        发现: 你能做什么
+        可识别：位置、日期、场景(和什么人)、活动(吃饭)
+            联系人设置关系
+        自定义自动化指令
+        地图：请使用百度地图获取去故宫的路线
 # 网络
 ## teamviewer
     # 远程桌面
@@ -287,6 +300,8 @@ type: docs
 ## source insight
 ## gerrit
         # 查看代码
+## keil
+    # 嵌入式
 
 # 客户端
 ## datastudio
@@ -299,5 +314,8 @@ type: docs
     # 原robomongo, 免费
 ## studio3t
     # mongodb, 收费
-
+# 字体
+    中文等宽
+        Sarasa Mono SC
+            https://github.com/be5invis/Sarasa-Gothic
 

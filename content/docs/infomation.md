@@ -20,6 +20,8 @@ date: 2018-10-10T20:56:27+08:00
             # 王垠
         https://softwarefoundations.cis.upenn.edu/
             # pl基础
+        https://bbs.pediy.com/
+            # 看雪论坛
 
 
         http://a.haskellcn.org/study
@@ -38,6 +40,10 @@ date: 2018-10-10T20:56:27+08:00
             # linux资讯、书
         java1234.com
             # pdf书籍资源
+        https://www.jiumodiary.com/
+            # 鸠摩搜书
+        https://z-lib.org/
+            # 最大eboot库
     问答
         quora
         stack overflow
@@ -62,6 +68,8 @@ date: 2018-10-10T20:56:27+08:00
     https://leetcode.com/problemset/algorithms/
         # leetcode
 # 资源
+    https://unsplash.com
+        # 图片
     堆糖
         # 图片
     www.pudn.com

@@ -1,23 +1,66 @@
 ---
 Categories : ["设计"]
-title: "设计-工程"
+title: "工程"
 date: 2018-10-10T17:39:31+08:00
 ---
-# 思想
-    设计
-        墨菲定律
-            事情不是表面看起来那么简单
-            事情都会比预计时间长
-            可能出错总会出错
-            如果你担心发生，它更可能发生
-        二八定律
-    系统划分与组织划分
-        康威定律
-            系统架构是公司组织架构的反映
-            按业务闭环进行系统拆分/组织架构划分，实现闭环/高内聚低耦合，减少沟通成本
-            沟通出现问题，考虑调整组织架构
-            在该拆分时拆分
+
+# 业务
+    目标
+        降低人才素质需求
+        减少开发时间
+    分类
+        创造虚拟空间
+        自动化
+        辅助决策
+    思路
+        逻辑: 因果(演绎), 时间, 空间, 优先
+        方法: 5w2h(who, when, where, why, what, how, how much)
+        建模:
+            中心                                # 调整抽象领域和层次(视问题决定)
+                自上而下                        # 问题明确，展开
+                自下而上                        # 内容分类、剪枝、归纳
+            分解
+                MECE(mutually exclusive collectively exhaustive)
+                    正交
+                    穷尽
+        经验
+            优秀的产品都有全局把控感(confluence, jira)
+            设计思想多源自: 操作系统、编译器、函数式
+            深入一线(面对客户)
+            思考全面, 全局
+            考虑需求本质，考虑上下游全局
+            想清楚再行动
+    过程
+        发掘(discovery)
+            价值定位(价值驱动)
+            客户体验梳理和设计
+            愿景
+            干系人
+            电梯演讲收敛
+        定义(define)
+            用户旅程，业务流程
+            事件风暴 -> 映射技术 -> 架构
+        设计(design)
+            总体
+                识别问题域, 归纳服务, 上下游关系
+                架构图, api, 技术栈
+                提升方向, 改进
+            迭代
+                价值/成本分布图
+                milestone演进
+                业务技术/需求拆解全景图(白板贴标)
+                mvp(minimum viable product最小可行计划)迭代计划
+        开发(develop)
+            度量, 质量指标
+            工具选择, 规范
+            架构守护，治理
+        实施策略
+        交付
+        产品生命周期管理
+            目标, 资本
+            机会点->需求
     角度决定设计
+        找到不动点
         如对cache的设计
             业务角度
                 选择简单易用的缓存框架
@@ -34,135 +77,407 @@ date: 2018-10-10T17:39:31+08:00
                 存储空间监控
                 命中率监控
                 避免缓存集中失效引起雪崩
-    为了简单
-        开发和运维分离
-        业务和基础架构分离
-        无状态和有状态分离
-        业务间乘法(正交)而非加法              # 升维的特点, 正交叠加
-        多层抽象, 不断隐去底层(约定大于配置)    # 升维的特点, 抽象观察
-    考虑因素
-        高并发、高可用、高可靠
-        容量规划(流量、容量)
-        SLA(service level agreement)制定(吞吐量、响应时间、可用性、降级方案)
-        压测方案(线下、线上)
-        监控报警(机器负载、响应时间、可用率)
-            tracing
-        应急预案(容灾、降级、限流、隔离、切流量、可回滚)
-    微服务
-        单体应用问题
-            复杂: 模块多, 边界模糊, 依赖关系不清晰, 代码质量不统一
-            技术债务: 不坏不修
-            部署频率低: 迭代要部署整个应用，部署时间长，风险高。修复问题慢, 易出错
-            可靠性差: 某bug导致整个应用崩溃
-            扩展性差
-            阻碍技术更新
-        特征
-            服务组件化
-            按业务组织团队
-            负责的态度, 不再是交付给维护者
-            粗粒度通信, http(二进制协议)或消息总线
-            去中心化治理
-            去中心化管理数据
-            基础设施自动化
-            容错设计
-            演进式设计
-        原则
-            单一职责
-            自洽
-            轻量级通信
-            服务粒度: 边界(DDD中的界限上下文)
-        *aaS
-            SaaS(software as a service)
-            PaaS(platform as a service)
-            aPaaS(application PaaS)         # 简单配置产生任意需求的application
-            saPaaS(specific aPaaS)          # 领域定制的aPaaS
-            GaPaaS(generator of aPaaS)      # 脚手架，产生定制的aPaaS
-# 架构模型
-    数据处理
-        lambda架构                           # 实时大数据, stream使用
-            批处理层
-            实时处理层
-            服务层
-        sharing-nothing                     # cpu之间不共享内存和磁盘
-    DDD(domain driven design)
-        本质
-            维护概念完整性，避免腐化
-        entity
-            主存储(可变)
-            互相派生                         # 如命令和事件派生状态, 事件派生状态等
-                状态(可变)
-                命令(command, 不可变)
-                事件(event, 不可变)
-        entity representation               # 数据表现
-            多representation一致性
-            representation表达业务的难易
-
-            entity物理介质/表现形式            # 表现形式一致性(同步), 多份存储, 数据派生合并转化
-                OLTP(mysql)                 # 点查询
-                OLAP(clickHouse)            # 范围查询
-                queue(kafka)                # 顺序读, 低延迟
-                业务服务                     # 业务逻辑, 像虚拟的表
-        entity再派生
-            viewModel(不可变)
-            子集(不可变)
-            视图(不可变)
-        BC(bounded context)                 # entity分组
-            分解复杂度: 系统、组织部门
-            内部一致性: 数据、概念
-
+    不过度设计      # 不超出需求，不用复杂方式实现
+                    # 少就是多，应一减再减。简单才能强大，也会提高性能和扩展性
+        范围减少    # 28原则，最小可行产品
+        设计减少    # 易理解，低成本，可扩展
+        实施减少    # 找开源->找内部已实现->找方案描述->自己解决
+        二八定律
+    墨菲定律
+        事情不是表面看起来那么简单
+        事情都会比预计时间长
+        可能出错总会出错
+        如果你担心发生，它更可能发生
+    维护
+        设计时考虑扩展性
+            DID(design, implement, deploy)(设计20倍, 实现3-20倍, 部署1.5-3倍)
+        设计能够监控的应用
+        版本升降      # 代码仓库
+    业务
+        防重          # 重复提交，重复扣减，重复支付(异构系统无法防重，用退款处理)
+            防重key, 防重表
+        幂等          # 消息处理，第三方支付回调
+        流程要抽象     # 如工作流
+        状态与状态机
+            订单系统
+                # 状态多时用状态机驱动
+                正向状态(待付款、待发货、已发货、完成)
+                逆向状态(取消、退款)
+                状态轨迹    # 跟踪和记日志，可回溯
+                并发修改，状态变更有序，状态变更消息有序
+    前端
+        减少dns查找     # dns可能查多个域
+        减少对象        # 页面布局少，图片合并。对象不要过大，减少到浏览器并发连接数
+        后台系统操作可反馈   # 便于确认效果
+    文档和注释
+        设计架构
+        设计思想
+        数据字典/业务流程
+        现有问题
+## DDD
+    # domain driven design
+    本质
+        维护概念完整性(纯洁)，避免语义泄露和腐化
+### 建模
+    要求
+        简单、容易、清晰
+        使用不动点
+        领域专注
+        内部概念完整一致(unification)
+            术语不变、不矛盾、不重叠
+    模型形式
+        失血                            # 纯数据, 只有getter, setter
+        贫血                            # 包含不依赖持久化的逻辑
+        充血                            # 包含持久化的逻辑，service很薄，仅有事务和简单逻辑，不使用dao
+        胀血                            # 无service
+    过程
+        分析模型                        # 业务领域分析, 不考虑代码
+            问题
+                含意不完整，不可图形或文字表达，错误假设
+                会深入某细节
+                忽略某细节直到设计或实现, 如持久化、性能
+            目标
+                领域模型
+                架构设计
+            事件风暴                    # 是开发建模，不是用户需求故事
+                准备
+                    功能确认: 近期milestone
+                    找正确的人: 领域专家, 前后端，架构师
+                    引导者: 准备资料, 排程, 时间, 2/3时间预警
+                事件风暴
+                    领域事件: 用户可感知状态
+                    分支小组 -> 个人发散 -> 小组一致 -> 整体一致        # 不能一致表示准备不足
+                    逻辑顺序 -> 最终流程
+                命令风暴                # 为什么, 分色
+                    事件触发原因、方式
+                    用户角色
+                    读模型: 用户前置需求
+                    写模型: 动词
+                    描述
+                聚合
+                    取名, 分职责
+                持续探索
+        领域模型一开始就结合编码设计    # 设计围绕模型, 模型受设计反馈改善
+            开发时意识到模型变更, 会保持完整性
+            每个开发在修改前需要了解模型
+            面向对象更易于建模, 过程化易于流程，如数学
+        重构
+            要求
+                设计灵活
+                使用经过验证的构造
+            目标
+                领域理解更深、更清晰
+                    深刻(incisive)、深层(deep)的模型
+                技术的动机的代码转换
+            实现
+                小幅可控
+                基于测试
+                突破
+                    新的概念或抽象
+                    隐含的概念被凸显
+                        倾听领域语言
+                        过分复杂是因为关键点被替代
+                        领域文献        # 深层视图
+                        约束            # 表达不变量
+                        过程(process)   # 面向对象中的面向过程, 多个过程时用策略
+                        规约            # 测试对象返回布尔值, 重构成对象而非写在application
+    战略建模                            # 形成上下文映射图
+        问题空间
+            领域                                            # 与公司组织关联
+                子域                                        # 最好对应一个限界上下文
+                    核心域(core domain)                     # 项目动机, 公司核心竞争力, 尽量小, 最高优先级
+                    通用子域(generic subdomain)             # 作用于整个系统的支撑子域
+                    支撑子域                                # 重要非核心
             集成
-                边界entity                   # 授权、binlog、视图数据。本质是权限
-                    东西、单据
-                    event
-                    可实现成worker托管
+                合作关系(partnership)                       # 同时成功失败
+                共享内核(shared kernel)                     # 小型内核, 持续集成功能
+                客户/供应(customer-supplier development)    # 上下游
+                遵从(conformist)                            # 下游遵从上游
+                防腐层(anticorruption layer)                # 翻译转换领域服务
+                开放主机服务(open host service)             # 公开协议，子系统访问
+                发布语言(published language)                # dsl, 通常与开放主机服务一起
+                分隔(separate way)                          # 声明无关联
+                大泥球(big ball of mud)                     # 已有纠缠的系统，隔离出来
+        解决方案空间
+            通用语言
+                一个限界上下文一个通用语言
+                清晰(概念无二义性), 简洁                    # 如卖家和买家都叫用户，就是不清晰。如用type标记用户是卖家或买家，就是不简洁。所以直接用两个对象
+            限界上下文                  # 条件的集合
+                目的
+                    确保术语含义明确
+                    切分规模, 易于保持领域纯洁
+                    设定进化框架而非模块，包含模块
+                考虑因素
+                    团队组织结构
+                    应用特定部分惯例、物理表现
+                挑战
+                    团队开发碎片化      # 写重复的代码，由于不知道或怕改错
+                    持续集成
+                        早合并
+                        自动构建测试    # 检测不一致
+                模块
+                    作用
+                        降低模型规模复杂度
+                        代码高内聚低耦合
+                    设计
+                        通信性内聚(communicational cohesion)
+                        功能性内聚(functional cohesion)
+                        每模块统一接口
+                        名称反映深层理解
+                        灵活性，进化性
+            上下文映射                  # 领域间集成关系
+                模式
+                    共享内核(shared kernel)                 # 为减少重复, 共享领域子集，多方测试
+                    客户-供应商(customer-supplier)          # 做反馈的需求, 需求测试, 自动化验收
+                    顺从者                                  # 供应商不做需求, 客户用适配器对接组件
+                    防腐层(anticorruption layer)            # 双向领域模型转换器, 保持内部模型纯洁
+                        从前
+                            原始数据(api, db)无模型无语义的处理
+                        实现
+                            对外多门面(facade)
+                            每个门面一个适配器(adapter)
+                            适配器间用转换器(translator)
+                    隔离通道(separate way)
+                    开放主机服务(open host service)         # 实现开放服务协议
+                    提炼                                    # 多次重构后还很大
+                        实现
+                            分离基本概念和普通概念, 提炼核心域和子域
+                            子域
+                                使用第三方服务
+                                外包
+                                修改已有模型
+            六边形架构
+                领域模型简洁自治
+                对外适配器防腐, 保护限界上下文              # 如面向接口
+                    消息, 内存, 数据库
+                    soap, rest
+            CQRS(command query responsibility segregationg)             # 修改只记事件(日志), 查询时计算
+                查询方式
+                    单数据库/读写分离，查询时计算事件
+                    读写分离, 读库异步计算事件保存冗余, 读库负载均衡
+    战术建模                            # 组成限界上下文
+        领域
+            实体(entity)                # 标识和延续性, 有id, 持续变化。
+            值对象(value object)        # 无id, 只有属性, 最好不可变(可共享)。尽量建模值对象。可包含实体引用或值对象。
+            生命周期
+                聚合(aggregate)         # 定义对象所有权和边界
+                    简化
+                        关联            # 可导航到的关联
+                            1对1        # 对象引用
+                            1对n        # 包含集合
+                            n对n        # 删除关联，关系加约束或转换 
+                    目的
+                        一致性
+                        强化不变量
+                    实现
+                        聚合根(root)    # 聚合根间是最终一致性
+                            是个实体,有id
+                            外部访问的唯一对象
+                            向外传递副本
+                工厂(factory)           # 在领域中没有定义, 但程序需要
+                    目的
+                        并非对象创建对象
+                        对象创建存在自有知识
+                        创建过程原子性
+                        对已有持久化对象重建并修复
+                    问题
+                        外部访问根内对象，需关联不必要的根实体
+                    实现
+                        不用工厂
+                            构造不复杂
+                            不涉及其它对象
+                            客户希望用策略创建
+                            类是具体类型, 无层级
+                        聚合根提供方法
+                        单独工厂        # 违反了封装原则, 但保持了简单
+                资源库(repository)      # 内存假象
+                    目的
+                        不关联根获取对象引用
+                        不暴露细节, 会减少领域专注
+                            防止代码扩散
+                            减少变更修改
+                            维护聚合封装性
+                            容易的基础设施被滥用, 产生除聚合根外导航
+                    实现
+                        封装所有获取对象逻辑
+                        基础设施, 全局可访问
+                        不同对象不同策略访问、存储      # 领域与基础设施解耦
+                        接口是领域模型, 实现像基础设施
+                        参数筛选或规约(specification)筛选(筛选器)
+        entity
+            介绍
+                entity即状态
+                应用开发即处理entity的表现
+            主从
+                主存储(可变)                    # 关键是选择主存储
+                    多派生一致性好保障
+                    派生表达业务的难易成度
+                只读派生(representation, 不可变)
+                    多份存储, 一致性
+                    派生, 合并, 转化
+            类型
+                东西(可变)                      # 单据叠加成东西, 东西叠加成东西
+                单据(可变)                      # 事件叠加成单据
+                事件(event, 不可变)
+                命令(command, 不可变)
+                视图(view model, 不可变)
+                子集(subset, 不可变)
+                视图(aggregation, 不可变)
+                表单(可变)                      # 是主存储
+            物理介质
+                OLTP(mysql)                     # 点查询
+                OLAP(clickHouse)                # 范围查询
+                queue(kafka)                    # 顺序读, 低延迟
+                业务服务                        # 业务逻辑, 像虚拟的表
+            分组entity主存储(BC, bounded context)
+                目的
+                    分解
+                        管理复杂度
+                            系统
+                            组织部门
+                        实现内部一致性
+                            概念, 数据
+                    对主存储进行受控的修改
+                边界entity                          # 用于集成，不一定是主存储
+                    形式
+                        授权、binlog、工作流、视图数据、租户作为其它租户user
+                        东西、单据、event
+                    介质
+                        queue, 带权限db, rpc虚拟表
+                    触发
+                        queue, ui, api
+                        触发由worker托管, 输入是queue或rpc socket
+                粒度
+                    分entity
+                    分步骤
+                    分entity字段
+                    原则
+                        BC尽可能少而大
+                关系
+                    时间错开
+                        外键关系                    # BC挂载到BC, 如后台系统与计费系统的定价, 运营人员与服务系统的配置, 流程节点系统对流程的依赖
+                            rpc, 数据库, 数据复制
+                        报表关系
+                            时效性高
+                            一般做复制              # 所以边界entity是数据变更event
+                        触发关系                    # fire and forget
+                        交棒关系
+                            下游给上游command/event, 上游触发
+                            上游实现降级            # 下游不可用时，安慰语
+                    时间同时
+                        accountable/responsible关系                 # 负责人与实现人
+                            原则
+                                accountable尽量小
+                                    只调度
+                                        与responsible的边界entity是rpc虚拟表, 请求command, 返回event
+                                    补偿实现一致                    # 如超卖
+                                    responsible提供自己界面         # accountable不控制
+                        抢资源关系
+                            锁服务
+        服务(service)                   # 无法划分对象的动作, 无状态。按功能分组, 多对象的连接点
+            可在application, domain, infrastructure
+### 分层
+        用户接口(user interface)
+        应用(application)                   # 尽可能小。数据验证，事务。故事, 表达出操作的事情
+            application service
+            unit work
+            presentation model
+        领域(domain)                        # 专注领域。准确定义业务对象
+            aggregate, entity, value object
+            domain service, domain event
+        基础设施(infrastructure)            # 辅助层
+            repository
+            global support
+        项目文件
+            [ui]
+                mall                            # 商城api
+            [saleDomain]
+                [application]
+                    mall.application            # 分模块，讲述故事
+                        CartService
+                            GetCart()
+                        BuyService
+                            Buy()
+                    mall.application.domainEventSubscribers         # 订阅domain事件
+                [domain]
+                    mall.domain                 # 不大而全，要求刚好满足需求
+                        cartModule
+                            entity
+                                CartItem
+                            aggregate
+                                Cart
+                        valueObject
+                            Product
+                            SellingPriceCart
+                        IDomainServices
+                        IRemoteServices         # 访问远程资源接口
+                            IUserService
+                            ISellingPriceService
+                        IRepositories           # 仓储接口
+                            ICartRepository
+                    mall.domain.events          # 领域事件, 用于实现最终一致性
+                    mall.domainService          # 操作domain的无状态方法
+                        ConfirmUserCartExistedDomainService
+            [sellingPriceDomain]                # 与saleDomain合作关系, sale请求sellingPrice定价
+                [appication]
+                    mall.application.SellingPrice
+                        dto
+                            CalculatedCartDTO
+                        mapper
+                            ValueObjectToDTO
+                [domain]
+            [infrastructure]
+                mall.infrastructure             # 通用类库
+                    domainCore                  # mail.domain base方法
+                        AggregateRoot
+                            Cart
+                        Entity
+                            CartItem
+                        ValueObject
+                            Product
+                        IUnitOfWork             # 仓储事务
+                    domainEventCore
+                        DomainEvent
+                        DomainEventBus
+                        DomainEventSubscriber
+                        IDomainEvent
+                        IDomainEventSubscriber
+                mall.infrastructure.repositories                # 仓储
+                    CartSqlServerRepository
+                mall.infrastructure.translators                 # 防腐层, 访问远程资源实现
+                    user
+                        UserAdapter             # 请求原始结果
+                        UserService
+                        UserTranslator          # 转换原始结果
+# 产品
+    ux
+        微交互                  # 细节决定成败
+# 项目
+## 分层
+    mv*
+        mvc
+            # view controller model, 单向循环
+        mvp
+            # view presenter model, presenter双向交互
+        mvvm
+            # view view-model model, view-model双向绑定
 
-                    物理介质
-                        queue
-                        只读db
-                        rpc虚拟表
-            粒度
-                BC尽可能少而大
-            关系
-                时间错开
-                    外键关系                 # BC挂载到BC, 如后台系统与计费系统的定价, 运营人员与服务系统的配置, 流程节点系统对流程的依赖
-                        rpc
-                        数据库
-                        数据复制
-                    报表关系
-                        时效性高
-                        一般数据复制          # 所以边界entity是数据变更event
-                    触发关系                 # fire and forget
-                    交棒关系
-                        下游给上游command/event, 上游触发
-                        上游实现降级          # 下游不可用时，安慰语
-                时间同时
-                    accountable/responsible关系                 # 像项目的负责人与开发人
-                        最小化accountable
-                            补偿
-                            responsible提供自己界面
-                        边界entity是rpc虚拟表, 插入command, 返回event
-                    抢资源关系
-                        锁服务
-        应用开发      
-            处理entity表现
-# 云原生应用
-    十二要素
-        一份代码，多份部署
-        显式声明依赖
-        外部保存配置
-        服务作为调用资源
-        分离构建、发布、运行
-            构建: 代码转化到可执行包
-            发布: 可执行包结合配置
-            运行: 选定发布版本，按计划启动
-        多个无状态进程运行
-        端口绑定服务
-        进程作为一等公民并发扩展
-        进程易处理: 快速启动、优雅终止
-        开发环境等价线上环境
-        日志作为事件流
-        管理进程不常驻, 一次性运行
-# 高并发原则
+    验证
+    异常层
+        # 封装每层异常为不同异常类
+    过滤层
+    监听器
+    日志
+    测试
+## 稳定
+    高并发、高可用、高可靠
+    容量规划(流量、容量)
+    SLA(service level agreement)制定(吞吐量、响应时间、可用性、降级方案)
+    压测方案(线下、线上)
+    监控报警(机器负载、响应时间、可用率)
+        tracing
+    应急预案(容灾、降级、限流、隔离、切流量、可回滚)
+### 高并发原则
     无状态     # 应用无状态，配置有状态
         尽可能浏览器端维护会话
         分布式缓存放状态
@@ -246,7 +561,7 @@ date: 2018-10-10T17:39:31+08:00
         不单点             # 一切都出故障
         不系统串联
         功能支持启用禁用    # 实现wire on/wire off框架
-# 高可用原则
+### 高可用原则
     降级
         开关集中化管理, 推送开关配置
         开关前置      # nginx层做开关
@@ -268,56 +583,54 @@ date: 2018-10-10T17:39:31+08:00
         部署版本
         数据版本
         静态资源版本
-# 业务设计
-    不过度设计    # 不超出需求，不用复杂方式实现
-                 # 少就是多，应一减再减。简单才能强大，也会提高性能和扩展性
-        范围减少    # 28原则，最小可行产品
-        设计减少    # 易理解，低成本，可扩展
-        实施减少    # 找开源->找内部已实现->找方案描述->自己解决
-    维护
-        设计时考虑扩展性
-            DID(design, implement, deploy)(设计20倍, 实现3-20倍, 部署1.5-3倍)
-        设计能够监控的应用
-        版本升降      # 代码仓库
-    业务
-        防重          # 重复提交，重复扣减，重复支付(异构系统无法防重，用退款处理)
-            防重key, 防重表
-        幂等          # 消息处理，第三方支付回调
-        流程要抽象     # 如工作流
-        状态与状态机
-            订单系统
-                # 状态多时用状态机驱动
-                正向状态(待付款、待发货、已发货、完成)
-                逆向状态(取消、退款)
-                状态轨迹    # 跟踪和记日志，可回溯
-                并发修改，状态变更有序，状态变更消息有序
-    前端
-        减少dns查找     # dns可能查多个域
-        减少对象        # 页面布局少，图片合并。对象不要过大，减少到浏览器并发连接数
-        后台系统操作可反馈   # 便于确认效果
-    文档和注释
-        设计架构
-        设计思想
-        数据字典/业务流程
-        现有问题
-# 开发模型
-    TDD(test-driven development)
-        先单元测试
-    BDD(behavior-driven development)
-        TDD的变种, 重点描述行为
-# 分层
-    mv*
-        mvc
-            # view controller model, 单向循环
-        mvp
-            # view presenter model, presenter双向交互
-        mvvm
-            # view view-model model, view-model双向绑定
-
-    验证
-    异常层
-        # 封装每层异常为不同异常类
-    过滤层
-    监听器
-    日志
-    测试
+## 微服务
+    单体应用问题
+        复杂: 模块多, 边界模糊, 依赖关系不清晰, 代码质量不统一
+        技术债务: 不坏不修
+        部署频率低: 迭代要部署整个应用，部署时间长，风险高。修复问题慢, 易出错
+        可靠性差: 某bug导致整个应用崩溃
+        扩展性差
+        阻碍技术更新
+    特征
+        服务组件化
+        按业务组织团队
+        负责的态度, 不再是交付给维护者
+        粗粒度通信, http(二进制协议)或消息总线
+        去中心化治理
+        去中心化管理数据
+        基础设施自动化
+        容错设计
+        演进式设计
+    原则
+        单一职责
+        自洽
+        轻量级通信
+        服务粒度: 边界(DDD中的界限上下文)
+    持续发布
+        工具链，自动化
+        契约
+        架构守护
+        灰度替换
+    *aaS
+        SaaS(software as a service)
+        PaaS(platform as a service)
+        aPaaS(application PaaS)         # 简单配置产生任意需求的application
+        saPaaS(specific aPaaS)          # 领域定制的aPaaS
+        GaPaaS(generator of aPaaS)      # 脚手架，产生定制的aPaaS
+## 云原生应用
+    十二要素
+        一份代码，多份部署
+        显式声明依赖
+        外部保存配置
+        服务作为调用资源
+        分离构建、发布、运行
+            构建: 代码转化到可执行包
+            发布: 可执行包结合配置
+            运行: 选定发布版本，按计划启动
+        多个无状态进程运行
+        端口绑定服务
+        进程作为一等公民并发扩展
+        进程易处理: 快速启动、优雅终止
+        开发环境等价线上环境
+        日志作为事件流
+        管理进程不常驻, 一次性运行

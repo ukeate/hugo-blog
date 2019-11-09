@@ -1481,10 +1481,139 @@ func KMP() {
 ## Dijkstra
 ## Bellman-Ford
 ## Floyd-Warshall
+## 走迷宫
+```golang
+/*
+    检测方向 -> 走 -> 递归 -> 回退
+*/
+const (
+	UP = iota
+	DOWN
+	LEFT
+	RIGHT
+)
+
+const MAX = 10
+
+type Direction int
+
+var m = [MAX][MAX]int{
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{1, 0, 0, 0, 1, 0, 1, 1, 1, 1},
+	{1, 0, 1, 0, 1, 0, 1, 1, 1, 1},
+	{1, 0, 1, 0, 0, 0, 0, 0, 1, 1},
+	{1, 0, 1, 0, 1, 1, 0, 1, 1, 1},
+	{1, 0, 1, 0, 0, 1, 0, 1, 1, 1},
+	{1, 0, 1, 1, 0, 1, 0, 0, 0, 1},
+	{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+	{1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	{1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
+}
+
+func printM() {
+	emt := " #R"
+	print(" ")
+	for j := 0; j < MAX; j++ {
+		fmt.Printf(" %d", j)
+	}
+	fmt.Println()
+	for i := 0; i < MAX; i++ {
+		fmt.Printf("%d", i)
+		for j := 0; j < MAX; j++ {
+			fmt.Printf("%c ", emt[m[i][j]])
+		}
+		fmt.Println()
+	}
+}
+func move(x *int, y *int, d Direction) {
+	switch d {
+	case UP:
+		*x--
+		break
+	case DOWN:
+		*x++
+		break
+	case LEFT:
+		*y--
+		break
+	case RIGHT:
+		*y++
+		break
+	}
+}
+
+func inspect(x int, y int, d Direction) bool {
+	move(&x, &y, d)
+	if x < 0 || y < 0 || x >= MAX || y >= MAX || m[x][y] != 0 {
+		return false
+	}
+	return true
+}
+
+func printProcess(n int) {
+	fmt.Printf("步数:%d\n", n)
+	printM()
+}
+
+func maze(s [2]int, e [2]int, n int) {
+	if s[0] == e[0] && s[1] == e[1] {
+		printProcess(n)
+	}
+	for i := Direction(0); i < 4; i++ {
+		if inspect(s[0], s[1], i) {
+			tmpX, tmpY := s[0], s[1]
+			move(&tmpX, &tmpY, i)
+
+			m[tmpX][tmpY] = 2
+			maze([2]int{tmpX, tmpY}, e, n+1)
+			m[tmpX][tmpY] = 0
+		}
+	}
+}
+
+func main() {
+	s, e := [2]int{9, 1}, [2]int{9, 8}
+	m[s[0]][s[1]] = 2
+	maze(s, e, 0)
+	println()
+}
+```
 # 动态规划
 ## 背包问题
     背包有大小，物品有大小和价值，向背包装最大价值物品
 ## 最长公共子串
+## 捏小球
+```golang
+/*
+    重量不同多个小球，合并用力为重量和。两两合并到剩一个，总用力最小。写代码求最优
+
+    公式 max[n] = max[n-1] + min2(arr)
+    每次捏重量最小两球，都达到全局最优
+*/
+func cutMin(arr []int) (int, []int) {
+	min := 0
+	for ind := range arr {
+		if arr[ind] < arr[min] {
+			min = ind
+		}
+	}
+	v := arr[min]
+	return v, append(arr[:min], arr[min+1:]...)
+}
+
+func pinch(arr []int) int {
+	if len(arr) == 1 {
+		return 0
+	}
+	v1, arr := cutMin(arr)
+	v2, arr := cutMin(arr)
+	return v1 + v2 + pinch(append(arr, v1+v2))
+}
+
+func main() {
+	print(pinch([]int{2, 3, 1, 4}))
+}
+```
 # 分类与回归
     分类是编组，回归是预测
 ## k最近邻(KNN, k-nearest neighbours)

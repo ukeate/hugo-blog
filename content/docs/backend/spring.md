@@ -1178,6 +1178,7 @@
                 request                                 # web程序ContextApplication用, 随请求创建
                 session                                 # web程序ContextApplication用, 随session创建
                 global session                          # porlet的global用, 其它用降级为session
+            @EventListener(XxxEvent.class)              # 修饰方法, 外部publishEvent()时触发
     实体
         注解
             @Entity                                     # 修饰bean类
@@ -1194,6 +1195,8 @@
     service
         注解
             @Service                                    # 修饰类
+            @PostConstruct                              # 修饰方法, 加载servlet时, init()前执行
+            @PreDestroy                                 # 修饰方法, 销毁servlet时, destroy()后执行
     controller
         注解
             @Controller                                 # 修饰类
