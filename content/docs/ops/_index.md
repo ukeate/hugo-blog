@@ -1146,6 +1146,30 @@ type: docs
         gradle-maven-plugin
         protobuf-maven-plugin
         build-helper-maven-plugin                   # 用于指定自定义目录
+        dockerfile-maven-plugin                     # root用户直接打包到docker images
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+                <configuration>
+                    <repository>${project.artifactId}</repository>
+                    <contextDirectory>./</contextDirectory>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>mqtt/target/*.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+            ./Dockerfile
+                FROM primetoninc/jdk:1.8
+
+                #ADD mqtt/target/*.jar app.jar
+                ARG JAR_FILE
+
+                COPY ${JAR_FILE} /opt/app.jar
+
+                ENTRYPOINT ["java", "-jar", "/app.jar"]
+            mvn package dockerfile:build
     方案
         新项目安装
             mvn clean install -DskipTests
@@ -1209,27 +1233,42 @@ type: docs
             # askpass pass.txt 放密码到文件
 ## supervisor
     介绍
-            实时代码改动重启node
-
+        监视重启
     命令
-            supervisord
-                    # 启动后台服务
-            supervisorctl update
-            supervisorctl status
+        supervisord
+            # 启动后台服务
+        supervisorctl
+            status          # 查看所有
+            update          # 重载配置
+            reload          # 
+
+            start
+            stop
+            restart
+            start all
+            stop all
+            restart all
+
     配置
-    [program:tri]
-    command=/data/apps/tri/bin/tri --config /data/apps/tri/conf/config.tri.toml
-    directory=/data/apps/tri
-    autostart=true
-    autorestart=true
-    startsecs=10
-    startretries=3
-    stdout_logfile=/data/logs/supervisor/tri/access.log
-    stdout_logfile_maxbytes=100MB
-    stdout_logfile_backups=20
-    stderr_logfile=/data/logs/supervisor/tri/stderr.log
-    stderr_logfile_maxbytes=100MB
-    stderr_logfile_backups=2
+        /etc/supervisor/supervisord.conf
+            [include]
+            files = /etc/supervisor/conf.d/*.conf
+        /etc/supervisor/conf.d/app.conf
+            [program:tri]
+            command=/data/apps/tri/bin/tri --config /data/apps/tri/conf/config.tri.toml
+            directory=/data/apps/tri
+            autostart=true
+            autorestart=true
+            startsecs=10
+            startretries=3
+            stdout_logfile=/data/logs/supervisor/tri/access.log
+            stdout_logfile_maxbytes=100MB
+            stdout_logfile_backups=20
+            stderr_logfile=/data/logs/supervisor/tri/stderr.log
+            stderr_logfile_maxbytes=100MB
+            stderr_logfile_backups=2
+            environment=ASPNETCORE_ENVIRONMENT=Production       # 环境变量
+            user=root                                           # 执行的用户
 ## pm2
     介绍
         带有负载均衡功能的node应用进程管理器

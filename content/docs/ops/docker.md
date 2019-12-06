@@ -12,6 +12,8 @@ date: 2018-10-11T18:18:21+08:00
         核心网的最终形态
     镜象网站
         https://hub.docker.com/
+    目录
+        /var/lib/docker
     配置
         /etc/sysconfig/docker
             # /etc/init.d/docker.conf
@@ -198,7 +200,7 @@ date: 2018-10-11T18:18:21+08:00
         o-> 客户端
         /etc/docker/daemon.json
             {"insecure-registries":["45.55.56.16:5000"]}
-    制作镜像
+    制作镜像并运行
         make
         docker build -t search:v1 .
         docker images
@@ -227,7 +229,7 @@ date: 2018-10-11T18:18:21+08:00
         systemctl daemon-reload
         systemctl restart docker
     登录运行容器
-        docker exec -it 8ce /bin/sh
+        docker exec -it --user root 8ce /bin/sh
 ## jenkins
     docker pull jenins
     mkdir /var/jenkins_home

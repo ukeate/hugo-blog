@@ -86,8 +86,6 @@ date: 2018-10-09T16:10:44+08:00
 
         get                     # 下载依赖, 默认目录是GOPATH下的pkg。下载后自动install
             go get gopl.io/...  # ...通配
-            go get gopl.io@2    # 指定mod版本号
-            -u                  # 更新到mod最新版本
             -v                  # 查看进度
         list                    # 列出指定代码包的信息
             go list ...         # ...通配
@@ -131,15 +129,6 @@ date: 2018-10-09T16:10:44+08:00
             cgo                 # 生成能够调用c语言代码的go源码文件
             compile
                 -help           # 可传给编译器的参数
-        mod
-            init packageName1   # 生成go.mod
-            download            # 下载mod
-            tidy                # 下载缺少，删除多余
-            edit                # 编辑go.mod
-            graph               # 打印依赖图
-            vendor              # 复制依赖到vendor
-            verify              # 验证mod
-            why                 # 打印依赖原因
 
     godoc                       # 提供html页面
         -http=:6060             # 运行本地帮助网站
@@ -147,6 +136,34 @@ date: 2018-10-09T16:10:44+08:00
             -analysis=pointer
     gofmt
     golint                          # 检查风格
+# mod
+    环境变量
+        GO111MODULE
+            off                     # 总关闭
+            on                      # 总开启
+            auto                    # 默认，有go.mod开启
+    路径
+        $GOPATH/pkg/mod             # 保存多版本依赖, 被多项目引用
+        go.mod                      # 被go命令维护, 融入了go命令的各个模块
+        go.sum                      # 记录lock
+    依赖加载顺序
+        最新release tag
+        最新commit
+    命令                            # 融入到各个子命令中
+        go
+            build                   # 检测mod
+            install                 # 检测mod
+            get gopl.io@2           # 指定mod版本号
+                -u                  # 更新到mod最新版本
+            mod
+                init packageName1   # 生成go.mod
+                download            # 下载mod
+                tidy                # 下载缺少，删除多余
+                edit                # 编辑go.mod
+                graph               # 打印依赖图
+                vendor              # 复制依赖到vendor
+                verify              # 验证mod
+                why                 # 打印依赖原因
 # 语法
     包                              # 路径引用，命名空间
         不能循环依赖
@@ -174,19 +191,6 @@ date: 2018-10-09T16:10:44+08:00
             // +build ignore                        # 任何时候都不编译
         内部包                      # 路径有internal的包, 只能被父目录导入
             net/http/internal/chunked
-        mod
-            环境变量
-                GO111MODULE
-                    off             # 总关闭
-                    on              # 总开启
-                    auto            # 默认，有go.mod开启
-            路径
-                $GOPATH/pkg         # 保存多版本依赖, 被多项目引用
-                go.mod              # 被go命令维护, 融入了go命令的各个模块
-                go.sum              # 记录lock
-            依赖加载顺序
-                最新release tag
-                最新commit
     注释
         //或/**/
         package前写文档注释，可出现在任何文件中，但一个包约定一个

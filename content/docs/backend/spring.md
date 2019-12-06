@@ -1143,6 +1143,12 @@
             ${random.long} long
             ${random.int(10)} 10以内int
             ${random.int[10,20]} 10到20 int
+        pom.xml
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <optional>true</optional>
+            </dependency>
         application.yml
             aa
                 bb: 1                                           # 可用properties类管理属性
@@ -1428,6 +1434,8 @@
             port: 8080                                      # 默认8080
             servlet
                 context-path: /hello                        # uri前缀
+    静态资源
+        默认映射public, resources, static到/
     注解
         控制器
             @RestController                             # 修饰类, 组合@Controller与@responseBody

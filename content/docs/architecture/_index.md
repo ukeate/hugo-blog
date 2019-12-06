@@ -18,11 +18,20 @@ date: 2018-10-11T10:33:48+08:00
     # service mesh
 ## service fabric
     # 微软
-## lstio
+## Istio
     #google IBM, lyft开源，基于envoy
     组成
         数据面板
         控制面板
+## knative
+    介绍
+        管理k8s, Istio
+    模块
+        build
+        serve
+            config
+            route
+        event
 ## traefik
     # go实现，多后台如k8s, swarm, marathon, mesos
 ## linkerd
@@ -1226,7 +1235,13 @@ date: 2018-10-11T10:33:48+08:00
 
 ### beanstalkd
 ### mqtt
-        # 最早由ibm提供的，二进制消息的mq
+    # 最早由ibm提供的，二进制消息的mq
+### emqttd
+    介绍
+        mqtt broker
+### apollo
+    介绍
+        apache mqtt broker
 ### metaq
     # 阿里mq
 ## 任务
@@ -1304,7 +1319,6 @@ date: 2018-10-11T10:33:48+08:00
                     # 下载
                 rm --recursive s3://meiqia/crm-module/search
                     # 级联删除
-
 # 功能服务
 ## webs
     aws

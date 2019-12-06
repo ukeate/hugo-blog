@@ -1680,7 +1680,7 @@ type: docs
         # node协程
     driud
         # 连接池，阿里开源
-# akka
+### akka
     # scala并发、分布式、容错工具
     使用
         system = ActorSystem.create("hello")
@@ -2603,6 +2603,8 @@ type: docs
             修改_config.yml
                 production_url: http://outrun.github.io
                 BASE_PATH: /jekyll-demo
+## webIDE
+    codebox
 ## 游戏
     pomelo
         # node.js上网易开源的实时性好的游戏类服务器
