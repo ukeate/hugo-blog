@@ -321,6 +321,18 @@ date: 2018-10-11T18:18:21+08:00
             ports:
             - "4171:4171"
     docker-compose up -d
+## mosquitto
+    docker-compose.yml
+        version: '3'
+        services:
+        mosquitto:
+            image: eclipse-mosquitto:1.6.7
+            # volumes:
+            #   - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+            command: ['mosquitto', '-c', '/mosquitto/config/mosquitto.conf']
+            ports:
+            - '1883:1883'
+    docker-compose up -d
 ## gitlab
     docker-compose.yml
         version: '3'

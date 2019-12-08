@@ -17,11 +17,5 @@
     java -jar xxx.jar
         java -jar a.jar  --spring.config.location=/application.yml 
             # 指定spring config
-    mvn clean package -DskipTests
-    maven
-        maven helper plugin
-        打包main方法jar不能引用
-        用父项目mvn package, 如果用子项目mvn package会找不到其它子项目(not exist)
-        模块运行前mvn package
 # hugo
     go install --tags extended
