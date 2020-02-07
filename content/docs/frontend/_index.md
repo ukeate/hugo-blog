@@ -839,6 +839,8 @@ type: docs
 # 应用框架
 ## 显示
     bootstrap
+    flutter
+        # google移动端框架, 声明式ui
     extjs
         介绍
             2.0之前是免费的，但有内在泄漏总是
@@ -890,8 +892,6 @@ type: docs
         # 手机，类bootstrap
     frozenui
         # 手机
-    flutter
-        # google移动端框架, 声明式ui
 ### 数据可视化
     highcharts
     chart.js

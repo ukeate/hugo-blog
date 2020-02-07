@@ -185,21 +185,6 @@ date: 2018-10-11T18:18:21+08:00
 # 方案
     进入容器
         docker exec -it mysql bash
-    私有仓库
-        docker pull registry
-        iptables -I INPUT 1 -p tcp --dport 5000 -j ACCEPT
-        docker run -d -p 5000:5000 --privileged=true -v /opt/registry:/tmp/registry registry
-        /etc/sysconfig/docker
-            OPTIONS='--selinux-enabled --log-driver=journald --insecure-registry 45.55.56.16:5000'
-            DOCKER_CERT_PATH=/etc/docker
-
-        docker tag busybox 45.55.56.16:5000/busybox
-        docker push 45.55.56.16:5000/busybox
-        docker search 45.55.56.16:5000/
-
-        o-> 客户端
-        /etc/docker/daemon.json
-            {"insecure-registries":["45.55.56.16:5000"]}
     制作镜像并运行
         make
         docker build -t search:v1 .
@@ -230,6 +215,38 @@ date: 2018-10-11T18:18:21+08:00
         systemctl restart docker
     登录运行容器
         docker exec -it --user root 8ce /bin/sh
+## registry
+    htpasswd  -Bbn outrun asdf > auth/htpasswd
+    docker-compose.yml
+        registry:
+            restart: always
+            image: registry:latest
+            # privileged: true
+            ports:
+                - 5000:5000
+            environment:
+                REGISTRY_AUTH: htpasswd
+                REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+                REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+                REGISTRY_STORAGE_DELETE_ENABLED: "true"
+            volumes:
+                - ./data:/var/lib/registry
+                - ./auth:/auth
+    docker-compose up -d
+
+    客户端
+        /etc/docker/daemon.json
+            {"insecure-registries":["127.0.0.1:5000"]}
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+
+        docker login 127.0.0.1:5000
+
+        docker tag java/device:1.0 127.0.0.1:5000/java/device:1.0
+        docker push 127.0.0.1:5000/java/device:1.0
+        curl --user outrun:asdf 127.0.0.1:5000/v2/_catalog
+            # v2表示版本 registry:2
+        docker pull 127.0.0.1:5000/java/device:1.0
 ## jenkins
     docker pull jenins
     mkdir /var/jenkins_home
@@ -366,6 +383,19 @@ date: 2018-10-11T18:18:21+08:00
                 - ./config:/etc/gitlab
                 - ./data:/var/opt/gitlab
                 - ./logs:/var/log/gitlab
+    docker-compose up -d
+## nexus
+    docker-compose.yml
+        version: '3.1'
+        services:
+        nexus:
+            restart: always
+            image: sonatype/nexus3
+            container_name: nexus
+            ports:
+            - 8081:8081
+            volumes:
+            - ./data:/nexus-data
     docker-compose up -d
 ## zipkin
     docker-compose.yml
@@ -663,6 +693,34 @@ date: 2018-10-11T18:18:21+08:00
             - 10012:8084 
             - 10013:8883 
             - 10014:8083
+    docker-compose up -d
+## hadoop
+    docker
+        docker run -it sequenceiq/hadoop-docker:latest /etc/bootstrap.sh -bash
+    docker-compose.yml
+        version: '3'
+        services:
+            namenode:
+                image: singularities/hadoop:latest
+                command: start-hadoop namenode
+                hostname: namenode
+                environment:
+                HDFS_USER: hdfsuser
+                ports:
+                - "8020:8020"
+                - "14000:14000"
+                - "50070:50070"
+                - "50075:50075"
+                - "10020:10020"
+                - "13562:13562"
+                - "19888:19888"
+            datanode:
+                image: singularities/hadoop:latest
+                command: start-hadoop datanode namenode
+                environment:
+                HDFS_USER: hdfsuser
+                links:
+                - namenode
     docker-compose up -d
 ## confluence
     docker-compose.yml

@@ -42,8 +42,9 @@
             /status                             # 任务虚拟地址空间的大小 VmSize, 应用程序正在使用的物理内存的大小 VmRSS
     /etc
         /sudoers
-        /group
+            outrun ALL=(ALL) NOPASSWD:ALL
         /passwd
+        /group
         /resolv.conf                            # dns
             nameserver 223.5.5.5
             nameserver 223.6.6.6                # alidns
@@ -133,6 +134,10 @@
         utmp            # 当前登录用户
         wtmp            # 用户登录登出记录
         xferlog         # ftp会话
+# 设置
+    lib设置
+        /etc/ld.so.conf加入so文件的配置路径如:/usr/local/lib
+        执行/sbin/ldconfig -v 更新
 # 系统编程
 ## 进程通信
     对象

@@ -83,6 +83,7 @@ date: 2018-10-11T18:47:57+08:00
     du -d 1 -h
         -s                  # 只返回汇总情况
         -k                  # 统一单位
+
     chmod ugo+rwx           # u拥有者, g群组, o其他人, +添加, -删除, r读、w写、x执行
         chmod a+rwx         # a指所有人
     chattr +i file          # 改变属性
@@ -90,12 +91,12 @@ date: 2018-10-11T18:47:57+08:00
     chown -R outrun:outrun .
     chgrp -R outrun .
     getfacl                 # 查看一个文件的ACL设置
-    setfacl
-        -m u:linuxcast:rwx   filename   # 配置用户权限
-        -m g:linuxcats:r-x  filename    # 配置组的权限
-        -x u:linuxcast filename         # 删除一个ACL设置
-
-    mucommander             # 跨平台文件管理软件
+    setfacl [-bkndRLP] { -m|-M|-x|-X ... } file ...
+        -b                  # 去掉所有acl设置
+        -m u:sudo:rwx   filename    # 配置用户权限
+        -m g:sudo:r-x  filename     # 配置组的权限
+        -x u:user1 filename         # 删除一个ACL设置
+        -d -m g:sudo:rwx            # 指定default
 
     cat
     tac                     # 倒转行显示
@@ -139,6 +140,7 @@ date: 2018-10-11T18:47:57+08:00
         chcon -R -t mysqld_db_t /data
         chcon -R --reference=/var/lib/mysql /data
 
+    mucommander             # 跨平台文件管理软件
 # 系统
     man
         -f                  # 简要介绍
@@ -152,23 +154,25 @@ date: 2018-10-11T18:47:57+08:00
     apropos                 # man -k
     uname -a                # 查看版本
     hostname
-    id                      # 用户信息
+    id                      # 用户信息, 所在组
+
+    passwd                  # 修改密码
     useradd outrun          # 创建用户
         -g outrun           # 指定组
         -r                  # 是系统用户
         -d /home/outrun     # 指定登录目录
         -u 544              # 指定id
-    passwd                  # 修改密码
+    userdel -r user1        # 完全删除用户
+    groups user1            # 查看组
+    groupadd ftp            # 创建组
     usermod                 # 修改用户状态
         -a -G root outrun   # 加入组
         -l newuser user1    # 改名
         -L user1            # 锁定
         -U user1            # 解锁
         -d /home/ftp ftp    # 改登录目录
-        -u 123 outrun       # 修改id
-    userdel -r user1        # 完全删除用户
-    groups                  # 查看组
-    groupadd ftp            # 创建组
+            -u 123 outrun       # 修改id
+
     poweroff                # 立即关机
     shutdown -h now
         -h                  # 关机
@@ -194,6 +198,8 @@ date: 2018-10-11T18:47:57+08:00
     jq . a.json             # 验证json格式
 # 控制
     script/scriptreply      # 终端录制
+        script -t 2>timing.log -a output.log
+        scriptreply timing.log output.log
     source
     bc
     maxima                  # 符号计算
@@ -323,12 +329,16 @@ date: 2018-10-11T18:47:57+08:00
             # 15 TERM 终止
             # 18 CONT 继续(与STOP相反, 同fg/bg)
             # 19 STOP 暂停(同ctrl + z)
-        -l      # 列出所有信号名称和编号
+        -l                  # 列出所有信号名称和编号
 
     pkill Xorg              # kill 所有包含
     killall Xorg            # kill 所有包含
     xkill                   # 运行后 在xwindow点击kill窗口
 ## 网络
+    iftop                   # 流量监控
+    ntop                    # 流量监控, web界面
+        # localhost:3000
+        -W 3001
     ab                      # 压测
         ab -c 10 -n 100 https://www.baidu.com/
             # 10并发100次, url结尾要有/
@@ -347,33 +357,73 @@ date: 2018-10-11T18:47:57+08:00
     traceroute              # 做一次探测, 默认UDP包, 发包TTL值逐渐增大
         -I                  # 使用ICMP包
     ufw                     # ubuntu, 简化防火墙
-    iptables
+    iptables [-t 表] -命令 匹配 操作
         参数
-            -L                  # list 显示
-            -n                  # 端口以数字显示
-            -A                  # append, 添加
-            -D                  # delete, 删除
-            -p                  # 协议
-            -m                  # 使用模块, 会根据-p选择模块
-            --dport             # 目标端口
-            --sport             # 源端口
-            -j                  # 跳转
-                ACCEPT
-                SNAT            # 只适用于POSTROUTING链，修改源地址
             -t                  # 要操作的匹配表
-            -F                  # flush
-        表
-            filter          # 默认表
-                INPUT       # 进入
-                OUTPUT      # 出去
-                FORWORD     # 通过
-            nat             # 遇到产生新的连接的包
-                PREROUTING  # 修改到来的包
-                OUTPUT      # 修改路由前本地的包
-                POSTROUTING # 修改准备出去的包
-            mangle          # 指定包修改
-                PREROUTING
-                OUTPUT
+            命令
+                -P                  # 策略, INPUT等
+                -A                  # append, 添加
+                -I 1                # 在第2条前添加
+                -D 1                # delete, 删除
+                -R 1                # 替换
+
+                -L                  # list 显示
+                -n                  # 端口以数字显示
+                -v                  # verbose, 显示更多信息
+                -F                  # flush
+                -X                  # 清除自定chain
+                -Z                  # 清除统计数
+            规则
+                -p                  # 协议
+                -i                  # 指定网卡流入
+                -o                  # 指定网卡流出
+                -s                  # 来源ip, !表示排除
+                -d                  # 目标ip
+                --sport             # 源端口
+                --dport             # 目标端口
+                -m                  # 使用模块, 会根据-p选择模块
+            动作
+                -j                  # 跳转
+                    ACCEPT
+        四表(table)
+            raw             # 跟踪
+            mangle          # 标记
+            nat             # 修改ip、port
+            filter          # 过滤, 默认
+        五链(chain)
+            PREROUTING
+            FORWORD         # INPUT前转发到POSTROUTING
+            INPUT
+            OUTPUT
+            POSTROUTING 
+        策略(policy)
+            ACCEPT          # 通过
+            REJECT          # 拒绝，返回数据
+                返回数据包
+                    ICMP port-unreachable
+                    ICMP echo-reply
+                    tcp-reset
+                iptables -A  INPUT -p TCP --dport 22 -j REJECT --reject-with ICMP echo-reply
+            DROP            # 丢弃
+            REDIRECT        # 导向端口(PNAT)
+                iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT--to-ports 8081
+            MASQUERADE      # 改写来源ip为本机ip, 可指定目标端口范围
+                iptables -t nat -A POSTROUTING -p TCP -j MASQUERADE --to-ports 21000-31000
+            LOG             # 日志, 记在/var/log
+                iptables -A INPUT -p tcp -j LOG --log-prefix "input packet"
+            ULOG
+            SNAT            # 改写源地址, 只适用POSTROUTING
+                iptables -t nat -A POSTROUTING -p tcp-o eth0 -j SNAT --to-source 192.168.10.15-192.168.10.160:2100-3200
+            DNAT            # 改写目标地址, 只适用POSTROUTING
+                iptables -t nat -A PREROUTING -p tcp -d 15.45.23.67 --dport 80 -j DNAT --to-destination 192.168.10.1-192.168.10.10:80-100
+            TOS
+            MIRROR          # 对调源ip与目标ip后返回
+            QUEUE           # 封包入队列待处理，实现功能如：计算联机费用
+            RETURN          # 退出当前规则链, 返回主规则链
+            TTL
+            MARK            # 对包做标记数字
+                iptables -t mangle -A PREROUTING -p tcp --dport 22 -j MARK --set-mark 22
+        规则(rule)          # 自定义的条件
         配置文件
             /etc/sysconfig/iptables
             /usr/libexec/iptables/iptables.init
@@ -387,32 +437,78 @@ date: 2018-10-11T18:47:57+08:00
                 -A INPUT -p tcp -m tcp --dport 23 -j ACCEPT
                 -A INPUT -p tcp -m tcp --dport 24 -j ACCEPT
                 COMMIT
-        开机启动
-            创建/etc/network/if-pre-up.d/iptables
-                iptables-restore < rules.v4
         命令
             systemctl enable iptables.service
             service iptables save
             service iptables restart
             iptables-restore < rules.v4
                 # 导入配置
-        常用命令
-            iptables -L -n
-                # 查看
-            iptables -F
-                # flush, 生效
-            iptables -P INPUT ACCEPT
-                # 开放所有input
-            iptables -P OUTPUT ACCEPT
-                # 开放所有output
-            iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-                # 开放input tcp 22
-            iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
-                # 开放output tcp 22
-            iptables -t nat -L
-                # 查nat表
-            iptables -t nat -A POSTROUTING -s 192.168.252.0/24 -j SNAT --to-source 10.171.83.146
-                # vpn转发
+        案例
+            关iptables
+                service iptables stop
+                chkconfig iptables off
+            查看
+                iptables -L -n -v --line-numbers
+            查nat表
+                iptables -t nat -L
+            flush, 生效
+                iptables -F
+            service命令
+                service iptables save
+                service iptables stop
+                service iptables start
+                service iptables restart
+            开机启动
+                /etc/network/if-pre-up.d/iptables
+                    iptables-restore < rules.v4
+
+            插入规则
+                iptables -I INPUT 2 -s 202.54.1.2 -j DROP
+            删除规则
+                iptables -D INPUT 4
+            开放所有input/output
+                iptables -P INPUT ACCEPT
+                iptables -P OUTPUT ACCEPT
+            开放input/output tcp 22
+                iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+                iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+            vpn转发
+                iptables -t nat -A POSTROUTING -s 192.168.252.0/24 -j SNAT --to-source 10.171.83.146
+            屏蔽私有地址
+                iptables -A INPUT -i eth1 -s 192.168.0.0/24 -j DROP
+                iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+            屏蔽ip
+                iptables -A INPUT -s 1.2.3.4 -j DROP
+                iptables -A INPUT -s 192.168.0.0/24 -j DROP
+                iptables -A OUTPUT -d 192.168.1.0/24 -j DROP
+                iptables -A OUTPUT -o eth1 -d 192.168.1.0/24 -j DROP
+            屏蔽端口
+                iptables -A INPUT -p tcp -s 1.2.3.4 --dport 80 -j DROP
+                iptables -A INPUT -i eth1 -p tcp -s 192.168.1.0/24 --dport 80 -j DROP
+            记录并屏蔽
+                iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix "IP_SPOOF A: "
+                iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+            mac屏蔽
+                iptables -A INPUT -m mac --mac-source 00:0F:EA:91:04:08 -j DROP
+                # *only accept traffic for TCP port # 8080 from mac 00:0F:EA:91:04:07 * ##
+                iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:0F:EA:91:04:07 -j ACCEPT
+            屏蔽icmp
+                iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+                iptables -A INPUT -i eth1 -p icmp --icmp-type echo-request -j DROP
+            开启范围端口
+                iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 7000:7010 -j ACCEPT
+            开启范围ip
+                iptables -A INPUT -p tcp --destination-port 80 -m iprange --src-range 192.168.1.100-192.168.1.200 -j ACCEPT
+            nat
+                iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j SNAT --to 123.4.5.100
+                    # 改写来自192.168.1.0/24的包, 源ip为123.4.5.100
+                iptables -t nat -A PREROUTING -s 192.168.1.0/24 -i eth1 -j DNAT --to 123.4.5.100
+                    # 改写来自192.168.1.0/24的包, 目标ip为123.4.5.100
+                iptables -t nat -A POSTROUTING -s 172.27.0.0/16 -d 10.0.0.1 -p tcp --dport 80 -j SNAT --to-source MASQUERADE
+                    # 改写来自172.27.0.0/16去向10.0.0.1:80的tcp包, 源ip为本机ip
+                iptables -t nat -A PREROUTING -d 192.168.1.1 -p tcp --dport 80 -j DNAT --to-destination 10.0.0.1
+                    # 改写去向192.168.1.1:80的tcp包, 目标ip为10.0.0.1
+
     firewall
         systemctl start firewalld
 
@@ -447,7 +543,8 @@ date: 2018-10-11T18:47:57+08:00
 
     ping
     telnet
-    nmblookup -A ip             # 查询域名
+    nslookup                    # 查域名ip
+    nmblookup -A ip             # 查ip域名
     nmcli                       # 设置网络连接
         sudo nmcli c mod 'Wired connection 1' ipv4.never-default false
             # 解决manual ip不能设置路由的问题
@@ -546,6 +643,24 @@ date: 2018-10-11T18:47:57+08:00
             或者浏览器java-plugin
                 localhost:5801                          # 需要安装java
     wifi-menu
+    hostapd                 # 无线热点
+        yum install hostapd
+        vi /etc/hostapd/hostapd.conf
+            wpa_passphrase=asdfasdf
+            ssid=myflowers
+            interface=p3p1
+
+        yum install dhcp
+        vi /etc/dhcp/dhcpd.conf
+            option domain-name-servers 192.168.0.1,8.8.8.8;         # 自己的dns提供商
+            option routers 192.168.0.42;    # 本机ip
+            option domain-name "mydhcp";
+            option domain-name-servers 192.168.0.1;
+            log-facility local7;
+            subnet 192.168.0.0 netmask 255.255.255.0 {
+                range  192.168.0.160 192.168.0.170;
+                option broadcast-address 192.168.0.255;
+            }
 # 调度
     at                      # 某时间运行一次
 
@@ -725,7 +840,7 @@ date: 2018-10-11T18:47:57+08:00
         service --status-all
     chkconfig iptables on/off   # 设置服务启动
         --level 2345 iptables off                   # 查看各level服务状态
-        --list
+        --list iptables
 # 编程
     :() { :|:& };:              # fork bombmake
     make
@@ -1030,69 +1145,3 @@ date: 2018-10-11T18:47:57+08:00
     wine
     winetricks                  # 安装wine的各种依赖
     cabextract                  # microsoft cabinet获取工具
-# 方案
-    命令组合                    # xargs sed | grep awk
-        grep                    # 去除某些 grep nginx | grep -v grep
-    过滤进程并kill
-        ps -ef|grep -v "grep"|grep aurora/app.js |awk '{print $2}'| xargs kill -9
-            # grep -v 去掉包含"grep"的条目
-            ## 因为ps执行时列出当前命令与命令内容，会影响后面的过滤
-            # awk 取第二列(pid)的内容
-            # xargs 将前面过滤后的内容作为参数，执行kill -9
-    后台
-        nohup *** > /dev/null &                 # 在脚本文件中写入^C可以使脚本执行完nohup退出(exit不可以)
-
-    复制多个
-        ls -rt | tail -4 | xargs -i cp -r {} ~/sdb/work/ryxWork/架构/
-
-    替换文本
-        sed -i "s/a/@/g" `grep -rl "a" ./`
-
-    代码行数
-        find -name "*.go" -or -name "*.py" |xargs grep -v "^$" |wc -l
-
-    lib设置
-        /etc/ld.so.conf加入so文件的配置路径如:/usr/local/lib
-        执行/sbin/ldconfig -v 更新
-
-    unzip中转码
-        unzip -P “$(echo 中文 | iconv -f utf-8 -t gbk)”
-
-    切换登录
-        sudo -i su outrun
-
-    查找删除
-        ls | grep '^Dar' | xargs rm
-
-    爬网站
-        wget -x -P curSite -r -l 100 -k -L -np http://nodeapi.ucdok.com/api/
-        带cookie
-            wget --post-data="username=u1&password=asdf" --save-cookies=cookie --keep-session-cookies "http://www.abc.com/logging.php"
-            wget -x -P curSite -r -l 1 -k -L -np --load-cookies=cookie --keep-session-cookies "https://www.abc.com/display/1"
-    递归查找所有内容
-        grep -nr --exclude-dir={.git, res, bin} 'a' .
-
-    终端录制
-        script -t 2>timing.log -a output.log
-        scriptreply timing.log output.log
-
-    simplehttp
-        python -m SimpleHTTPServer 8080
-    无线热点
-        yum install hostapd
-        vi /etc/hostapd/hostapd.conf
-            wpa_passphrase=asdfasdf
-            ssid=myflowers
-            interface=p3p1
-
-        yum install dhcp
-        vi /etc/dhcp/dhcpd.conf
-            option domain-name-servers 192.168.0.1,8.8.8.8;         # 自己的dns提供商
-            option routers 192.168.0.42;    # 本机ip
-            option domain-name "mydhcp";
-            option domain-name-servers 192.168.0.1;
-            log-facility local7;
-            subnet 192.168.0.0 netmask 255.255.255.0 {
-                range  192.168.0.160 192.168.0.170;
-                option broadcast-address 192.168.0.255;
-            }

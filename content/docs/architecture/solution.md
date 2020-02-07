@@ -1,6 +1,6 @@
 ---
 Categories : ["架构"]
-title: "构架-方案"
+title: "架构-方案"
 date: 2018-10-10T16:49:27+08:00
 ---
 
@@ -149,6 +149,30 @@ date: 2018-10-10T16:49:27+08:00
 ## 缓存
     queue + map
         # queue存储、限量, map查询，指向queue中元素
+# 大数据
+    流程
+        采集 -> kafka -> ETL -> kafka -> 存储 -> OLAP
+    借鉴
+        宜信
+    采集
+        实时
+            trigger、日志
+                canel
+        准实时
+            日志
+        非实时
+            任务调度
+                quartz, xxl-job, 大数据
+    处理
+        流式框架、ETL
+            storm, flink, spark
+    存储
+        es, HDFS, driud, 业务系统
+        hadoop: hbase, hive
+    展现
+        OLAP
+            kylin, superset, Davinci
+        DBus-allinone
 # 实时并发
 ## 异步方案
     node.js + mongodb
@@ -588,3 +612,20 @@ date: 2018-10-10T16:49:27+08:00
 # 优秀项目借鉴
     thingsBoard
     confluence, jira
+# 运维
+    标准
+        ITIL(IT Infrastructure Library)
+        ITSM(IT System Management)
+    资产管理
+    运维
+        规章
+        容器
+            vspere, openstack
+        服务
+            硬件: 巡检
+            软件
+        交换机
+            ng, lvs
+        展现
+            zabbix
+    DevOps

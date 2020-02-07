@@ -38,6 +38,7 @@ headless: true
   - [javaweb](/docs/backend/javaweb)
   - [spring](/docs/backend/spring)
   - [hibernate](/docs/backend/hibernate)
+  - [hadoop](/docs/backend/hadoop)
 - [**数据库**](/docs/db)
   - [mongodb](/docs/db/mongodb)
   - [mysql](/docs/db/mysql)

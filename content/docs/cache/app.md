@@ -35,7 +35,7 @@ type: docs
             视频: quickTime, gifox, gif brewery, gif maker, Hype3
             3d: aurora3DMaker
         修补
-            设备同步: synergy, pushbullet
+            设备同步: synergy, pushbullet, sharemouse
             人机: alfred, divvy, unclutter, workspaces, yoink, xscope, hazeOver, microSnitch
             监视: istatistica, wifiExplorer
             文件: FEFileExplorer
@@ -66,7 +66,7 @@ type: docs
     ops:
         shell: ^z, bg, fg, jobs, nohup, expect, 
         系统: sysdig, sysstat包(sar, sadf, mpstat, iostat, pidstat), ifconfig, top, htop, ps, df
-        网络: wireshark, netstat, ss, ping, telnet, iptables, wget, git, openssh, nc
+        网络: wireshark, netstat, ss, ping, telnet, iptables, wget, git, openssh, nc, nmap, nslookup
         vpn: openvpn, shadowsocks, polipo, v2ray
         vm: docker, docker-compose
             db: mysql, mariadb, postgresql, redis, mongodb, cassandra, neo4j

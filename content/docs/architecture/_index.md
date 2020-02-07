@@ -9,7 +9,7 @@ date: 2018-10-11T10:33:48+08:00
     sdn        software defined network 软件定义网络
 # serverless
     knative
-        # google开源，serverless标准化方案，基于k8s和istio
+        # google开源，serverless标准化方案，基于kubernetes和istio
         模块
             build
             serving
@@ -25,7 +25,7 @@ date: 2018-10-11T10:33:48+08:00
         控制面板
 ## knative
     介绍
-        管理k8s, Istio
+        管理kubernetes, Istio
     模块
         build
         serve
@@ -33,11 +33,11 @@ date: 2018-10-11T10:33:48+08:00
             route
         event
 ## traefik
-    # go实现，多后台如k8s, swarm, marathon, mesos
+    # go实现，多后台如kubernetes, swarm, marathon, mesos
 ## linkerd
     # buoyant出品
 ## conduit
-    # 面向k8s轻量化mesh
+    # 面向kubernetes轻量化mesh
 ## fingle
     # twitter出品
 ## envoy
@@ -57,18 +57,18 @@ date: 2018-10-11T10:33:48+08:00
 ## openstack
     # 云操作系统，管理虚拟资源
 # 分布式服务(容器调度编排)
-|特性             |dubbo                      |spring cloud                        |k8s|
+|特性             |dubbo                      |spring cloud                        |kubernetes|
 |:----------------|:--------------------------|:-----------------------------------|:--|
-|配置管理          |-                          |config                              |k8s configMap|
-|服务发现          |zookeeper                  |eureka, consul, zookeeper           |k8s services
-|负载均衡          |自带                        |ribbon                              |k8s services
-|网关              |-                          |zuul                                |k8s services
+|配置管理          |-                          |config                              |kubernetes configMap|
+|服务发现          |zookeeper                  |eureka, consul, zookeeper           |kubernetes services
+|负载均衡          |自带                        |ribbon                              |kubernetes services
+|网关              |-                          |zuul                                |kubernetes services
 |分布式追踪        |-                          |spring cloud sleuth                 |open tracing
-|容错              |不完善                     |hystrix                             |k8s health check
+|容错              |不完善                     |hystrix                             |kubernetes health check
 |通信方式          |rpc                        |http, message                       |
 |安全模块          |-                          |spring cloud security               |-
 |分布式日志        |                           |ELK                                 |EFK
-|任务管理          |                           |spring batch                        |k8s jobs
+|任务管理          |                           |spring batch                        |kubernetes jobs
 ## kubernetes
     # google开源的，borg的发展，在docker技术上，管理容器化应用
     特点
@@ -211,6 +211,14 @@ date: 2018-10-11T10:33:48+08:00
         hyperkube
         apiextensions-apiserver
         mounter
+    镜像
+        kube-apiserver
+        kube-controller-manager
+        kube-scheduler
+        kube-proxy
+        pause
+        etcd
+        coredns
     配置
         用yaml或json定义
         pod
@@ -406,7 +414,7 @@ date: 2018-10-11T10:33:48+08:00
     # Apache
 ## 配置
 ### etcd
-    # k8s中用到的服务发现仓库
+    # kubernetes中用到的服务发现仓库
 ### spring cloud config
 ### Diamond
     # 淘宝

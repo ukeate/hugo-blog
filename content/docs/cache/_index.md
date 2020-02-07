@@ -25,6 +25,7 @@ type: docs
 <br/>
 
 工具:
+[rssHub](https://docs.rsshub.app/ "")
 [JetBrains](https://www.jetbrains.com "")
 [Atlassian](https://www.atlassian.com/ "")
 <br/>
@@ -56,6 +57,6 @@ type: docs
 |话费/网费              |61             |月         |
 |marginNote3            |6              |月         | 
 |oneDrive               |75             |年         | 
-|tech                   |263            |3年        |
+|tech                   |263            |2年        |
 |吃饭                   |20*30=600      |月         |
 |面包                   |10*10=100      |月         |

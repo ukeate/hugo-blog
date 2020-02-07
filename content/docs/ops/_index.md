@@ -39,7 +39,7 @@ type: docs
 # 虚拟化
     docker
     vagrant
-        # 用一个virtualbox虚拟机来快速部署开发环境
+        # 自动化虚拟机配置
     parallels desktop
         # 苹果
     xen
@@ -457,6 +457,11 @@ type: docs
 
             o-> 例子
             ansible '*' -m command -a 'uptime'
+# 仓库
+## nexus
+    # maven, npm, go, docker, yum等
+## jfrog
+    # 全语言二进制仓库
 # 版本
     mercurial
         # 简称hg，分布式版本控制系统，比git好
@@ -496,6 +501,9 @@ type: docs
     命令
         git [command] --help
         git help submodule
+        设置
+            config
+                --global http.proxy 'http://127.0.0.1:8123'
         仓库
             clone
             checkout
