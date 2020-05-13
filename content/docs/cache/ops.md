@@ -6,7 +6,7 @@
     阿里云maven: https://maven.aliyun.com/mvn/view
     阿里云个人docker
         入口: cr.console.aliyun.com
-            docker login --username=934260428@qq.com registry.cn-qingdao.aliyuncs.com
+            docker login -u 934260428@qq.com registry.cn-qingdao.aliyuncs.com
             docker tag java/device:1.0 registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
             docker push registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
             docker pull registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
@@ -18,13 +18,17 @@
         -e
             # 显示到底部
         -u
-            # 指定unit名
+            # 指定unit名, 如kubelet
         --no-pager
             # 不输出到管道来分页
         -f
             # 追加显示
+        -q
+            # 只显示warn以上信息
         --user-unit
             # 指定用户
+        --since "2018-03-26" 
+        --until "2018-03-26 03:00"
 
     journalctl -f --user-unit onedrive
     journalctl -xeu kubelet --no-pager
@@ -52,7 +56,7 @@
         sed -i '1i\new line'
             # 第一行前插入
     nmap
-        nmap 192.168.100.1/24
+        nmap 192.168.100.1/24 -p1-65535
     onedrive
         systemctl --user enable onedrive
         systemctl --user start onedrive
@@ -101,6 +105,7 @@
         sudo systemctl daemon-reload
         sudo systemctl restart docker
         docker build --help
+        docker login -u outrun -p asdf
     registry
         docker login -u outrun -p asdf registry:5000
         curl --user outrun:asdf -X GET  registry:5000/v2/_catalog
@@ -122,6 +127,10 @@
         docker image inspect 4de
         docker images|grep none|awk '{print $3}'|xargs docker rmi -f
             # 删除none镜像
+
+        docker save -o a.tar.gz a
+        docker load < a.tar.gz
+            --input a.tar.gz
     容器
         docker
             run
@@ -342,6 +351,8 @@
             --docker-email=934260428@qq.com
         所有nodeport
             kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
+        node上跑pod个数
+            kubectl get po --all-namespaces -o wide | grep cn-shanghai.i-uf6iudwa5b1tvdxb3yy8 |  wc -l 
 
 
 ## chrome

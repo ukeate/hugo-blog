@@ -108,7 +108,8 @@ type: docs
             升级方案
             硬件，网络，网络模型，存储模型，语言
             分布式协议，压缩方案，ha，api，运维方案，存储计算分离，缓存方案
-# rds(relational database service)
+# rds
+    # relational database service
     缺点
         阻抗失谐    # 和内存中的模型存在差异
     安全
@@ -590,7 +591,7 @@ type: docs
         start with 100;                         # 错误 ，不能变更启动序列，只能在创建序列时指定
     drop sequence seq
 
-# 性能优化
+## 性能优化
     设计
         库
             分库

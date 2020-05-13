@@ -1,20 +1,10 @@
 ---
-Categories : ["架构"]
-title: "架构-原理"
+Categories : ["支撑"]
+title: "支撑-原理"
 date: 2018-10-10T15:25:12+08:00
 ---
-
-# 基础
-    CAP定理
-        # 当面临分区的时候，必须在一致性和可用性之间权衡
-        一致性Consistency
-        可用性Availability
-        分区容错性Partition tolerance
-    BASE    # 解决CAP
-        基本可用(basic available)
-        软状态(soft state)
-        最终一致性(eventually consistent)
-# cpu
+# 主机
+## cpu
     介绍
         单cpu串行工作，前任务完成，后任务才开始                             # 串行不适合图形处理(多点，线，面要同时乘投影矩阵)
         cpu把大量空间和电量分配给控制器和缓存，不能集成太多计算单元
@@ -84,7 +74,7 @@ date: 2018-10-10T15:25:12+08:00
                     自己的信号掩码
                     cpu affinity(倾向在某cpu尽量长时间运行)
                     cgroups
-## 进程调度
+### 进程调度
     等级
         高级调度(High-Level Scheduling)
             作业调度, 后备作业调入内存运行
@@ -105,7 +95,7 @@ date: 2018-10-10T15:25:12+08:00
                     批处理系统用. 从就绪队列中选出下一个cpu执行期最短的进程,分配处理机
                 轮转法
                     分时系统中,都采用时间片轮转法
-# gpu
+## gpu
     介绍
         gpu控制单元少, 计算单元多
         显卡在pci总线上
@@ -117,7 +107,7 @@ date: 2018-10-10T15:25:12+08:00
             线程块线程相同指令地址, 通过共享存储器(shared memory)和栅栏(barrier)块内通信
                 不同块不通信，粗粒度并行
                 同块通信，细粒度并行
-# 内存
+## 内存
     原理
         虚拟内存(virtual memory)
         页表(page table)
@@ -744,6 +734,16 @@ date: 2018-10-10T15:25:12+08:00
             转接来话，处理传真，电子邮件等
 
 # 分布式服务
+    定理
+        CAP定理
+            # 当面临分区的时候，必须在一致性和可用性之间权衡
+            一致性Consistency
+            可用性Availability
+            分区容错性Partition tolerance
+        BASE    # 解决CAP
+            基本可用(basic available)
+            软状态(soft state)
+            最终一致性(eventually consistent)
     架构
         服务网格
         容器调度编排

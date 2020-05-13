@@ -68,7 +68,7 @@ type: docs
                 33. progman--------程序管理器
                 34. winmsd---------系统信息
                 35. perfmon.msc----计算机性能监测程序
-                2. 36. winver---------检查Windows版本
+                36. winver---------检查Windows版本
                 37. sfc /scannow-----扫描错误并复原
                 38. taskmgr-----任务管理器（2000／xp／2003
                 39. winver---------检查Windows版本
@@ -117,7 +117,7 @@ type: docs
                 82. sfc.exe--------系统文件检查器
                 83. sfc /scannow---windows文件保护
                 84. tsshutdn-------60秒倒计时关机命令
-                3. 84. tsshutdn-------60秒倒计时关机命令
+                84. tsshutdn-------60秒倒计时关机命令
                 85. tourstart------xp简介（安装完成后出现的漫游xp程序）
                 86. taskmgr--------任务管理器
                 87. eventvwr-------事件查看器

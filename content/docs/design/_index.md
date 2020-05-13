@@ -48,19 +48,19 @@ type: docs
 ## 知识库
     confluence
         # 收费
+    NextCloud
+        # 私有网盘
     tiddlyWiki
         # 可在线定义目录树
     github
         # 用wiki页面
-    gitboot
+    gitbook
     mediaWiki
         # 维基百科样式，只有单页目录树
     dokuWiki
         # 只有网站地图
     xwiki
         # 目录树, acl
-    tapd
-        # 腾讯
     语雀
     hdwiki
         # 百科, 已停更
@@ -71,9 +71,40 @@ type: docs
     有道云笔记
     幕布
     石墨
+    etherpad.org
+        # 在线协作无缝编辑
+    dropbox
+        # 文档协作
+    坚果云
+        # 文档协作
 ## 网盘
     google drive
     百度云
+## 沟通
+    Mattermost
+        # 开源
+    team
+        # 微软, 聊天
+    slack
+        # 聊天
+    hipChat
+        # Atlassian, 聊天
+    企业微信
+    钉钉
+    倍洽
+    飞书
+    瀑布IM
+## 邮件
+    gmail
+    阿里云邮箱
+    腾讯企业邮
+    zoho
+    网易企业邮
+## 原型
+    zeplin
+        # 设计和前端协同工具
+    蓝湖
+        # 免费
 ## 团队协作
     jira
         # 进度管理跟踪, 敏捷开发
@@ -87,10 +118,8 @@ type: docs
         # 进度管理
     testlink
         # 测试收集, 进度管理
-    zeplin
-        # 设计和前端协同工具
     redmine
-        # ror开发, 项目管理, 把成员、任务、文档、讨论等资源整合在一起。支持git, svn, cvs等
+        # 开源, ror开发, 项目管理, 把成员、任务、文档、讨论等资源整合在一起。支持git, svn, cvs等
     youtrack
         # jetbrains, 项目管理
     禅道
@@ -104,25 +133,48 @@ type: docs
         功能
     worktile
         # microsoft项目管理
-
+    notion
+    明道云
+    云之家
+    eteams
+    今目标
+    tower
+    masterlab
+        # 开源
+    openProject
+        # 开源
+    peerProject
+        # 开源
 
     trello
         # 进度管理
-
-    team
-        # 微软, 聊天
-    slack
-        # 聊天
-    hipChat
-        # Atlassian, 聊天
-    企业微信
-    钉钉
-
-    shimo
-        # 文档协作
-    etherpad.org
-        # 在线协作无缝编辑
-    dropbox
-        # 文档协作
-    坚果云
-        # 文档协作
+## 代码管理
+    github
+    gitee
+    coding
+    bitbucket
+    gitea
+        # 开源
+    gitlab
+    gogs
+        # 开源
+## 测试
+    semaphore
+    codeClimate
+## 文档
+    swagger
+## 镜像
+    harbor
+    nexus
+## 部署
+    drone
+    Travis-CI
+    CircleCI
+    GitLab-CI
+## 集群
+    kuboard
+    prometheus
+    grafana
+    zabbix
+## 日志
+    ElasticStack

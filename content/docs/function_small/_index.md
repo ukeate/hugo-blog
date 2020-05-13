@@ -1,6 +1,6 @@
 ---
-title: 后端
-Categories : ["后端"]
+title: 小功能
+Categories : ["功能"]
 date: 2018-10-10T14:36:50+08:00
 type: docs
 ---
@@ -121,7 +121,209 @@ type: docs
     crm                 customer relationship management
     erp             enterprise resource planning
     webRTC          web Real-Time Communication
-# 开发框架
+# 库
+## 日志
+    log4j
+        # java
+    logback
+        # log4j后续版本
+    slf4j
+        # java
+    log4js
+        # js
+## 格式|模板
+    moment
+        # js格式化时间
+    iconv
+        # nodejs调用c++ libiconv库来转码
+    iconv-lite
+        # nodejs实现的转码，比调用c++ 的iconv更高效
+    poi
+        # java 文件处理
+    jFreeChart
+        # java图表库
+    jackson
+        # java json序列化
+    json-smart
+        # java json
+    xstream
+        # java xml序列化
+    pango2
+        # 国际化模板
+    snakeyaml
+        # java yaml
+    js-beautify
+        # js, html格式化
+    xmlbeans
+        # java xml
+    joda-time
+        # java日期
+    dom4j
+        # java dom 
+## 生成|压缩|加密|计算特征
+    simhash
+        # google 文档hash
+    pygments
+        # python 生成高亮html
+    mako
+        # python 模板
+    jinja2
+        # python 模板
+    freemarker
+        # java 模板
+    proguard
+        # java 混淆
+    snappy
+        # google java 压缩
+    jbcrypt
+        # java加密, scrypt更强
+## 客户端|邮件
+    javamail
+        # java mail
+    nodemailer
+        # node mail
+    mailapi
+        # java mail
+    c3p0
+        # java rds 连接池
+    dbcp
+        # java rds 连接池
+    druid
+        # java rds 连接池。可监控sql执行性能，记sql日志
+    jdbc
+        # java rds client
+    dbutil
+    hibernate
+    ef
+        # .net orm
+    NHibernate
+        # .net orm
+    peewee
+        # python orm
+    node-mysql
+    mongoose
+    httpClient
+        # java http
+    request
+        # js http
+    superagent
+        # js http
+    mybatis
+    hsqldb
+        # java内置, 单文件/内存数据库
+    mqttv
+        # java mqtt客户端
+    libthrift
+        # java thrift
+    kafka-clients
+## 领域语言
+    lex
+        # 生成词法分析程序
+    yacc
+        # 生成自底向上语法分析程序
+    antlr
+## 图形
+    ccap
+        # 基于c++的图形CImg库，就是一个CImg.h文件
+    canvas
+        # node canvas
+    tesseract
+        # node 验证码
+## 运维控制
+    later
+        # nodejs corntab
+    glob
+        # nodejs 匹配获得文件
+    rd
+        # node 遍历文件
+    commander
+        # node制作命令
+    mkdirp
+        # node 递归makedir
+    fs-extra
+        # node扩展fs包
+    testcontainers
+        # java, 运行docker
+    jOptSimple
+        # java, 命令解析
+## 协议
+    spring-websocket
+        # java
+    httpcore-nio
+        # java
+    grpc-context
+        # java
+## 高可用 | 性能
+    retry
+        # js retry
+    ehcache
+        # 缓存
+    tagg
+        # node线程池
+    cluster
+        # node单机集群
+    fiber
+        # node协程
+    driud
+        # 连接池，阿里开源
+### akka
+    # scala并发、分布式、容错工具
+    使用
+        system = ActorSystem.create("hello")
+        system.actorOf() ## 前端 ### dwr
+    介绍
+        java函数通过ajax映射到前端js调用
+    使用
+        ajax框架
+        1.导入jar包 dwr.jar
+        2.web-inf/下的配置文件
+            web.xml文件
+                <servlet>
+                    <servlet-name>dwr-invoker</servlet-name>
+                    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
+                            # 固定写法
+                    <init-param>
+                            <param-name>debug</param-name>
+                            <param-value>true</param-value>
+                    </init-param>
+                    <init-param>
+                            <param-name>scriptCompressed</param-name>        # 允许在javascript中执行
+                            <param-value>false</param-value>
+                    </init-param>
+                    <load-on-startup>1</load-on-startup>        # web工程启动时加载
+                </servlet>
+                <servlet-mapping>
+                    <servlet-name>dwr-invoker</servlet-name>
+                    <url-pattern>/dwr/*</url-pattern>
+                </servlet-mapping>
+            dwr.xml文件
+                <dwr>
+                    <allow>
+                        <create creator="new" javascript="DWRUserAccess">        # 生成js文件的名（页面中引用）
+                                <param name="class" value="outrun.dwr.DWRUserAccess" />                # 曝露的类
+                        </create>
+                        <convert converter="bean" match="outrun.dwr.User" />        # 注册实体类，可以在js中进行实例化
+                    </allow>
+                </dwr>
+        3.写outrun.dwr.DWRUserAccess中的方法
+        4.页面调用
+            test.html
+                <script src="/outrun/dwr/engine.js"></script>
+                <script src="/outrun/dwr/util.js"></script>
+                <script src="/outrun/dwr/interface/DWRUserAccess.js"></script>
+                <SCRIPT LANGUAGE="JavaScript">
+                    DWRUserAccess.方法(参数,执行完运行的js函数)
+                        # 参数可以是一个map,如
+                            var userMap = {};
+                            userMap.id = regForm.id.value;
+                            userMap.password = regForm.password.value;
+                            userMap.name = regForm.name.value;
+                            userMap.email = regForm.email.value;
+                            DWRUserAccess.save(userMap, saveFun);
+                                    # 其中的regForm是页面中的表单（的name属性,dom支持直接使用名字引用表单）
+                </SCRIPT>
+
+# 开发
 ## 脚手架
 ### spring boot
 ### drapWizard
@@ -213,7 +415,7 @@ type: docs
 
         o-> 高可用
         LoadingCache                        # 堆内缓存
-## 接口
+# 接口
     luavit
         # lua实现, 类node
     scotty
@@ -267,6 +469,7 @@ type: docs
         # php
     codelgniter
         # php
+## RESTful
 ### connect
     介绍
         nodejs处理http中req、res的中间件框架
@@ -673,11 +876,11 @@ type: docs
 
                     });
 
-## 展示
+# 展示
     titles
         # java apache的标签库
-### spring mvc
-### struts2
+## spring mvc
+## struts2
     # 基础
         介绍
             struts1和WebWork的发展
@@ -1535,211 +1738,8 @@ type: docs
             o-> 设置tomcat/conf/server.xml
                 <Connector port="8080" .. URIEncoding="utf-8"/>
             o-> 提交下载请求用post方式，struts框架自动给post请求编码解码
-# 功能
+# 数据
 ## 日志
-    log4j
-        # java
-    logback
-        # log4j后续版本
-    slf4j
-        # java
-    log4js
-        # js
-## 格式|模板
-    moment
-        # js格式化时间
-    iconv
-        # nodejs调用c++ libiconv库来转码
-    iconv-lite
-        # nodejs实现的转码，比调用c++ 的iconv更高效
-    poi
-        # java 文件处理
-    jFreeChart
-        # java图表库
-    jackson
-        # java json序列化
-    json-smart
-        # java json
-    xstream
-        # java xml序列化
-    pango2
-        # 国际化模板
-    snakeyaml
-        # java yaml
-    js-beautify
-        # js, html格式化
-    xmlbeans
-        # java xml
-    joda-time
-        # java日期
-    dom4j
-        # java dom 
-## 生成|压缩|加密|计算特征
-    simhash
-        # google 文档hash
-    pygments
-        # python 生成高亮html
-    mako
-        # python 模板
-    jinja2
-        # python 模板
-    freemarker
-        # java 模板
-    proguard
-        # java 混淆
-    snappy
-        # google java 压缩
-    jbcrypt
-        # java加密, scrypt更强
-## 客户端|邮件
-    javamail
-        # java mail
-    nodemailer
-        # node mail
-    mailapi
-        # java mail
-    c3p0
-        # java rds 连接池
-    dbcp
-        # java rds 连接池
-    druid
-        # java rds 连接池。可监控sql执行性能，记sql日志
-    jdbc
-        # java rds client
-    dbutil
-    hibernate
-    ef
-        # .net orm
-    NHibernate
-        # .net orm
-    peewee
-        # python orm
-    node-mysql
-    mongoose
-    httpClient
-        # java http
-    request
-        # js http
-    superagent
-        # js http
-    mybatis
-    hsqldb
-        # java内置, 单文件/内存数据库
-    mqttv
-        # java mqtt客户端
-    libthrift
-        # java thrift
-    kafka-clients
-## 领域语言
-    lex
-        # 生成词法分析程序
-    yacc
-        # 生成自底向上语法分析程序
-    antlr
-## 图形
-    ccap
-        # 基于c++的图形CImg库，就是一个CImg.h文件
-    canvas
-        # node canvas
-    tesseract
-        # node 验证码
-## 运维控制
-    later
-        # nodejs corntab
-    glob
-        # nodejs 匹配获得文件
-    rd
-        # node 遍历文件
-    commander
-        # node制作命令
-    mkdirp
-        # node 递归makedir
-    fs-extra
-        # node扩展fs包
-    testcontainers
-        # java, 运行docker
-    jOptSimple
-        # java, 命令解析
-## 协议
-    spring-websocket
-        # java
-    httpcore-nio
-        # java
-    grpc-context
-        # java
-## 高可用 | 性能
-    retry
-        # js retry
-    ehcache
-        # 缓存
-    tagg
-        # node线程池
-    cluster
-        # node单机集群
-    fiber
-        # node协程
-    driud
-        # 连接池，阿里开源
-### akka
-    # scala并发、分布式、容错工具
-    使用
-        system = ActorSystem.create("hello")
-        system.actorOf() ## 前端 ### dwr
-    介绍
-        java函数通过ajax映射到前端js调用
-    使用
-        ajax框架
-        1.导入jar包 dwr.jar
-        2.web-inf/下的配置文件
-            web.xml文件
-                <servlet>
-                    <servlet-name>dwr-invoker</servlet-name>
-                    <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
-                            # 固定写法
-                    <init-param>
-                            <param-name>debug</param-name>
-                            <param-value>true</param-value>
-                    </init-param>
-                    <init-param>
-                            <param-name>scriptCompressed</param-name>        # 允许在javascript中执行
-                            <param-value>false</param-value>
-                    </init-param>
-                    <load-on-startup>1</load-on-startup>        # web工程启动时加载
-                </servlet>
-                <servlet-mapping>
-                    <servlet-name>dwr-invoker</servlet-name>
-                    <url-pattern>/dwr/*</url-pattern>
-                </servlet-mapping>
-            dwr.xml文件
-                <dwr>
-                    <allow>
-                        <create creator="new" javascript="DWRUserAccess">        # 生成js文件的名（页面中引用）
-                                <param name="class" value="outrun.dwr.DWRUserAccess" />                # 曝露的类
-                        </create>
-                        <convert converter="bean" match="outrun.dwr.User" />        # 注册实体类，可以在js中进行实例化
-                    </allow>
-                </dwr>
-        3.写outrun.dwr.DWRUserAccess中的方法
-        4.页面调用
-            test.html
-                <script src="/outrun/dwr/engine.js"></script>
-                <script src="/outrun/dwr/util.js"></script>
-                <script src="/outrun/dwr/interface/DWRUserAccess.js"></script>
-                <SCRIPT LANGUAGE="JavaScript">
-                    DWRUserAccess.方法(参数,执行完运行的js函数)
-                        # 参数可以是一个map,如
-                            var userMap = {};
-                            userMap.id = regForm.id.value;
-                            userMap.password = regForm.password.value;
-                            userMap.name = regForm.name.value;
-                            userMap.email = regForm.email.value;
-                            DWRUserAccess.save(userMap, saveFun);
-                                    # 其中的regForm是页面中的表单（的name属性,dom支持直接使用名字引用表单）
-                </SCRIPT>
-
-# 应用框架
-## 数据
-### 日志
     scribe
         facebook出品
         特点
@@ -1769,17 +1769,17 @@ type: docs
                 agent collector 由master统一
     logstash
         # 分布式日志收集，需结合kafka
-### 爬虫
+## 爬虫
     cheerio
         # node解析html，如jquery
     scrapy-redis
         # python 分布式爬虫框架
     phantomjs
         # js浏览器模拟框架
-### 分析
+## 分析
     pandas
         # python数据分析
-### 计算
+## 计算
     druid
         # apache
         特点
@@ -1791,7 +1791,7 @@ type: docs
     spark
     stream
     hadoop
-## 搜索
+# 搜索
     分类
         垂直搜索引擎
             针对某一个行业的专业搜索引擎，是搜索引擎的细分和延伸，是对网页库中的某类专门的信息进行一次整合，定向分字段抽取出需要的数据进行处理后再以某种形式返回给用户。
@@ -1813,7 +1813,7 @@ type: docs
         # 基于Rsolr，以dsl结构用ruby调solr
     sphinx
         # 基于sql的全文检索引擎
-### lucene
+## lucene
     # 原理
         block k-d tree
         倒排索引
@@ -1985,7 +1985,7 @@ type: docs
         String result = highlighter.getBastFragment(analyzer,"name",doc.get("name"));
             # 返回高亮处理字符串
             ## 参数1：解析用户输入词的分词器,参数2：是要查询的field的key(没有用)，参数3：field的value
-### solr
+## solr
     介绍
         基于lucene
         搜索服务器，http请求提交和返回xml
@@ -1998,7 +1998,7 @@ type: docs
         垂直搜索
         高亮
         data schema定义字段
-### elasticsearch
+## elasticsearch
     介绍
         基于lucene
     性能
@@ -2007,8 +2007,8 @@ type: docs
         文件系统缓存(内存中分配)和数据量同样大，才有效率        # 冷热分离
 
         分页，会查前面所有数据                              # 用scroll api, 快照 + 游标
-## 权限
-### shiro
+# 权限
+## shiro
     功能
         认证
         授权
@@ -2218,524 +2218,4 @@ type: docs
 
                 user：比如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查
                         # remember me可登录
-## 博客
-### cleaver
-    # 基于node幻灯片
-### hexo
-    介绍
-        简单轻量，基于node的静态博客框架
-        可以部署在自己node服务器上，也可以部署在github上
-    目录结构
-        scaffolds                                        # 脚手架
-        scripts                                            # 写文件的js, 扩展hexo功能
-        source                                            # 存放博客正文内容
-                _drafts                                    # 草稿箱
-                _posts                                        # 文件箱
-        themes                                            # 皮肤
-        _config.yml                                        # 全局配置文件
-        db.json                                            # 静态常量
-    使用
-        npm install -g hexo
-        hexo version
-        hexo init nodejs-hexo
-        cd nodejs-hexo && hexo server
-        hexo new 新博客                            # 产生 source/_posts/新博客.md
-        hexo server                                        # 启动server
-        hexo generate                                    # 静态化处理
-        github中创建一个项目nodejs-hexo, 在_config.yml中找到deploy部分，设置github项目地址
-        hexo deploy
-                # 部署以后，分支是gh-pages, 这是github为web项目特别设置的分支
-        上github，点settings找到github pages, 找到自己发布的站点
-        无法访问静态资源
-                设置域名
-                        申请域名
-                        dnspod 中 绑定ip
-### hugo
-    简介
 
-        hugo由go编写，开源，特点为编译快
-        本文基于hugo0.49
-
-    help
-        hugo help
-        hugo help server    # server代表任何子命令
-
-     生成站点
-        hugo new site blog1 # 站点命令在blog1中执行
-
-     生成文章
-        hugo new about.md
-        hugo new post/first.md
-
-     主题
-        git clone https://github.com/spf13/hyde.git themes/hyde # 更多主题在https://themes.gohugo.io
-
-
-     本地服务器
-        hugo server
-            # 自带watch
-            -s /path/to/codes
-            --theme=hyde
-            --buildDrafts
-            -p 1315
-                # 默认端口1313
-
-     发布
-        hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
-
-     文章
-        开头
-            ---
-            用YAML写内容
-            --- # +++标记可写TOML
-
-            Description = ""
-            Categories = ["a1", "a2"]
-            Tags = ["b1","b2"]
-            draft = true    # 文章隐藏
-            menu = ""
-            title = "a" # 文章标题
-
-     配置
-        打开config.toml   # 可以是config.yaml、config.json
-        baseURL = ""
-        title = ""
-        theme = ""
-        [permalinks]
-            post = "/:year/:month/:title/"  # 生成list页面
-
-        [taxonomies]
-            category = "categories"
-            tag = "tags"
-
-        [params]
-            description = ""
-            author = ""
-
-        ignoreFiles = []
-
-        [blackfriday]   # 设置markdown库
-
-### jekyll
-    介绍
-        ruby静态站点生成器，根据网页源码生成静态文档文件
-        提供模板、变量、插件等功能
-        生成的站点可以直接发布到github上
-    使用
-        curl http://curl.haxx.se/ca/cacert.pem -o cacert.pem
-            # 移动到ruby安装目录
-        安装devkit
-        gem install jekyll
-        git clone https://github.com/plusjade/jekyll-bootstrap.git jekyll
-            # 下载jekyll-bootstrap模版
-        cd jekyll && jekyll serve
-        rake post title = 'Hello'
-            # 生成文章
-            ## 编辑_posts下面生成的文章
-        修改convertible.rb文件编码为utf-8
-        jekyll serve
-        发布到github
-            github上创建新仓库
-            git remote set-url origin git@新仓库
-            git add .
-            git commit -m 'new'
-            git push origin master
-            git branch gh-pages
-                # 新建一个分支，用于发布项目
-            git checkout gh-pages
-            修改_config.yml
-                production_url: http://outrun.github.io
-                BASE_PATH: /jekyll-demo
-## webIDE
-    codebox
-## 游戏
-    pomelo
-        # node.js上网易开源的实时性好的游戏类服务器
-## 地理信息
-    ide
-        skylive
-        arcGIS
-        mapInfo
-        mapGIS
-        superMap
-    webglobe
-    arcpy
-## 人工智能
-    tensorflow
-        # 神经网络计算
-    convnet.js
-        # js深度学习
-    scikit-learn
-        # python机器学习
-## CMS
-    # content management system
-### wordpress
-    # php
-### dedecms
-    # 织梦cms, SEO优化
-### 帝国cms
-    # SEO优化
-### phpcms
-### phpwind
-    # 开源, 社区管理系统
-### drupal
-    # 开源, cms
-## 商城
-### ecshop
-    # 开源, 商城系统, 微信商城
-## 企业资源计划
-    # erp
-    activiti
-        # 工作流
-    YAML
-        # 工作流
-    bossa
-        # 工作流引擎
-    azkaban
-        # 开源oa
-    grav
-        # 开源cms
-    nopCommerce
-        # .net开源电商
-### jbpm
-    # 常识
-        适用对象：业务逻辑不复杂，业务流程会变化
-            # s2sh适合业务逻辑复杂，但是业务流程不会变化的项目
-        jbpm封装hibernate
-        包含对象
-            模型
-            实例（由活动组成，包括活动、箭头等）
-            任务（需要人办理的活动）
-
-
-    # 使用
-        myeclipse添加jbpm xml画图插件
-            MyEclipse -> MyEclipse Configuration Center -> Software -> Browse Software(add site) -> add from archive file找到jbpm-gpd-site.zip,取名为jbpm4.4 -> Browse Software(Personal Sites -> jbpm4.4下8个选项)右键add to Profile -> 右下角apply changes -> 重启myeclipse -> 新建文件中找到新建jbpm xml文件
-            画图
-                test.jpdl.xml文件用jbpm工具打开
-                打开Properties视图
-        配置
-            jbpm.hibernate.cfg.xml                # mysql方言要配置InnoDB的方言（因为jbpm建表时对表指定了type=InnoDB约束）
-            配置hibernate的5个映射文件（导入的jbpm.jar包中有）
-                <mapping resource="jbpm.repository.hbm.xml" />
-                <mapping resource="jbpm.execution.hbm.xml" />
-                <mapping resource="jbpm.history.hbm.xml" />
-                <mapping resource="jbpm.task.hbm.xml" />
-                <mapping resource="jbpm.identity.hbm.xml" />
-            jbpm.cfg.xml:
-
-        api
-            hibernate的api:org.hibernate.cfg.Configuration()
-                .configure("jbpm.hibernate.cfg.xml").buildSessionFactory();进行hibernate配置文件加载测试
-            delete_deployment       # 有实例时不能删除
-                                    # 级联删除时出现constraintViolationException的原因：
-                                    ## jbpm4.4下载包中/install/src/db/create/下有创建jbpm各个数据库时用到的sql文件
-                                    ##　如果是mysql数据库，其中表有type=InnoDB约束。该约束的方言类为hibernate-core.jar包下/org.hibernate.dialect.MySQLInnoDBDialect的类文件
-                                    ## ，在hibernate的配置文件中配置该方言就可以解决问题
-    # 表结构
-        表
-            模型
-                jbpm4_deployment
-                jbpm4_lob
-                jbpm4_deployprop
-            实例
-                jbpm4_execution
-                jbpm4_hist_procinst
-                jbpm4_task
-                jbpm4_hist_task
-            活动
-                jbpm4_hist_actinst
-            变量
-                jbpm4_variable
-
-        id关联
-## it服务管理
-    # ITSM(IT service management)
-    sap
-    salesforce
-    servicenow
-    workday
-        # hr平台
-## 工业互联网(IoT)
-    Kaa
-    SiteWhere
-        # tomcat, mongodb, hbase, influxdb, grafana
-    ThingSpeak
-        # matlab可视化
-    DeviceHive
-        # 开源, docker, k8s, es, spark, cassandra, kafka
-    Zetta
-    Thinger.io
-    wso2
-### thingsBoard
-    # java, 社区版、企业版
-    文档
-        github.com/thingsboard/thingsboard
-        thingsboard.io/docs
-        localhost:8080/swagger-ui.html      # 本地swagger
-    安装
-        docker
-            docker run -it -p 9090:9090 -p 1883:1883 -p 5683:5683/udp -v ~/.mytb-data:/data -v ~/.mytb-logs:/var/log/thingsboard --name mytb thingsboard/tb-postgres
-        maven
-            确定ui/pom.xml中<nodeVersion>
-            mvn install -DskipTests
-        配置
-            application
-                zk
-                    ZOOKEEPER_ENABLED
-                    ZOOKEEPER_URL
-                cassandra
-                    CASSANDRA_URL
-                    CASSANDRA_USERNAME
-                    CASSANDRA_PASSWORD
-                redis
-                    REDIS_HOST
-                    REDIS_PORT
-                    REDIS_DB
-                    REDIS_PASSWORD
-                postgresql
-                    SPRING_DATASOURCE_URL
-                    SPRING_DATASOURCE_USERNAME
-                    SPRING_DATASOURCE_PASSWORD
-                kafka
-                    TB_KAFKA_SERVERS
-        运行
-            application
-                server
-            transport
-                http
-        demo数据
-            admin
-                sysadmin@thingsboard.org    sysadmin
-            tenant
-                tenant@thingsboard.org  tenant
-            customer
-                customer@thingsboard.org或customerA@thingsboard.org  customer
-                customerB@thingsboard.org   customer
-                customerC@thingsboard.org   customer
-            device
-                A1, A2, A3  A1_TEST_TOKEN,...   customerA
-                B1  B1_TEST_TOKEN   customerB
-                C1  C1_TEST_TOKEN   customerC
-                'DHT11 Demo Device'     DHT11_DEMO_TOKEN
-                'Raspberry Pi Demo Device'  RASPBERRY_PI_DEMO_TOKEN
-    包结构
-        application                         # 可改, 网关
-            server
-                install
-                config                      # 同源策略、swagger、websocket、消息、安全
-                exception
-                controller                  # 页面调用
-                service
-                actors
-                    service
-                        DefaultActorService
-                            actorContext
-                                actorService(this)
-                                actorSystem
-                                appActor
-                                statsActor
-                            rpcManagerActor
-        common                              # 不可改, 功能代理
-            data                            # 数据结构
-            message                         # 消息类型
-            transport                       # 客户端调用
-        dao                                 # 可改, 业务, 适配db
-            model                           # 数据库对象
-            resources
-                sql                         # 表结构
-        netty-mqtt                          # 不可改, 数据通信协议
-        rule-engine                         # 不可改, 规则引擎
-        transport                           # 不可改, 设备端运行
-            http                            # 启动http传输协议
-            coap
-            mqtt
-        tools                               # 可改, 工具
-        ui                                  # 可改, 页面, angular, react, webpack
-        docker                              # 不可改, 打包
-        msa                                 # 不可改，分布式
-            black-box-tests                 # 黑盒测试
-            js-executor                     # 执行js
-        log
-        img         
-    模块
-        application
-            common
-                data                        # 数据结构
-                message                     # 消息结构
-                transport                   # 接口结构，适配客户端
-        dao                                 # 交互data, 兼容不同db
-        tools
-            extensions
-                kafka
-                mqtt
-                rabbitmq
-                rest-api-call
-            extensions-api
-                action
-                filter
-                plugin
-                processor
-            extensions-core                 # 实现公用extensions-api
-        transport
-            http                            # rest
-            coap                            # californium
-            mqtt                            # netty
-        规则引擎                             # 基于actors执行
-            filters
-            processors
-            action
-        ui                                  # node.js + yarn
-    表结构
-        tenant
-        customer                            # 关联tenant
-        tb_user                             # user信息、角色
-        user_credentials                    # user密码
-        admin_settings                      # admin信息, key value形式
-        audit_log                           # 登录日志
-
-        asset
-        entity_view     
-        attribute_kv                        # entity attribute
-        component_descriptor                # node类
-
-        device                              # 设备, label
-        device_credentials                  # 设备ACCESS_TOKEN
-        ts_kv                               # 设备事件
-        ts_kv_latest                        # 设备当前状态
-
-        rule_chain                          # rule root chain
-        rule_node                           # rule节点
-        relation                            # rule关系
-        event                               # rule事件
-        alarm                               # alarm事件
-
-        dashboard                           # dashboard设置
-        widget_type                         # widget, 别名
-        widgets_bundle
-    api
-        host:port/api/v1/$ACCESS_TOKEN/
-            telementry                      # 上传遥测数据
-                post {"key1":"value1"}
-                post [{"key1":"value1"}]
-                post {"ts":1451649600512, "values":{"key1":"value1"}}
-            attributes
-                post {"attribute1":"value1"}          # 更新属性
-                get                         # 请求属性
-            attributes/updates
-                get ?timeout=20000          # 订阅属性
-            rpc
-                get ?timeout=20000          # 要求订阅，返回id, method, params
-                post {"method": "getTime", "params":{}}     # 执行method
-            rpc/{$id}
-                post
-            claim                           # 用户认领设备
-                post
-    服务架构
-    产品架构
-        设备接入: MQTT、CoAP、HTTP
-        规则引擎                             # 处理设备消息
-            消息(message)
-                设备传入数据
-                设备生命周期事件
-                rest api事件
-                rpc请求
-            规则节点(node)                   # 过滤消息
-                filter
-                enrichment
-                transformation
-                action
-                external
-                rule chain
-            规则链                           # 连接节点
-        核心服务
-            设备认证: token、X.509
-            规则和插件
-            多租户(tenant)
-                客户
-                    资产
-                    设备
-            部件(widget)仪表盘(dashboard)
-                alarm
-                实体视图
-                    设备即服务(DaaS)
-                    共享资产、设备
-                    传感器等权限
-            告警和事件
-        网关: rest api, websocket
-        actor模型: 用于并发
-        集群: zookeeper服务发现, 一致性哈希
-        安全: SSL
-        第三方
-            akka
-            zookeeper
-            grpc
-            cassandra
-
-        system
-            general
-            mail
-            security
-    功能模块
-        admin
-        tenant
-            rule chain
-                filter
-                enrichment
-                transformation
-                action
-                *analytics
-                external
-                rule chain
-            *data converters
-            *integrations
-            *roles
-            *customers hierarchy
-            *user groups
-            customers
-            *customer groups
-            assets
-            *asset groups
-            devices
-            *device groups
-            entity views
-            *entity view groups
-            widgets library
-            dashboards
-            *dashboard groups
-            *scheduler
-                report
-                send rpc
-                update attributes
-            *white labeling
-                main server
-                mail templates
-                custom translation
-                custom menu
-                white labeling
-                login white labeling
-                self registration
-            audit logs
-        entities
-            包含
-                tenants
-                customers
-                users
-                devices
-                assets
-                alarms
-                dashboards
-                rule node
-                rule chain
-            操作
-                detail
-                assigned to customer
-                attributes
-                    client
-                    server
-                    shared
-                telemetry
-                alarms
-                events
-                relations
-                audit logs

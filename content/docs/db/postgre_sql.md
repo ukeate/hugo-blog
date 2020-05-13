@@ -51,7 +51,7 @@ date: 2018-10-11T15:34:29+08:00
         \h                          # sql命令
         \l                          # 列出数据库
         \q                          # 退出
-        \c 数据库名                   # 切换数据库
+        \c 数据库名                 # 切换数据库
         \d name                     # 查看序列、表、视图、索引
             \dS+                    # 详情
         \du                         # 查看角色
@@ -164,7 +164,7 @@ date: 2018-10-11T15:34:29+08:00
 
     o-> 序列
     create table a(
-        id integer primary key
+        id bigint primary key
     );
     create sequence a_id_seq
         start with 1

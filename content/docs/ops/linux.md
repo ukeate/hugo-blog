@@ -40,6 +40,7 @@
     /proc
         /[pid]
             /status                             # 任务虚拟地址空间的大小 VmSize, 应用程序正在使用的物理内存的大小 VmRSS
+        /loadavg                                # 1分钟、5分钟、15分钟平均负载。运行队列进程数/进程总数。最后一个进程id
     /etc
         /sudoers
             outrun ALL=(ALL) NOPASSWD:ALL

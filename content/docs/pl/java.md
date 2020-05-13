@@ -102,6 +102,9 @@ date: 2018-10-09T08:48:07+08:00
     工具
         MAT (Memory Analyzer)
             # eclipse MAT插件分析dump文件
+        jstack          # 查看线程(如死锁),得到java stack和native stack
+        jmap            # 查看内存
+        jstat           # 性能分析
 # 语法
 ## 基础
     类型
