@@ -182,6 +182,9 @@ date: 2018-10-11T15:34:29+08:00
     pg_stat_user_tables
         select relname from pg_stat_user_tables;
             # 所有表名
+    pg_stat_activity                # 活动状态
+        SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE datname='garbage' AND pid<>pg_backend_pid();
+            # 查看数据库活动连接
 # 配置
     数据库目录
         /usr/lib/systemd/system/postgresql.service

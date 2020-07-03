@@ -713,6 +713,7 @@ date: 2018-10-11T18:47:57+08:00
 # 包管理
     snap
         list                    # 列已安装
+        info                    # 查看仓库所有版本
         find                    # 搜索
         install
         remove

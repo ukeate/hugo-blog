@@ -206,125 +206,81 @@ type: docs
                 --global http.proxy 'http://127.0.0.1:8123'
         仓库
             clone
-            checkout
-                # 切换到分支。检出原有文件替换
-                -b
-                        # 创建并切换到分支
-            branch
-                # 创建并切换到分支
-                -r
-                        # 指定操作远程分支
-                        -r origin/dev
-                -a
-                        # 本地远程所有分支
-                dev ef71
-                        # 从ef71创建分支dev
+            checkout                    # 切换到分支。检出原有文件替换
+                -b                      # 创建并切换到分支
+            branch                      # 创建并切换到分支
+                -r                      # 指定操作远程分支
+                    -r origin/dev
+                -a                      # 本地远程所有分支
+                dev ef71                # 从ef71创建分支dev
                 dev
-                -d dev
-                        # 删除
-                -D dev
-                        # 强制删除
+                -d dev                  # 删除
+                -D dev                  # 强制删除
             remote
                 remove origin
-                show
-                        # 显示仓库
-                prune origin
-                        # 删除远程没有而本地缓存的远程分支
+                show                    # 显示仓库
+                prune origin            # 删除远程没有而本地缓存的远程分支
                 add origin git@bitbucket.org:outrun/www2.git
                         # 设置仓库
                 set-url origin git@github.com:outrun/jeky
                         # 设置仓库url
-            fetch
-                # pull加merge
+            fetch                       # pull加merge
             pull origin master
                 --allow-unrelated-histories
                     # 本地有已存文件时，强行pull并检查冲突
-            merge dev
-                # 合并dev到当前分支
-                --squash dev-bak
-                    # dev-bak改动写到stash
+            merge dev                   # 合并dev到当前分支
+                --squash dev-bak        # dev-bak改动写到stash
             push origin master
-                -u origin master
-                    # 设定git push 默认参数
+                -u origin master        # 设定git push 默认参数
                 origin :dev
                     # origin +dev:dev
                     # 强制替换掉原来版本
-            commit
-                # stage 提交到branch
-                -a
-                    # 提交删改，忽略增加
-                -m
-                    # 注释
-                --amend
-                    # 合并到上次commit
-            revert  -m 1 ea1
-                # 舍弃最近一次commit
+            commit                      # stage 提交到branch
+                -a                      # 提交删改，忽略增加
+                -m                      # 注释
+                --amend                 # 合并到上次commit
+            revert
                 git commit -am 'revert'
                 git revert revertid1 取消上次revert
-                    # intellji - local history - revert
-            rebase master
-                # 相当于当前改动代码之前merge master
+                    # ideaIDE操作 - local history - revert
+                示例
+                    revert  -m 1 ea1    # 舍弃最近一次commit
+            rebase master               # 相当于当前改动代码之前merge master
             reset
-                --hard ea1
-                    # 回退
-            stash
-                # 暂存buffered
-                list
-                    # 显示stash
-                drop
-                    # 删除暂存
-                pop
-                    # 恢复并删除暂存
-                apply stash@{0}
-                    # 恢复暂存
-            tag tag1
-                # 添加tag tag1
-                -a tag1
-                    # 添加tag1
-                -m 'a'
-                    # 注释
-                -d tag1
-                        # 删除tag1
-            show tag1
-                # 查看tag1的信息
+                --hard ea1              # 回退
+            stash                       # 暂存buffered
+                list                    # 显示stash
+                drop                    # 删除暂存
+                pop                     # 恢复并删除暂存
+                apply stash@{0}         # 恢复暂存
+            tag
+                -a tag1                 # 添加tag1
+                -m 'a'                  # 注释
+                -d tag1                 # 删除tag1
+                示例
+                    git tag -a v1.0.1  -m 'a' e67
+            show tag1                   # 查看tag1的信息
         文件
             add
-                -A
-                    # 递归
-            mv a b
-                # 重命名
-            rm
-                # buffered和stage中都删除
-                --cached
-                    # 只删除stage中
-            log
-                # HEAD到指定版本号之前的log
-                --stat
-                    # 文件名差异
-                -p
-                    # 细节差异
-                -2
-                    # 文件最近2次差异
-            reflog
-                # 包括reset前的版本号
-            diff master dev
-                # 对比分支差异，可指定到文件
-                # 默认对比buffered和stage的差异
-                --cached
-                    # 对比stage和branch的差异
+                -A                      # 递归
+            mv a b                      # 重命名
+            rm                          # buffered和stage中都删除
+                --cached                # 只删除stage中
+            log                         # HEAD到指定版本号之前的log
+                --stat                  # 文件名差异
+                -p                      # 细节差异
+                -2                      # 文件最近2次差异
+            reflog                      # 包括reset前的版本号
+            diff master dev             # 对比分支差异，可指定到文件。默认对比buffered和stage的差异
+                --cached                # 对比stage和branch的差异
             ls-files
-                -u
-                    # 显示冲突文件
-                -s
-                    # 显示标记为冲突已解决的文件
-                --stage
-                    # stage中的文件
+                -u                      # 显示冲突文件
+                -s                      # 显示标记为冲突已解决的文件
+                --stage                 # stage中的文件
             submodule
-                init
-                    # 初始化本地配置文件
+                init                    # 初始化本地配置文件
                 update
-                    # --init --recursive
-                    # 同步项目中的submodule
+                    --init --recursive  # 同步项目中的submodule
     设置
         .gitignore
 
@@ -596,17 +552,15 @@ type: docs
         provided    # 编译和测试有效
         system      # 本地仓库
         import
-    命令
-        mvn                                     # 相当于mvn compile
-            o-> 全局
+    mvn                                         # 相当于mvn compile
+        全局
             -version                            # 版本
             -e                                  # 错误详情
             help:describe                       # help插件的describe
                 -Dplugin=help                   # 显示help插件的详情
                 -Dfull                          # 显示完整参数
             help:effective-pom                  # 显示默认设置
-
-            o-> 项目生成
+        生成
             archetype:create                    # 创建java项目
                 -DgroupId=com.outrun
                 -DartifactId=erp
@@ -619,9 +573,11 @@ type: docs
             eclipse:eclipse                     # 生成或转化成eclipse工程
             eclipse:clean                       # 清除eclipse设置
             idea:idea                           # 生成idea项目
-
-
-            o-> 项目执行
+            install                             # compile, package后， 保存到本地仓库
+                -X                              # 显示依赖
+                -Dmaven.test.skip=true          # 跳过测试
+                -rf 模块名                       # 从指定模块从新开始
+        执行
             validate                            # 项目验证
             verify                              # 验证包
             compile                             # 编译
@@ -635,29 +591,30 @@ type: docs
             package                             # 打包
                 -Dmaven.test.skip=true          # 跳过单元测试，不编译
                 -DskipTests                     # 跳过单元测试，编译
-            install                             # compile, package后， 保存到本地仓库
-                -X                              # 显示依赖
-                -Dmaven.test.skip=true          # 跳过测试
-                -rf 模块名                       # 从指定模块从新开始
             clean                               # 清除编译
                 install-U                       # 强制更新
                 package                         # 编译成jar包
             deploy                              # install后, 上传
             jar:jar                             # 打jar包
-
-
-            o-> 插件
+        插件
             jetty:run                           # 引入jetty-plugin后, 运行jetty
             tomcat:run
-
-
-            o-> 分析
+        分析
             dependency:list                     # 列出依赖
             dependency:tree                     # 列出依赖树
             dependency:analyze                  # 依赖分析, 未使用的做标记
             dependency:resolve                  # 列出已解决的依赖
             dependency:sources                  # 下载源码
             dependency:copy-dependencies        # 得到jar包
+    经验
+        清理打包文件
+            mvn clean package -DskipTests
+        idea工具
+            打包了带main方法的jar不能引用
+            在父项目运行mvn package, model中运行会找不到其它model
+            model运行前先mvn package
+        手动添加依赖
+            mvn install:install-file -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar -Dfile=ojdbc7.jar
     配置
         <groupId>                               # 包名
         <artifactId>                            # 项目名

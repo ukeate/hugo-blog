@@ -45,9 +45,9 @@
             time_zone=%27%2B00%3A00%27&
             sql_mode=%27NO_ENGINE_SUBSTITUTION%2CSTRICT_TRANS_TABLES%27
     数据类型
-        int         # int(5) zerofill
+        int             # int(5) zerofill
         varchar(20)     # null不占空间
-        decimal(10,2)  # 小数
+        decimal(10,2)   # 小数
         char(10)        # 空间已固定, 不论null与否
         date
         bool或boolean

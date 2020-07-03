@@ -14,37 +14,6 @@ type: docs
     |       表示or
     ::=     表示“被定义为”
 # 工具
-## 在线
-    http://tool.lu/coderunner/
-        # 在线repl
-    http://lpaste.net/
-        # 粘代码
-    https://pastee.org/
-        # 粘贴代码
-    http://editor.method.ac/
-        # 在线ps
-    https://www.processon.com/
-        # 在线思维导图, uml等
-    https://www.gliffy.com/go/html5/launch
-        # 在线画图
-    http://plantuml.com/
-        # plantuml在线画图
-        画图指南: https://deepu.js.org/svg-seq-diagram/Reference_Guide.pdf
-
-    http://www.lmgtfy.com/?q=Linux#seen
-        # let me google this for you
-    codility.com
-        # 招聘在线做题
-    send.firefox.com
-        # 临时分享文件
-    file.io
-        # 临时分享文件
-    https://volafile.org
-        # 临时聊天室，文件分享
-    http://ge.tt/
-        # 临时文件分享
-    https://wetransfer.com/
-        # email文件
 ## 知识库
     confluence
         # 收费

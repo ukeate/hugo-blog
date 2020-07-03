@@ -377,81 +377,133 @@ date: 2018-10-10T17:39:31+08:00
         服务(service)                   # 无法划分对象的动作, 无状态。按功能分组, 多对象的连接点
             可在application, domain, infrastructure
 ### 分层
-        用户接口(user interface)
-        应用(application)                   # 尽可能小。数据验证，事务。故事, 表达出操作的事情
-            application service
-            unit work
-            presentation model
-        领域(domain)                        # 专注领域。准确定义业务对象
-            aggregate, entity, value object
-            domain service, domain event
-        基础设施(infrastructure)            # 辅助层
-            repository
-            global support
-        项目文件
-            [ui]
-                mall                            # 商城api
-            [saleDomain]
-                [application]
-                    mall.application            # 分模块，讲述故事
-                        CartService
-                            GetCart()
-                        BuyService
-                            Buy()
-                    mall.application.domainEventSubscribers         # 订阅domain事件
-                [domain]
-                    mall.domain                 # 不大而全，要求刚好满足需求
-                        cartModule
-                            entity
-                                CartItem
-                            aggregate
-                                Cart
-                        valueObject
-                            Product
-                            SellingPriceCart
-                        IDomainServices
-                        IRemoteServices         # 访问远程资源接口
-                            IUserService
-                            ISellingPriceService
-                        IRepositories           # 仓储接口
-                            ICartRepository
-                    mall.domain.events          # 领域事件, 用于实现最终一致性
-                    mall.domainService          # 操作domain的无状态方法
-                        ConfirmUserCartExistedDomainService
-            [sellingPriceDomain]                # 与saleDomain合作关系, sale请求sellingPrice定价
-                [appication]
-                    mall.application.SellingPrice
-                        dto
-                            CalculatedCartDTO
-                        mapper
-                            ValueObjectToDTO
-                [domain]
-            [infrastructure]
-                mall.infrastructure             # 通用类库
-                    domainCore                  # mail.domain base方法
-                        AggregateRoot
-                            Cart
-                        Entity
+    用户接口(user interface)
+    应用(application)                   # 尽可能小。数据验证，事务。故事, 表达出操作的事情
+        application service
+        unit work
+        presentation model
+    领域(domain)                        # 专注领域。准确定义业务对象
+        aggregate, entity, value object
+        domain service, domain event
+    基础设施(infrastructure)            # 辅助层
+        repository
+        global support
+    项目文件
+        [ui]
+            mall                            # 商城api
+        [saleDomain]
+            [application]
+                mall.application            # 分模块，讲述故事
+                    CartService
+                        GetCart()
+                    BuyService
+                        Buy()
+                mall.application.domainEventSubscribers         # 订阅domain事件
+            [domain]
+                mall.domain                 # 不大而全，要求刚好满足需求
+                    cartModule
+                        entity
                             CartItem
-                        ValueObject
-                            Product
-                        IUnitOfWork             # 仓储事务
-                    domainEventCore
-                        DomainEvent
-                        DomainEventBus
-                        DomainEventSubscriber
-                        IDomainEvent
-                        IDomainEventSubscriber
-                mall.infrastructure.repositories                # 仓储
-                    CartSqlServerRepository
-                mall.infrastructure.translators                 # 防腐层, 访问远程资源实现
-                    user
-                        UserAdapter             # 请求原始结果
-                        UserService
-                        UserTranslator          # 转换原始结果
+                        aggregate
+                            Cart
+                    valueObject
+                        Product
+                        SellingPriceCart
+                    IDomainServices
+                    IRemoteServices         # 访问远程资源接口
+                        IUserService
+                        ISellingPriceService
+                    IRepositories           # 仓储接口
+                        ICartRepository
+                mall.domain.events          # 领域事件, 用于实现最终一致性
+                mall.domainService          # 操作domain的无状态方法
+                    ConfirmUserCartExistedDomainService
+        [sellingPriceDomain]                # 与saleDomain合作关系, sale请求sellingPrice定价
+            [appication]
+                mall.application.SellingPrice
+                    dto
+                        CalculatedCartDTO
+                    mapper
+                        ValueObjectToDTO
+            [domain]
+        [infrastructure]
+            mall.infrastructure             # 通用类库
+                domainCore                  # mail.domain base方法
+                    AggregateRoot
+                        Cart
+                    Entity
+                        CartItem
+                    ValueObject
+                        Product
+                    IUnitOfWork             # 仓储事务
+                domainEventCore
+                    DomainEvent
+                    DomainEventBus
+                    DomainEventSubscriber
+                    IDomainEvent
+                    IDomainEventSubscriber
+            mall.infrastructure.repositories                # 仓储
+                CartSqlServerRepository
+            mall.infrastructure.translators                 # 防腐层, 访问远程资源实现
+                user
+                    UserAdapter             # 请求原始结果
+                    UserService
+                    UserTranslator          # 转换原始结果
 # 产品
+    愿景
+        定义产品的目的和原因，将到达的地点
     ux
         微交互                  # 细节决定成败
+## RoadMap
+    介绍
+        到达愿景的策略路径，提供一系列与产品战略相一致的战术步骤
+    为什么
+        简单、清晰的通讯文档
+            少的多的会议
+            健康的团队辩论：交付成果与目标联系起来
+            做出每个人都理解的产品决定，不再打击创意
+        高维度的概述
+        动态演变
+    要素
+        时间周期
+            时间区间，只定时间范围
+                big-view(product)
+                    全局理解产品的未来,  交付顺序
+                    统一视野(vision), 范围(scope)，时间期限(time line)
+                pre-view(release)
+                    release中的产品功能, 和前几个迭代从backlog中要交付的工作项(item)
+                now-view(iteration)
+                    团队在一次迭代中要交付的需求(requirements)
+            优先级，留空间适应变化
+        项目事件
+            完成产品总体计划必要的工作项, 详尽且切合目的
+            分解目的，制定步骤
+        路标
+            关键工作项完成的时间节点(里程碑)
+            结果反馈：审视是否偏离，试验中改进
+            确定在每个时间范围内实现可衡量的结果。定义为目标关键结果(OKR)、关键性能指标(KPI)
+    种类
+        基于目标
+            current
+            near term
+            future
+        基于功能
+            5000新用户
+    步骤
+        确定目标
+        分解目标，穷尽事项，组织，优先级排序
+        使用优化框架
+            effort / impact
+            impact / goal
+            卡洛斯模型?
+    注意
+        定义战略主题(名词)，抓住核心用户行为的本质、产品能力、竞争优势、技术改进
+        保持路线图战略，避免战术
+        每个计划阶段都考虑优先级, 每个目标、动作、发布、特性的价值可见性
+        始终在试验(ABE), 为了正确定义目标和后续特征
+            先做出有根据的猜测
+            测试
+            基于反馈迭代
 # 项目
 ## 分层
     mv*

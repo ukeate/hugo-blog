@@ -9,5 +9,4 @@ mosquitto_pub -h 101.132.195.113 -p 32003 -t 'device/mrsipspeaker0001/deliver' -
 
 
 
-
 mosquitto_sub -h localhost -p 1883 -t 'device/ea1'

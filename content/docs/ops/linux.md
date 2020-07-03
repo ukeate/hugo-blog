@@ -208,20 +208,38 @@
 # 发行版
     lfs
     coreos
-    arch
-    fedora
     debian
     gentoo
     opensuse
     mint
 ## centos
+    包
+        dnf install @development-tools
+        yum install epel-release
     安装VBoxAdditions
         yum update kernel
         yum install kernel-headers kernel-devel gcc
         # 可能要加软连接 /usr/src/kernels/
         mount /dev/cdrom /mnt
         /mnt/VBoxLinuxAdditions.run
-
+    gcc升级
+        yum -y install centos-release-scl
+        yum -y install devtoolset-6-gcc devtoolset-6-gcc-c++ devtoolset-6-binutils
+        scl enable devtoolset-6 bash
+        echo "source /opt/rh/devtoolset-6/enable" >>/etc/profile
+## ubuntu
+    包
+        apt-cache madison xxx       # 查看仓库中所有版本
+        apt-cache search xxx
+        apt-get -f -y --assume-yes install
+        aptitude
+            search
+            show
+            install
+            remove 
+            purge                   # 删除包及配置
+            clean                   # 删除下载的包文件
+            autoclean               # 仅删除过期
 ## fedora
     升级
         fedup --network 21

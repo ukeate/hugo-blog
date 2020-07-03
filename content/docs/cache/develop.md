@@ -18,5 +18,6 @@
         java -jar a.jar  --spring.config.location=/application.yml 
             # 指定spring config
             --spring.profiles.active=prod
+    java -Xmx2g
 # hugo
     go install --tags extended
