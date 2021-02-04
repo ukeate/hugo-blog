@@ -35,6 +35,15 @@
 
     快捷键
         ctrl alt f1/f2/...
+# 网络
+    ifconfig docker0 down
+        ifconfig docker0 up
+    tcpdump -n tcp port 8383 -i lo and src host 183.14.132.117
+        -w 文件         # 文件会记录详细包
+        -c 条数
+        -n              # 不转端口成name
+        -i 网卡
+        -vvv            # 最详细输出
 # 命令
     envsubst '${THREAD_NUM}' < decoder.conf.template > decoder.conf
     grep

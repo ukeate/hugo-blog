@@ -95,16 +95,28 @@ date: 2018-10-09T08:48:07+08:00
         serialver       #  返回指定类的序列化号serialverUID
         appletviewer    #  小程序浏览器，执行HTML文件上java小程序类
         htmlconverter   #  转换applet tags成java plug-in
-        javap   # 反编译
-        jad     # 反编译
+        javap           # 反编译
+        jad             # 反编译
             jad -o -a d.java Xxx.class
-        jmap    # 查看堆内存情况, 产生dump文件
+        jps                                 # 查java进程
+        jinfo                               # 输出、修改opts
+        jstat                               # 性能分析
+            -option                         # 查看分析项
+            -class                          # 加载class的数量
+            -compiler                       # 实时编译数量
+            -gc                             # gc次数，时间
+            -gccapacity                     # gc占量: young、old、perm
+            -gcnew                          # new对象数量
+            -gcnewcapacity                  # new对象占量
+            -gcutil                         # gc统计
+        jmap                                # 内存分配
+        jconsole                            # 图形统计：heap, threads, classes, cpu, VM summary
+        jstack                              # 查看线程(如死锁),得到java stack和native stack
     工具
         MAT (Memory Analyzer)
             # eclipse MAT插件分析dump文件
-        jstack          # 查看线程(如死锁),得到java stack和native stack
-        jmap            # 查看内存
-        jstat           # 性能分析
+        JProfiler
+            # 图形化全面性能分析
 # 语法
 ## 基础
     类型
@@ -1750,74 +1762,6 @@ date: 2018-10-09T08:48:07+08:00
     多态
         父类(接口)中定义的引用变量，在运行时动态绑定到具体实例的方法执行
     内部unicode编码
-    内存      # java自动管理堆栈, c++手动分配
-        方法区(method area)
-            特点
-                静态分配, 位置不改变
-                线程共享
-            保存
-                类信息
-                    class
-                数据区(data segment)
-                    常量池(constant pool) # 编译期确定，保存在.class中的数据
-                        字面量
-                        文本形式的符号引用
-                            字段名称和描述符
-                            方法名称和描述符
-                            类和接口的全限定名
-                    静态区(static segment)
-                        静态变量
-                代码区(code segement)
-                    JIT编译后的代码
-        堆(heap)
-            特点
-                以随意顺序，运行时分配和回收空间, 代码申请
-                大小、数量、生命期常常在编译时不确定
-                细分为新生代和老年代, 再具体为 eden survivor(from survivor、to survivor), tenured
-                线程共享
-                OutOfMemoryError
-            保存
-                引用类型在堆分配类变量, 局部变量生命周期结束后，堆空间等待gc回收
-                this
-            实现
-                存放所有runtime data
-                heap是jvm启动时创建
-        程序计数器(program counter register)
-        栈(stack)
-            分类
-                虚拟机栈(vm stack)
-                本地方法栈(native method stack)
-            特点
-                逻辑概念，可连续可不连续, 系统自动分配。栈中的字面值可共享,如int i = 3
-                每个线程有私有栈空间, 随线程创建
-                StackOverflowError
-            保存
-                基础数据类型
-                引用类型在栈分配地址, 局部变量生命周期结束后，栈空间立即回收
-                方法调用    # 一次调用一个帧(frame)
-                方法的形参, 调用完回收
-                方法引用参数, 在栈上分配地址, 调用完回收
-                方法实参，栈空间分配，调用完释放
-            实现
-                java的stack存放的是frames, frames由heap分配，所以stack内存不连续
-                只存在本地变量、返回值、调用方法，不能直接push和pop frams
-
-        机制
-            程序计数器、虚拟机栈、本地方法栈 是线程私有空间
-                随线程产生和销毁，每个栈帧分配多少内存在随类结构确定。内存分配回收都是确定的
-            方法区和堆
-                一个接口的各实现类需要内存可能不一样, 所以运行时才知道创建哪些对象，内存分配和回收是动态的，gc主要关注
-        内存溢出
-            原因
-                加载数据过大  # 大约10万条以上, 应分页查询
-                集合中对象引用未清除
-                代码循环产生对象
-                第三方软件bug
-                启动参数内存设置过小
-            方案
-                jvm启动参数 -Xms, -Xmx
-                jvm错误日志, OutOfMemory前信息
-                内存查看工具动态查看
     类
         初始化时机
             new
@@ -1840,7 +1784,77 @@ date: 2018-10-09T08:48:07+08:00
         运行时都有线程栈，保存变量值信息。访问对象值时，建立变量副本。修改后(线程退出前)副本值写到对象
     JIT(just in time)
         # 热点代码检测, 运行时编译和优化
-
+### 内存
+    # java自动管理堆栈, c++手动分配
+    组成
+        方法区(method area)
+            组成
+                类信息
+                    class
+                数据区(data segment)
+                    运行时常量池(constant pool) # 编译期确定，保存在.class中的数据
+                        字面量
+                        文本形式的符号引用
+                            字段名称和描述符
+                            方法名称和描述符
+                            类和接口的全限定名
+                    静态区(static segment)
+                        静态变量
+                代码区(code segement)
+                    JIT编译后的代码
+            特点
+                线程共享
+                静态分配, 位置不改变
+        栈(stack)
+            分类
+                虚拟机栈(vm stack)
+                本地方法栈(native method stack)
+            保存
+                基础数据类型
+                引用类型在栈分配地址, 局部变量生命周期结束后，栈空间立即回收
+                方法调用    # 一次调用一个帧(frame)
+                方法的形参, 调用完回收
+                方法引用参数, 在栈上分配地址, 调用完回收
+                方法实参，栈空间分配，调用完释放
+            特点
+                线程隔离
+                逻辑概念，可连续可不连续, 系统自动分配。栈中的字面值可共享,如int i = 3
+                StackOverflowError
+            实现
+                java的stack存放的是frames, frames由heap分配，所以stack内存不连续
+                只存在本地变量、返回值、调用方法，不能直接push和pop frams
+        堆(heap)
+            保存
+                引用类型在堆分配类变量, 局部变量生命周期结束后，堆空间等待gc回收
+                this
+            特点
+                线程共享
+                以随意顺序，运行时分配和回收空间, 代码申请
+                大小、数量、生命期常常在编译时不确定
+                细分为新生代和老年代, 再具体为 eden survivor(from survivor、to survivor), tenured
+                OutOfMemoryError
+            实现
+                存放所有runtime data
+                heap是jvm启动时创建
+        程序计数器(program counter register)
+            特点
+                线程隔离
+    机制
+        程序计数器、虚拟机栈、本地方法栈 是线程私有空间
+            随线程产生和销毁，每个栈帧分配多少内存在随类结构确定。内存分配回收都是确定的
+        方法区和堆
+            一个接口的各实现类需要内存可能不一样, 所以运行时才知道创建哪些对象，内存分配和回收是动态的，gc主要关注
+    内存溢出
+        原因
+            加载数据过大  # 大约10万条以上, 应分页查询
+            集合中对象引用未清除
+            代码循环产生对象
+            第三方软件bug
+            启动参数内存设置过小
+        方案
+            jvm启动参数 -Xms, -Xmx
+            jvm错误日志, OutOfMemory前信息
+            内存查看工具动态查看
 ## 类加载器
     父亲委派机制(java2)
         # 常用类不被替代

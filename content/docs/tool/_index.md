@@ -210,6 +210,7 @@ type: docs
             联系人设置关系
         自定义自动化指令
         地图：请使用百度地图获取去故宫的路线
+
 # 网络
 ## teamviewer
     # 远程桌面
@@ -217,6 +218,25 @@ type: docs
     # 抓包
 ## charlet
     # 抓包
+## mitmproxy
+    # 抓包
+    命令
+        mitmdump
+        mitmproxy
+        mitmweb
+## Burp Suite
+    # 抓包
+## fiddler
+    # 抓包
+## whistle
+    # 抓包
+## tcpdump
+    # 抓包
+## anyproxy
+    # 代理http/https
+## proxychains
+    # 代理
+
 ## chrome
     介绍
         webkit: chrome firefox safari的内核，来源于kde的khtml与kjs
@@ -260,34 +280,7 @@ type: docs
 
 # 开发
 ## vim
-## intellij idea
-    注意
-        Project 相当于workspace, module 相当于工程
-    注册
-        服务器
-            # 发布网站 http://idea.lanyus.com
-            http://idea.qinxi1992.cn
-            http://idea.lianghongbo.com/licens
-            http://im.js.cn:8888
-    javaagent
-        https://zhile.io/
 
-    快捷键
-        alt + enter     # 改错
-        shift shift     # 搜索跳转
-
-    编码
-        file -> settings -> appearence里use custom font设置中文字体
-        file -> settings -> editor -> file encodings 三处utf-8
-        idea安装目录/bin/idea.vmoptions和idea64.vmoptions,最后添加
-            -Dfile.encoding=UTF-8
-        .idea/encodings.xml里删除除了UTF-8的项
-
-## webstorm
-## pycharm
-## goland
-## clion
-## phpCharm
 ## sublime
     功能
         显示风格好

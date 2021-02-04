@@ -2218,4 +2218,7 @@ type: docs
 
                 user：比如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查
                         # remember me可登录
-
+# 分布式
+## redisson
+    介绍
+        使用redis外部存储，实现分布式功能

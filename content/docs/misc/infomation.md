@@ -81,12 +81,16 @@ date: 2018-10-10T20:56:27+08:00
     http://www.blendswap.com/
         # blender 模型分享
 # 留查
+    csapp
+    domain driven design
+    clean architecture
     vim实用技巧
     算法设计与分析基础
     代码之髓
     阿里巴巴Java开发手册
     黑马程序员面试宝典
     微内核工作流引擎体系结构与部分解决方案参考, 工作流引擎核心调度算法与PetriNet
+
     https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md
         # 提问的智慧
     http://matt.might.net/articles/by-example-continuation-passing-style/

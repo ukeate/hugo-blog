@@ -211,8 +211,15 @@ date: 2018-10-11T18:47:57+08:00
     factor                  # 分解质因数
     screenfetch
     expect                  # 为运行的脚本预填表单
+        o-> 结束
+        #!/usr/bin/expect
 
-        o-> 实例
+        spawn ssh outrun@192.168.1.103
+        expect "*password"
+        send "asdf\n"
+        expect eof
+
+        o-> 交互
         #!/usr/bin/expect -f
         spawn sudo /usr/local/mysql/bin/mysqld_safe --user=mysql
         expect "*password:*"
@@ -626,6 +633,10 @@ date: 2018-10-11T18:47:57+08:00
     w3m                     # 命令行浏览器
 
     ssh
+        ssh 10.1.10.2 -L 9901:localhost:5901
+            # 用ssh建tunnel访问内部端口
+        ssh -t -L 5900:localhost:5900 remote_host 'x11vnc -localhost -display :0'
+            # 本机执行命令并端口映射
     sshpass
         sshpass -p asdf ssh root@47.74.230.238
     sshfs -o allow_other root@ip:~ /mnt                 # 挂载远程目录
@@ -750,7 +761,7 @@ date: 2018-10-11T18:47:57+08:00
                 -e                      # 明确指定的
                 -n                      # 本地的
                 -q                      # 静默
-                -i                      # 详情, 两个i显示备份文件和修改状态
+                -i                      # 详情, 两个i显示备份文件和修改状态, 显示依赖
                 -l                      # 列出文件
                 -o                      # 显示拥有此文件的包名
             选项-R
@@ -774,10 +785,12 @@ date: 2018-10-11T18:47:57+08:00
             -S $(pacman -Ssq fcitx*)            # 通配安装
             -R $(pacman -Qsq fcitx)             # 通配删除
             -Rcns plasma                        # 删除plasma
+            -Rns                                # 删依赖并删配置
             -Scc                                # 清除缓存
             -Qii zsh                            # 包信息
             -Ql zsh                             # 查看安装的文件
             -Qo /bin/zsh                        # 查看文件属于的包
+            -Qdt                                # 查孤儿包 
 
         源
             mirrors.163.com
@@ -1058,6 +1071,18 @@ date: 2018-10-11T18:47:57+08:00
         -charcoal 2         # 炭笔
         -spread 30          # 漩涡
         -swirl 67           # 凸起
+# 网络服务
+    rclone
+        config              # 配置向导
+        ls [name]:          # 显示文件
+        lsd [name]:         # 显示文件夹
+        copy a [name]:a     # 上传
+        cleanup             # 只保留最新版本
+        sync                # 本地向远程同步
+        mount               # 双向一致同步
+            fusermount -u /path/to/local/mount
+                # umount
+    rclone-browser          # rclone GUI
 
 # 图形程序
 ## 桌面
@@ -1094,7 +1119,12 @@ date: 2018-10-11T18:47:57+08:00
     启动
         .xinitrc
             exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
+    命令
+        awesome
+        awesome-client
     配置
+        配置模板
+            /etc/xdg/awesome/rc.lua
         .config/awesome/rc.lua
             Variable definitions            # 可定义布局优先级
             Menu                            # 右键菜单
@@ -1104,8 +1134,40 @@ date: 2018-10-11T18:47:57+08:00
             Rules                           # client规则, 如在哪个screen显示
             Signals                         # client启动信号触发动作
             自定义
-            awful.util.spawn_with_shell("~/.config/awesome/autorun.sh")
-                # 随桌面启动脚本
+        API
+            文档地址
+                https://awesomewm.org/apidoc/
+            快捷键简写
+                modkey                      # win键
+                Mod1                        # alt
+            gears                           # 工具组件
+            wibox                           # wibar
+                widget
+                layout
+            beautiful                       # theme
+                init(gears.filesystem.get_configuration_dir() .. "/themes/default/theme.lua")
+                    # 主题
+                useless_gap = 5             # 窗口间隔
+                theme.lua文件
+                    theme.wallpaper = "~/.config/awesome/themes/awesome-wallpaper.png"
+                        # 背景
+
+            naughty
+                notify({ preset = naughty.config.presets.critical, title = "Oops, there were errors during startup!", text = awesome.startup_errors })
+            menubar
+                menu_gen
+            hotkeys_popup
+            awful
+                layout
+                tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+                key({ modkey }, "F12", function () awful.spawn{ "xlock" } end)
+                    # 快捷键
+                    awful.key({ "Mod1" }, "Escape", function () awful.menu.menu_keys.down = { "Down", "Alt_L" } awful.menu.clients({theme = { width = 250 }}, { keygrabber=true, coords={x=525, y=330} }) end),
+                widget
+                rules
+                spawn("firefox", { tag = mouse.screen.selected_tag })
+                util.spawn_with_shell("~/.config/awesome/autorun.sh")
+                    # 随桌面启动脚本
         autorun.sh
             #!/usr/bin/env bash
 
@@ -1122,6 +1184,13 @@ date: 2018-10-11T18:47:57+08:00
 
             run ibus-daemon -d -x
             run nm-applet
+    插件
+        revelation          # 全局client
+        shifty              # 动态tag
+        naughty             # 通知
+        vicious             # widgets
+        obvious             # widgets
+        bashets             # widgets
 ## 显示
     xrandr
         # 多显示器布局

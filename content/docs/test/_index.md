@@ -23,20 +23,6 @@ type: docs
             # 判断是否有此耦合，用一个测试验证: 是否为应用逻辑编写一个单元测试而不需要dom结构存在
             ## angular中没有这种问题，因为所有定位元素和处理事件的工作都是在angular内部完成的
             ## 在测试时创建dom，就增加了测试的复杂性。而且页面变化时有更多维护要做。访问dom的操作很慢，测试反馈时间长
-# 资源占用
-## cpu
-    graph-frames
-    subsecond offset
-## 综合
-### VisualVM
-### JProfiler
-    # 收费, java
-### perfino
-    # 监测jvm
-### YourKit
-    # 收费, java, 有调用链
-### Spring Insight
-    # java spring
 
 # 数据库
     sysbench

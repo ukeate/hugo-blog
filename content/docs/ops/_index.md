@@ -176,11 +176,42 @@ type: docs
     redmine
 ### Gradle
     介绍
-        dsl声明设置
+        基于dsl(Groovy)声明项目自动化构建
+    环境
     命令
         gradle
+            -q                                      # --quiet, 只显示error
             init
                 --type pom                          # 转换maven项目
+            wrapper                                 # 生成可独立运行的打包脚本gradlew和gradlew.bat
+    配置
+        build.gradle
+            task hello {
+                doLast {
+                    println 'Hello world!'
+                }
+            }
+            task hello << {
+                println 'Hello world!'
+            }
+
+            buildscript{}
+            allprojects{}
+            subprojects{}
+
+
+        settings.gradle
+            rootProject.name = 'choice-scm'
+            include 'choice-scm-dao'
+
+
+        gradle.properties
+            org.gradle.parallel=true                # 开启并行编译
+            org.gradle.daemon=true                  # 守护线程，在第一次编译时开线程并保持
+            org.gradle.configureondemand=true       # 用新的孵化模式，加快编译
+            org.gradle.caching=true                 # 启用缓存
+            org.gradle.warning.mode=none            # 屏蔽warning
+            org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
 ### Git
     目录结构
         .git
@@ -265,7 +296,7 @@ type: docs
                 -A                      # 递归
             mv a b                      # 重命名
             rm                          # buffered和stage中都删除
-                --cached                # 只删除stage中
+                --cached                # 只删除git stage中文件, 不实际删 
             log                         # HEAD到指定版本号之前的log
                 --stat                  # 文件名差异
                 -p                      # 细节差异
@@ -311,9 +342,24 @@ type: docs
             git push origin +a:a
         远程回退
             git revert id
+        忽略文件
+            git add 逆操作
+                git rm --cached a
+            远程保留，忽略本地
+                git update-index --assume-unchanged a
+                恢复 git update-index --no-assume-unchanged a
+            远程删除，忽略本地
+                git rm --cached a
+                恢复 git add -A a
+            远程不论，忽略本地
+                .gitignore
+        删本地分支
+            git branch -D test
         删除远程分支
-            git branch -r -d origin/test
-            git push origin :test
+            git push origin --delete test
+            或
+                git branch -r -d origin/test
+                git push origin :test
         恢复历史版本文件
             git reset ba5798aff7778c95252b9e01e924dddb5811bcd7 courseModel.js
             git checkout -- courseModel.js
@@ -350,6 +396,8 @@ type: docs
                 # git push origin :refs/tags/v1.0c
         统计某人代码
             git log --author="$(git config --get user.name)" --pretty=tformat: --numstat | gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "added lines: %s removed lines : %s total lines: %s\n",add,subs,loc }' -
+        统计所有人代码
+            git log --format='%aN' | sort -u | while read name; do echo -en "$name\t"; git log --author="$name" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' -; done
         共添加或修改行数
             git log --stat|perl -ne 'END { print $c } $c += $1 if /(\d+) insertions/'
         pr

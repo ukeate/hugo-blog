@@ -129,7 +129,7 @@ type: docs
         mysql
         mariadb
         percona
-            # mysql分支
+            # mysql分支, Oracle发布的最接近官方mysql的发行版
         drizzle
             # mysql分支
         oracle

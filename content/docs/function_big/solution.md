@@ -70,9 +70,16 @@ date: 2018-10-10T16:49:27+08:00
         如果客户端存状态，这就是个简单的mq问题
 ## 权限
     类型
-        ACL(access control list)                        # 权限存成列表
-        RBAC(role base access control)                  # 角色对应权限
-        ABAC(attribute base access control)             # 计算属性匹配权限
+        ACL(access control list)                        # 访问权限列表
+        RBAC(role base access control)                  # 基于角色的访问控制
+        ABAC(attribute base access control)             # 基于属性(计算属性)的访问控制
+        DAC(discretionary access control)               # 自主访问控制
+            主体对所属对象有全部控制权
+            主体执行的程序权限相同
+            主体权限可分配给其它用户
+        MAC(mandatory access control)                   # 强制访问控制
+            管理分配权限，主体不能改变
+            主体只能访问他的对象，也不能写低级别对象
     成员
         user
         role

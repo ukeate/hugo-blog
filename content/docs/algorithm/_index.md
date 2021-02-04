@@ -1130,6 +1130,46 @@ func RemoveDuplicates2(arr []int) int {
 	return num
 }
 ```
+## 数组积水
+```golang
+// 无论中间多少高低柱子，当前点积水量都是min(最左, 最右)高度
+func savewater(arr []int) int {
+	point_l := 0
+	max_l := arr[0]
+
+	point_r := len(arr) - 1
+	max_r := arr[len(arr)-1]
+
+	volume := 0
+	for point_l < point_r {
+		if max_l < max_r {
+			point_l++
+			if max_l < arr[point_l] {
+				max_l = arr[point_l]
+			} else {
+				volume = volume + max_l - arr[point_l]
+			}
+		} else {
+			point_r--
+			if max_r < arr[point_r] {
+				max_r = arr[point_r]
+			} else {
+				volume = volume + max_r - arr[point_r]
+			}
+		}
+	}
+	return volume
+}
+```
+{{< expand >}}
+```golang
+func main() {
+	arr := []int{1, 2, 3, 4, 2, 1, 1, 5, 3, 2,4}
+	volume := savewater(arr)
+	fmt.Println(volume)
+}
+```
+{{< /expand >}}
 # 字符串
 ## 字符统计
 ```golang
