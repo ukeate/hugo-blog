@@ -56,7 +56,7 @@ headless: true
 - [**运维**](/docs/ops)
   - [Linux](/docs/ops/linux)
   - [工具](/docs/ops/tool)
-  - [安全](/docs/ops/monitor)
+  - [监控](/docs/ops/monitor)
   - [安全](/docs/ops/security)
   - [Docker](/docs/ops/docker)
 - [**测试**](/docs/test)
