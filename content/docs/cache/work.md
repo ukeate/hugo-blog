@@ -81,14 +81,9 @@ goods_amt_nodiscount
 dispatch_in(up_bill_id) -> return_goods(id) in_id   -> 
 dispatch_in(id) up_bill_id -> out_check_relation(check_id) -> out_id
 
-# 结算
-[查询预占金额], reservePointMap
-[releaseAndDeduct]超预占出库
-[releaseAndDeduct]预占成功
-[请购单积分比例]pointRateMap
-[releaseAndDeduct]params
 
 # 数据库
+
 jdbc:mysql://172.17.31.65:3306/test_cloud_scm?useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=GMT%2B8&autoReconnectForPools=true&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
 test_new_scm test_scm_2018
 

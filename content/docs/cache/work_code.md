@@ -20,6 +20,7 @@ tenantUtil
 
 # 命令
 git update-index --assume-unchanged a
+mvn clean deploy -P keruyun -pl alsc-item-solution-kryun-dish-client -DskipTests
 
 # 搜索词
 分库 DynamicDataSource determineCurrentLookupKey

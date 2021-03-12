@@ -1023,6 +1023,7 @@ type: docs
                 set_var KEY_EMAIL="test@example.net"
                 # set_var EASYRSA_NS_SUPPORT "yes"                      # 客户端配置ns-cert-type server时配置
         生成server文件
+            # 配置文件在/etc/easy-rsa或 .../openvpn/easy-rsa
             rm -rf pki
             ./easyrsa init-pki                                          # pki目录
             ./easyrsa build-ca  nopass                                  # 回车过, 生成ca.crt
@@ -1062,6 +1063,7 @@ type: docs
 
             server 192.168.200.0 255.255.255.0
             ifconfig-pool-persist ipp.txt
+            ;client-config-dir "C:\\Program Files\\OpenVPN\\ccd"        # 支持TLS client
             push "route 0.0.0.0 0.0.0.0"
             keepalive 10 120
 

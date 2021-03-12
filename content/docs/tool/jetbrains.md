@@ -20,6 +20,7 @@ type: docs
         settings -> Keymap 设置eclipse
             alt + enter     # 改错
             shift shift     # 搜索跳转
+        shift + f4          # 新窗口打开文件
     类注释
         settings -> Editor -> File and Code Templates -> Includes -> File Header
            /**  
