@@ -25,19 +25,25 @@ draft: true
     5. 对每个项目负责。
 
 
-# 技能简介
-1. 从事后端研发/系统架构，主要使用Java、Golang、Node.JS。
-2. 技能广泛。动手能力强。熟悉函数式编程。对新技术敏感。
-3. 有丰富的设计、开发框架的经验。
-4. 设计能力强，对服务设计、模块拆分、系统维护与重构，数据库设计、接口设计、功能实现各方面有良好的品味。
-5. 深度参与PaaS/SaaS开发、有微服务架构经验。
-6. 用Linux、vim工作，擅长各种开源工具的使用。
-7. 有带技术团队的经验。
-
+# 个人介绍
+    专业技术全面，长期担任核心研发、系统架构师
+    精通Java、Golang、JavaScript。一直到目前都是公司的最核心代码的编写者。
+    深度参与PaaS/SaaS开发、微服务架构、DDD业务设计。
+    精通JVM调优，精通数据库，对数据库调优，性能优化有深入实践。
+    熟悉各种数据库及运维工具
+    具有丰富的管理经验。
+# 服务
+    熟悉 Mysql、Redis、MongoDB、ElasticSearch、Lucene
+    熟悉 Nginx、Kafka、Tomcat、RabbitMQ、NSQ
+    熟悉 K8S、Docker、Docker-Compose
+    熟悉 Linux、Git、Maven、NPM、PM2
+    熟悉 VIM、Idea、Goland、Webstorm、Eclipse、VSCode
+    熟悉 Nexus、Harbor、Jenkins、Kibana、Prometheus、Grafana、Jira、Confluence
+    熟悉 HTML5、CSS、Canvas、WebGL、Query、VUE、Angluar1、Three.JS、Sim.JS、FIS、Bootstrap、Webpack、Gulp
 
 # 薪资水平
     济南：2.4万/月
-    北京：43万/年
+    北京：44万/年
 
 
 # 期望从事
@@ -145,57 +151,6 @@ draft: true
 ## Excel中间件
     产品
         可配置的中间件，自适应接口数据转换成可直接下载的excel文等。
-
-# 技术概要
-## 后端
-    Golang: 熟悉
-    JS: 熟悉
-    Java: 熟悉
-    Python: 了解
-
-    Node.JS: 熟悉
-    GRPC: 熟悉
-
-    Express、KOA、Socket.IO等: 了解
-    Java SSH、SpringCloud、SpringMVC、SpringBoot、Lucene、Shiro、Mybatis等: 了解
-    Tornado、Django等：了解
-
-    SWIG、OpenTracing等：了解
-
-    BIRT：了解
-## 服务
-    Mysql、MongoDB: 熟悉
-    Redis：熟悉
-    ElasticSearch: 了解
-    TiDB、PgSQL、Oracle、Neo4J等：了解
-
-    Docker、Docker-Compose: 熟悉
-    K8S: 熟悉
-
-    Nginx、Tomcat等: 了解
-    RabbitMQ、NSQ、Kafka等: 了解
-
-    Nexus、Harbor等：了解
-## 运维
-    Jenkins、Kibana、Prometheus、Grafana等: 了解
-
-    Jira、Confluence等：了解
-## 前端
-    HTML5、CSS、Canvas、WebGL等: 了解
-
-    JQuery、VUE、Angluar1、Three.JS、Sim.JS等: 了解
-
-    FIS、Bootstrap、Webpack、Gulp：了解
-## 工具
-    Linux: 熟悉
-
-    Git: 熟悉
-    Maven、NPM等：熟悉
-    PM2等: 了解
-
-    VIM: 熟悉
-    Goland、Webstorm、Idea: 熟悉
-    Eclipse、VSCode: 了解
 
 
 # 履历
