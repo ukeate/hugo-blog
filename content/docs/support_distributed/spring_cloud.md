@@ -3,6 +3,49 @@ Categories : ["后端"]
 title: "Spring Cloud"
 date: 2018-10-11T10:33:48+08:00
 ---
+# 亿级流量
+## 流量接入层
+    二级域名
+        泛域名
+        A记录
+    dns解析
+        udp
+            向网关请求dns解析
+        httpDNS
+            用ip请求http服务, 返回域名解析的ip
+            因为用ip请求，适合app，不适合网页
+    lvs + keepalive             # 多lvs时用dns负载
+    nginx
+        openresty
+            kong
+    动静分离
+        cdn
+            dns动态域名解析
+            cdn分发服务
+                源服务拉取FastDFS
+                CDN节点分发
+## WEB服务层
+    webflux
+        不基于重量的servlet标准
+        基于netty
+# Eureka
+    使用
+        @EnableEurekaServer
+        application.properties
+            eureka.client.register-with-eureka=false                # 是否注册自己
+            eureka.client.fetch-registry=false                      # 是否拉取eureka
+            eureka.client.service-url.defaultZone=http://localhost:7900/eureka/         # 设置注册中心的URL
+            eureka.instance.hostname=euk1.com
+            spring.application.name=EurekeServer                    # eureka集群中各节点要同名
+    一致性问题
+        Eureka间不同步，client提交多个
+        Enreka间同步，Eureka强可用性弱一致性
+    行为
+        register
+        renew                       # 通过心跳, 默认30s。三次失败删除实例
+        fetch registry              # 拉注册的信息
+        cancel                      # 发取消请求，删除实例
+        time lag                    # 
 # 基础
     介绍
         spring boot基础上构建，快速构建分布式系统, 全家桶

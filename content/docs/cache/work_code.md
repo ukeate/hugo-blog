@@ -16,7 +16,9 @@ goodsClientService.findGoodsList
 枚举
 出库状态 ScmDispatchOutStatusEnum
 
-tenantUtil
+查分库
+tenantUtil, DynamicDataSource
+
 
 # 命令
 git update-index --assume-unchanged a
@@ -37,7 +39,8 @@ com.choice.scm.utils.common.ScmConstants.SCM_ORDER_TYPE 汇总类型
 com.choice.scm.utils.common.BillTypeEnum 出库类型
 com.choice.scm.entity.dispatch.enums.ScmDispatchOutStatusEnum: 配送出库状态
 
-
+// 设置属性
+System.getProperties().set()
 // 查属性
 ServletContext sc = ContextLoader.getCurrentWebApplicationContext().getServletContext();
 WebApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sc);
@@ -46,30 +49,32 @@ env.getProperty("name");
 
 
 # sql
-	UPDATE scm_out_posorderredu_detail
-	SET bill_no = CASE bill_id
+	update scm_out_posorderredu_detail_summary
+	set 
+	goods_qty = case uniq_key
 	<foreach collection="list" item="item" index="index">
-		WHEN #{item.billId} THEN #{item.billNo}
+		WHEN #{item.uniqKey} THEN goods_qty + #{item.goodsQty}
+	</foreach>
+	END,
+
+	goods_amt = case uniq_key
+	<foreach collection="list" item="item" index="index">
+		WHEN #{item.uniqKey} THEN goods_amt + #{item.goodsAmt}
+	</foreach>
+	END,
+
+	unit_price = case uniq_key
+	<foreach collection="list" item="item" index="index">
+		WHEN #{item.uniqKey} THEN
+		if(0=goods_qty, 0, convert((goods_amt) / (goods_qty) , decimal(65,#{item.precision})))
 	</foreach>
 	END
-	WHERE
-	tenant_id = #{tenantId} and delete_flag = 0
-	and bill_id IN
+
+	where
+	tenant_id = #{tenantId} and delete_flag=0
+	and uniq_key in
 	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-		#{item.billId}
-	</foreach>
-
-
-	update scm_dispatch_detail
-	set purc_out_num = case
-	<foreach collection="updateDetails" item="item" index="index">
-		when id=#{item.id} and tenant_id=#{item.tenantId}
-		then #{item.purcOutNum}
-	</foreach>
-	end
-	WHERE id IN
-	<foreach collection="updateDetails" item="item" index="index" open="(" separator="," close=")">
-		#{item.id}
+		#{item.uniqKey}
 	</foreach>
 
 

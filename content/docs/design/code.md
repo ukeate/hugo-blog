@@ -25,7 +25,7 @@ date: 2018-10-10T17:40:53+08:00
         单一方式
 # 原则
     观念
-        kiss(keep it simple stupid)
+        KISS(keep it simple stupid)
         YAGNI(You Ain’t Gonna Need It)
         取好名字占设计一半
         约定大于配置

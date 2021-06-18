@@ -81,8 +81,17 @@ goods_amt_nodiscount
 dispatch_in(up_bill_id) -> return_goods(id) in_id   -> 
 dispatch_in(id) up_bill_id -> out_check_relation(check_id) -> out_id
 
+整理下配送订单拆单生成备货分拣单的流程图
+细一点，备货单怎么生成的，分拣单怎么生成的，每张表记录了啥
+
+
 
 # 数据库
+jdbc:mysql://172.17.31.65:3306/test_cloud_scm?
+useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
+
+jdbc:mysql://vpcprod.cs-scm-global-master.cnhz.keruyun.com:3306/online_cloud_scm?
+useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
 
 jdbc:mysql://172.17.31.65:3306/test_cloud_scm?useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=GMT%2B8&autoReconnectForPools=true&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull
 test_new_scm test_scm_2018
