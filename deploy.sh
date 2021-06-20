@@ -15,11 +15,11 @@ mv .git ..
 rm -r *
 mv ../hugo-blog/public/*  .
 mv ../.git .
+echo runout.run > CNAME
 git add -A .
 git commit -am "$msg"
 git push origin master
 
-echo runout.run > CNAME
 
 cd ../hugo-blog
 
