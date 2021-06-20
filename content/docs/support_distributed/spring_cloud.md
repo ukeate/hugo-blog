@@ -37,15 +37,21 @@ date: 2018-10-11T10:33:48+08:00
             eureka.client.service-url.defaultZone=http://localhost:7900/eureka/         # 设置注册中心的URL
             eureka.instance.hostname=euk1.com
             spring.application.name=EurekeServer                    # eureka集群中各节点要同名
-    一致性问题
-        Eureka间不同步，client提交多个
-        Enreka间同步，Eureka强可用性弱一致性
     行为
-        register
+        register                    # 注册
         renew                       # 通过心跳, 默认30s。三次失败删除实例
         fetch registry              # 拉注册的信息
         cancel                      # 发取消请求，删除实例
-        time lag                    # 
+        time lag                    # 同步时间延迟
+        communication mechanism     # 通讯机制，默认jersey和jackson
+    功能
+        唯一标识                        # service id
+            主机名:application.name:端口
+        提供RestAPI, 可多终端接入
+    问题
+        一致性问题方案
+            Eureka间不同步，client向多个Eureka提交
+            Enreka间同步，Eureka强可用性弱一致性
 # 基础
     介绍
         spring boot基础上构建，快速构建分布式系统, 全家桶
