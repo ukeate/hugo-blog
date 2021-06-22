@@ -79,7 +79,6 @@ headless: true
 - [**cache**](/docs/cache)
   - [运维](/docs/cache/ops)
   - [开发](/docs/cache/develop)
-  - [MCA](/docs/cache/mashibing)
 - [**博客**](/posts)
   - [关于我](/about_me)                    
 - [**模板配置**](/docs/template)
