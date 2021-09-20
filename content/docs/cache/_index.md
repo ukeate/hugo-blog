@@ -2,4 +2,3 @@
 title: Register
 type: docs
 ---
-

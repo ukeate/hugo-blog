@@ -371,7 +371,7 @@ type: docs
             git log --stat --date=relative
         删除历史
             git filter-branch --force --index-filter 'git rm -r --cached --ignore-unmatch .idea' --prune-empty --tag-name-filter cat -- --all
-            git push origin master --force
+            git push origin main --force
             rm -rf .git/refs/original/
             git reflog expire --expire=now --all
             git gc --prune=now

@@ -1,3 +1,5 @@
+# 环境
+    scp eureka-server-1.0-SNAPSHOT.jar shenwq@36.137.165.51:~
 # 源
     163: http://mirrors.163.com/
     阿里云mirror: https://developer.aliyun.com/mirror
@@ -10,6 +12,27 @@
             docker tag java/device:1.0 registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
             docker push registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
             docker pull registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
+# 分析
+    nmon
+    pidstat -p 434
+        -u 1        # CPU
+        -r 1        # 内存
+        -d 1        # 磁盘
+        -w          # 上下文切换
+    iftop -n
+        # 网络流量
+    iotop
+        p   # 显示pid
+        o   # 只显示活跃
+# java
+    -Dserver.port=18001
+    -Deureka.client.serviceUrl.defaultZone=http://localhost:19090/eureka
+    -javaagent:/opt/svc/apache-skywalking-apm-bin/agent/skywalking-agent.jar
+    -Dspring.profiles.active=prod
+    -Dlogging.config=classpath:logback-spring-prod.xml
+# go
+    go env -w GOPROXY=https://goproxy.cn,direct
+    go list -m -u all 来检查可以升级的package，使用go get -u need-upgrade-package 升级后会将新的依赖版本
 # linux日志
     dmesg
     journalctl
@@ -119,10 +142,9 @@
 # docker
     目录
         /var/lib/docker
-    系统
-        sudo systemctl daemon-reload
-        sudo systemctl restart docker
-        docker build --help
+    配置
+        systemctl daemon-reload
+        systemctl restart
         docker login -u outrun -p asdf
     registry
         docker login -u outrun -p asdf registry:5000

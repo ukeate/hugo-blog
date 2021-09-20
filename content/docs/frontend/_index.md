@@ -58,6 +58,8 @@ type: docs
     sea.js
     when
             # amd 加载
+### 测试
+    vConsole    # APP HTML页面显示console按钮，打印请求参数
 ### bigpipe
     介绍
         facebook的页面异步加载框架

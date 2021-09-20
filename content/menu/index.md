@@ -85,3 +85,4 @@ headless: true
   - [docker](/docs/template/docker)
   - [linux](/docs/template/linux)
   - [awesome](/docs/template/awesome)
+  - [script](/docs/template/script)

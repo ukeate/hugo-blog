@@ -1,4 +1,5 @@
-
+# git
+    git clone ssh://git@192.168.0.1:2232/jinancloud/jncloud-one.git
 # go
     go test -bench=.  --cpuprofile=cpu.prof --memprofile=mem.prof -config ../conf/config_lc.toml -test.run TestCreateType
     go test -cover -args -config config.toml -test.run "TestCreate"
@@ -21,7 +22,6 @@
     java -Xmx2g
 # hugo
     go install --tags extended
-
 
 
 

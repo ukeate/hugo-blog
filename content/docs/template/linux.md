@@ -3,6 +3,17 @@ title: linux模板
 type: docs
 ---
 
+# /etc/fstab
+    /dev/nvme0n1p5 /home ext4 defaults 0 2
+    /dev/nvme0n1p3 /home/outrun/nvme0n1p3 ntfs-3g defaults 0 0
+
+    # /dev/nvme0n1p6
+    UUID=b00fac49-46d7-43ef-aea7-256d82b862b2	/         	ext4      	rw,relatime,data=ordered	0 1
+
+    # /dev/nvme0n1p1 LABEL=ESP
+    UUID=FE8F-730F      	/boot/EFI 	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro	0 2
+
+
 # /etc/resolv.conf
     nameserver 114.114.114.114
 

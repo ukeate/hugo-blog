@@ -1,24 +1,33 @@
-# 跳转点
-积分类 ScmSettlementPointServiceFacade
+# 框架编写
+优雅关闭相关的，使用到的是enable**
+choice-driver-shutdown
+jwt相关
+choice-driver-jwt
+通用
+choice-driver-common
+choice-driver-all
+gray-spring-boot
 
-精度
-Integer precision = paramClientService.getPricePrecision(dto.getTenantId());
+0
+FAT
 
-标准单位转订货单位
-scmDataProcessorService.transferUnitQty2OrdOrPrucQtyWayFloor(prepareDTO.getTenantId(), detail.getWareQty(), detail.getPurcUnitRates(), precision )
+1
+eureka.instance.prefer-ip-address=true
+eureka.instance.instance-id=fat:jncloud-account
+eureka.instance.ip-address=192.168.0.9
 
-物品
-goodsClientService.findGoodsList
+2 TEST04 dev -> fat
 
-计算类类似 DispatchOutPriceCalculator 
-        detail.setPurcUnitPriceNotax(BigDecimalUtils.div(detail.getGoodsAmtNotax(), detail.getPurcUnitNum(), pricePrecision))
+3 0.9
 
-枚举
-出库状态 ScmDispatchOutStatusEnum
+4 fat:
 
-查分库
-tenantUtil, DynamicDataSource
+5
+36.137.165.51:31019
 
+6 redis
+
+7 删除
 
 # 命令
 git update-index --assume-unchanged a
