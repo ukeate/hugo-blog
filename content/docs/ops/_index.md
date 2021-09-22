@@ -5,8 +5,7 @@ date: 2018-10-10T17:33:07+08:00
 type: docs
 ---
 
-
-# 基础
+# 指标
     目标
         安全性
             账号管理
@@ -28,16 +27,13 @@ type: docs
             运维自动化平台建设
     工作方式
         邮件申请开通 LDAP, VPN, 测试, 线上
-# 单机
-## 系统
-    linux
-    windows
-    chrome os
-    mac os
-    fushsia
-        # goolge os
-## 虚拟化
+# 持续集成(CI/CD)
+    # Continuous Integration(持续集成), Continuous Delivery(持续部署)
+    Jenkins
+# 容器
     docker
+    containerd
+# 虚拟化
     vagrant
         # 自动化虚拟机配置
     parallels desktop
@@ -46,7 +42,7 @@ type: docs
     gnome boxes
     hyper-v
         # 微软
-### KVM
+## KVM
     介绍
         kernel-based virtual machine, 使用linux自身的调度器进行管理,所以代码较少
             # 又叫qemu-system或qemu-kvm
@@ -57,7 +53,7 @@ type: docs
         检查系统是否支持硬件虚拟化
             egrep '(vmx|svm)' --color=always /proc/cpuinfo
 
-### VMware
+## VMware
     安装
         安装后会创建两个虚拟网卡
     设置
@@ -69,7 +65,7 @@ type: docs
             nat:通过虚拟网卡连接主机，共享网络
             host-only:单机模式
 
-### VirtualBox
+## VirtualBox
     网络连接
 |                 |NAT  |Bridged Adapter|Internal|Host-only Adapter|
 |:----------------|:----|:--------------|:--------|:----------------|
@@ -97,8 +93,10 @@ type: docs
         clone
             clone 时选择更新mac,并在虚拟机中网络连接设置中重写mac与ip
             配置主机间ssh免登录，远程ssh与所有主机免登录
-# 多机
-## 自动化
+# PaaS
+    OpenStack
+# DevOps
+# 自动化运维
     tty.js
         # 浏览器运行命令
     jenkins
@@ -109,7 +107,8 @@ type: docs
         # 自动化运维
     selenium
         # 自动化运维
-### Ansible
+    chef
+## Ansible
     # python实现的自动化部署工具
     命令
         ansible
@@ -150,18 +149,10 @@ type: docs
 
             o-> 例子
             ansible '*' -m command -a 'uptime'
-## 监控
-    prometheus
-        # 监控, go实现
-    grafana
-        # 监控
-    zabbix
-        # 分布式监控
-    nagios
-        # 监控
-    emq
-        # mqtt broker, erlang开发, 管理控制台
-# 资源
+# 资源管理
+## 文档管理
+    Confluence
+    Git Wiki
 ## 版本
     mercurial
         # 简称hg，分布式版本控制系统，比git好

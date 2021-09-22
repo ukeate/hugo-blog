@@ -3,10 +3,36 @@ Categories: ["运维"]
 title: "Monitor"
 date: 2018-10-11T18:47:57+08:00
 ---
-# 统计方式
-    选时间段
-        时序数据表
-        max、min、avg
+# 基础
+    监控的方式
+        主动、被动、旁路（舆情）
+    监控类型
+        服务端监控、客户端监控
+    目标
+        全、块、准
+    指标
+        请求量、成功率、耗时    
+# 统计
+    指标
+        访问、访客
+        停留时长
+        跳出率
+        退出率
+        转化率
+        参与度
+    显示方式
+        选时间段
+            时序数据表
+            max、min、avg
+    埋点
+        通过可视化工具配置，非硬编码
+    第三方
+        友盟
+        百度移动
+        魔方
+        App Annie
+        talking data
+        神策数据
 # 物理机
 ## Load Average
     介绍
@@ -68,9 +94,29 @@ date: 2018-10-11T18:47:57+08:00
     TCP Retransmission
         segments retransmitted: 0ops
         retransmit ratio: 0%
-# 程序
-
-
+# 应用监控
+    Prometheus
+        # 监控, go实现
+    Grafana
+        # 监控
+    Zabbix
+        # 分布式监控
+    Nagios
+        # 监控
+    Ganglia
+    Zenoss
+    Open-falcon
+    emq
+        # mqtt broker, erlang开发, 管理控制台
+# APM
+    # Application Performance Management
+    SkyWalking
+    CAT
+    Jaeger
+    Pinpoint
+    Zipkin
+    Dapper
+        # C#
 # Mysql
     总览
         Services: 38
@@ -83,7 +129,7 @@ date: 2018-10-11T18:47:57+08:00
         Top Service Client Threads Connected: 60%
         Top Service Active Client Threads: 99%
         Top Service Threads Cached: 100%
-# 单节点
+## 单节点
     总计 
         Uptime: 29 weeks
         Version: 5.7.26
@@ -199,7 +245,7 @@ date: 2018-10-11T18:47:57+08:00
         Table Definition Cache Size: 1k
         Open Table Definitions: 700
         Opened Table Definitions: 0
-## Node Summary
+### Node Summary
     总计
         Node Name
         Uptime: 1.4 years
@@ -223,7 +269,7 @@ date: 2018-10-11T18:47:57+08:00
     Network Traffic
         Outbound: 3MBs
         Inbound: 330 kBs
-## InnoDB
+### InnoDB
     总计
         Buffer Pool Size: 16GiB
         Buffer Pool Size of Total RAM: 52%
@@ -341,7 +387,7 @@ date: 2018-10-11T18:47:57+08:00
     Online Operations(MariaDB)
         Defragmentation
         Online DDL
-# Overview
+## Overview
     I/O Thread Running
     SQL Thread Running
     Read Only
@@ -401,7 +447,7 @@ date: 2018-10-11T18:47:57+08:00
         Service Table Definition Cache: 1.5 KiB
         Service Opened Table Definitions: 210 ops
         Service Open Table Definitions: 1.4k
-# 主从复制
+## 主从复制
     Replication Delay:  10
     Binlogs Size:  10GiB
     Binlog Data Written Hourly

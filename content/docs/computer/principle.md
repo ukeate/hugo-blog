@@ -133,14 +133,6 @@ date: 2018-10-10T15:25:12+08:00
         数据结构: 满足优先队列的数据结构(第1个元素有最高优先权)
 
 # 网络
-    OSI分层
-        物理层
-        数据链路层
-        网络层
-        传输层
-        会话层
-        表示层
-        应用层
     ABR(area border router)：区域边界路由器
     子网隔离
 ## 状态
@@ -175,7 +167,15 @@ date: 2018-10-10T15:25:12+08:00
             3. redis或memcached等缓存
                 # 常用
             4. 数据库中
-## 数据链路层
+## OSI分层
+    物理层
+    数据链路层
+    网络层
+    传输层
+    会话层
+    表示层
+    应用层
+### 数据链路层
     分层
         数据链路层分为两层
             llc上层子层                # Logical Link Control 逻辑链路控制。
@@ -228,7 +228,7 @@ date: 2018-10-10T15:25:12+08:00
                 arp -a                                         查看arp缓存表中的内容
                 arp -d                                        清空arp缓存表
 
-## 网络层
+### 网络层
     数据包
         接收
             # 一般情况下，网络上所有的机器都可以“听”到通过的流量, 但对不属于自己的数据包则不予响应
@@ -293,7 +293,7 @@ date: 2018-10-10T15:25:12+08:00
     bgp
         介绍　
             border gateway protocol 边界网关协议
-### ip
+#### ip
     Internet Protocol                                # ip地址是互联网主机的唯一标识
 ![""](/docs/architecture/ip1.jpg)
         ip地址分类
@@ -325,7 +325,7 @@ date: 2018-10-10T15:25:12+08:00
 
     ip分片    # 一个MTU（链路层）较大的网络传输到MTU较小的网络过程中，将一个较大的数据包分为几个较小的数据包来传输。
         利用PING命令中的参数–l 可以设置数据部分的字节数
-### 抓包
+#### 抓包
     sniffer(嗅探器)
         # 网络层
         # 硬件sniffer称为 协议分析仪
@@ -351,7 +351,7 @@ date: 2018-10-10T15:25:12+08:00
             攻陷一台主机后，安装sniffer, 侦听同网段数据包，存到log文件(通常是包含username或password的包)，截获其他主机密码后，登入这台主机。
                 # 属于第M层攻击，即 在攻击者已经进入了目标系统的情况下
                 ## 也可以截获金融信息
-## 传输层
+### 传输层
     协议
         TCP        Transmission Control Protocol 传输控制协议
         UDP        User Datagram Protocol 用户数据报协议
@@ -401,7 +401,7 @@ date: 2018-10-10T15:25:12+08:00
         ssl加密(消息, node模块)
             非对称生成公私钥(慢)
             对称传数据(快)
-## 会话层
+### 会话层
     udp传输
         netBIOS
             Network Basic Input Output System                           # 网络基本输入输出系统 由ibm开发
@@ -414,14 +414,14 @@ date: 2018-10-10T15:25:12+08:00
                 cifs        Common Internet File System）                # 通用互联网文件系统。
                                                                         ## 微软将原有的几乎没有多少技术文档的SMB协议进行整理， 重新命名为CIFS
                                                                         ## 成为Internet上计算机之间相互共享数据的一种标准。
-## 表示层
+### 表示层
     协议
         XDR
         ASN.1
         SMB
         AFP
         NCP
-## 应用层
+### 应用层
     协议
         HTTP        Hypertext transfer protocol 超文本传输协议
         HSTS        HTTP Strict Transport Security HTTP安全传输
@@ -440,7 +440,7 @@ date: 2018-10-10T15:25:12+08:00
         ENRP
         DHCP        Dynamic Host Configuration Protocol 动态主机配置
         BOOTP        Bootstrap Protocol 自举协议
-### tcp传输
+#### tcp传输
     telnet
         telnet                                        # 一个简单的远程终端协议。用户可以通过TCP连接登录到远程的一个主机上，好象使用远程主机一样。
             采用客户机/服务器计算模式。在本地系统上运行TELNET客户机进程，在远程主机上运行TELNET服务器进程。
@@ -498,7 +498,7 @@ date: 2018-10-10T15:25:12+08:00
             http live streaming 苹果创建, 延迟较高
             html5原生支持
             m3u8扩展名，里面封装ts小视频
-#### http
+##### http
     1.0与1.1区别
         扩展性
             1.1消息中增加版本号
@@ -638,7 +638,7 @@ date: 2018-10-10T15:25:12+08:00
         Expires: -1
         Cache-Control: no-cache
         Pragma: no-cache
-### udp传输
+#### udp传输
     dns
         domain name system
             分类
@@ -717,7 +717,7 @@ date: 2018-10-10T15:25:12+08:00
             订阅观察, 接收通知
             支持可靠传输、数据重传、块传输, 确保到达
             支持ip多播
-### mqtt
+#### mqtt
     介绍
         消息队列遥测传输(message queuing telemetry transport)
         针对硬件性能低、网络状态差的远程设备, 如卫星链路通信

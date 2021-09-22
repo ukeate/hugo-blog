@@ -1021,6 +1021,11 @@ type: docs
 # 流式数据库
     piplelineDB
         # 依赖zeromq, 记录时间段内的事件
+# 全文索引
+    Lucene
+    ElasticSearch
+    Solr
+    Sphinx
 # proxy
 ## mycat
     # 目录结构
