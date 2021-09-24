@@ -393,6 +393,7 @@ date: 2018-10-11T10:33:48+08:00
 ### Zookeeper
     介绍
         google chubby的开源实现。用于服务发现
+        保证CP
         分布式, hadoop中hbase的组件
         fast paxos算法        # paxos存在活锁问题, fast paxos通过选举产生leader, 只有leader才能提交proposer
     功能
@@ -408,12 +409,20 @@ date: 2018-10-11T10:33:48+08:00
     exhibitor
         # supervisor for zk
 ### Eureka
-    # Netflix
+    # Netflix，保证AP
 ### Consul
-    # Apache
-## 配置
+    # Apache，保证CA
 ### Etcd
-    # kubernetes中用到的服务发现仓库
+    # kubernetes用，保证CP
+## 路由控制
+    负载均衡策略
+        随机、轮询、调用延迟判断、一致性哈希、粘滞连接
+    本地路由优先策略
+        优先JVM（injvm），优先相同物理机（innative）
+    配置方式
+        统一注册表、本地配置、动态下发
+
+## 配置
 ### Spring Cloud Config
 ### Diamond
     # 淘宝
@@ -813,3 +822,82 @@ date: 2018-10-11T10:33:48+08:00
                 # 显示VIP当前绑定的服务器
             tail -f /var/log/messages
                 # 日志
+
+# 数据库
+## 读写分离
+    MySQL主从复制
+    Haproxy + 多Slave
+    DRBD + Heartbeat + MySQL
+    MySQL Cluster
+## 分片
+    问题
+        事务
+        Join
+        迁移
+        扩容
+        ID生成
+        分页
+    方案
+        事务补偿        # 数据对账：基于日志对比、同步标准数据源
+        分区            # MySQL机制分文件存储，客户端无感知
+        分表            # 客户端管理分表路由
+        分库
+            为什么 
+                单库无法承接连接数时分库，MySQL单库5千万条，Oracle单库一亿条
+            策略
+                数值范围
+                取模
+                日期
+    框架
+        Sharding-JDBC
+        TSharding
+    代理
+        Atlas
+        MyCAT
+        Vitess
+## 分布式文件系统
+    HDFS            # 批量读写，高吞吐量，不适合小文件
+    FastDFS         # 轻量级，适合小文件
+# 一致性
+    CAP
+        一致性
+            强一致性、弱一致性（秒级），最终一致性
+        可用性
+        分区容错性（网络故障）
+    BASE
+        Basically Available（基本可用），Soft state（软状态），Eventually consistent（最终一致性）
+    幂等性
+## 分布式锁
+    算法
+        PAXOS
+        Zab
+            # Zookeeper使用
+        Raft
+            # 三角色：Leader（领袖），Follower（群众），Candidtate（候选人）
+        Gossip
+            # Cassandra使用
+        两阶段提交、多阶段提交
+        TCC事务
+    实现方式
+        数据库
+            有单点问题
+        缓存
+            非阻塞性能好
+            有锁不释放问题
+            实现
+                RedLock setnx
+                Memcached add
+        Zookeeper
+            有序临时节点，集群透明解决单点问题，锁被释放，锁可重入
+            性能不如缓存，吞吐量随集群规模变大而下降
+## 一致性哈希
+    扩容映射
+# ID生成器
+    Snowflake算法           # Twitter
+        41位时间戳+10位机器标识（比如IP，服务器名称等）+12位序列号(本地计数器)
+    MySQL自增ID + "REPLACE INTO XXX:SELECT LAST_INSERT_ID();"
+        # Flicker
+    MongoDB ObjectId
+        不能自增
+    UUID
+        无序，过长，影响检索性能
