@@ -110,6 +110,29 @@ type: docs
     chef
 ## Ansible
     # python实现的自动化部署工具
+    模式
+        ad-hoc              # 批量命令
+        playbook            # 任务编排，执行yml文件
+    安装
+        pip install ansible
+    配置
+        优先级
+            export ANSIBLE_CONFIG=/etc/ansible.cfg
+            ~/.ansible.cfg
+            /etc/ansible.cfg
+        ansible.cfg
+            inventory = /etc/ansible/hosts
+            library = /usr/share/ansible
+            forks = 5
+            sudo_user = root
+            remote_port = 22
+            host_key_checking = False
+            timeout = 60
+            log_path = /var/log/ansible.log
+        hosts
+            [mysql_test]
+            192.168.0.1
+            192.168.0.2
     命令
         ansible
             通配符
@@ -149,6 +172,12 @@ type: docs
 
             o-> 例子
             ansible '*' -m command -a 'uptime'
+        ansible-doc         # 文档
+        ansible-galaxy      # 上传/下载模块
+        ansible-playbook    # 任务编排
+        ansible-pull        # 拉配置
+        ansible-vault       # 文件加密
+        ansible-console     # REPL
 # 资源管理
 ## 文档管理
     Confluence
@@ -385,6 +414,10 @@ type: docs
             git tag -d v1.0
             git push origin --delete tag v1.0
                 # git push origin :refs/tags/v1.0c
+        fork跨网站git
+            git remote add upstream git@github.com:xuyuadmin/xxljob.git
+            git fetch upstream
+            git merge upstream/master --allow-unrelated-histories
         统计某人代码
             git log --author="$(git config --get user.name)" --pretty=tformat: --numstat | gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "added lines: %s removed lines : %s total lines: %s\n",add,subs,loc }' -
         统计所有人代码

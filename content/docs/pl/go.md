@@ -1598,3 +1598,17 @@ date: 2018-10-09T16:10:44+08:00
 ## go-torch
     # 性能火焰图
     go-torch -b cpu.prof
+## gf
+    -v/version
+    -h/help
+    init
+    build
+    gen         # 生成模块
+        gen dao
+    run
+    swagger
+    pack
+    get
+    docker
+    mod
+    update

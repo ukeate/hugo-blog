@@ -113,7 +113,8 @@
         patch -p1  < ../b.patch
         patch -RE -p1 < ../b.patch
     vimdiff a b
-    rsync
+    rsync -av --exclude=.git --exclude=logs/* ./* 192.168.0.14:/data/app/ext-marketing/
+
     后台
         fg
         bg

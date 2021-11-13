@@ -571,8 +571,11 @@ type: docs
 ## Kong
 	# 基于OpenResty
 # 日志
-## elk
+## ELK
 	# elasticsearch, logstash, kibana
+    FileBeat
+        命令
+        filebeat --environment systemd -c /etc/filebeat/filebeat.yml --path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat
 ## log.io
 # 实时计算
 	阿里云Flink
