@@ -675,6 +675,15 @@ date: 2018-10-11T18:47:57+08:00
                 range  192.168.0.160 192.168.0.170;
                 option broadcast-address 192.168.0.255;
             }
+## 声卡
+    aplay -l
+    /etc/asound.conf
+        defaults.pcm.card 1
+        defaults.pcm.device 1
+        defaults.ctl.card 1
+    alsactl
+        store
+        restore
 # 调度
     at                      # 某时间运行一次
 
