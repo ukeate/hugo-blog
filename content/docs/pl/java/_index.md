@@ -38,7 +38,6 @@ date: 2018-10-09T08:48:07+08:00
                 执行计数器找出最有编译价值的代码，通知JIT以方法为单位编译
                 方法频繁调用或有效循环多，触发标准编译和OSR(栈上替换)
                 不用等待本地代码输出就执行，编译时间压力小，可引入更多优化技术，输出更高效本地代码
-
         KVM                         # 强调简单、轻量、可移植，但运行慢。Android, iOS前手机平台广泛使用
         CDC-HI VM/CLDC-HI VM        # CDC/CLDC(Connected Limited Device Configuration)希望在移动端建立统一java编译接口, 这是它们的参考实现， Java ME的支柱
         Squawk VM                   # 运行于Sun SPOT(small programmable object technology, 一种手持wifi设备)。java本身实现大部分
@@ -64,18 +63,210 @@ date: 2018-10-09T08:48:07+08:00
         Microsoft JVM               # 微软想垄断Java，Sun打官司令开发停止
         其它
             JamVM, cacaovm, SableVM, Kaffe, Jelatine JVM, NanoVM, MRP, Moxie JVM, Jikes RVM
-    JDK(java development kit)       # java开发的最小环境
-        Java语言
-        JVM
-        Java API类库
-    JRE(java runtime environment)
-        JVM
-        Java SE API
-    平台
-        Java Card                        # Applets, 运行在小内存设备
-        Java ME(Micro Edition)           # 以前叫J2ME。手机, PDA, 精简API
-        Java SE(Standard Edition)        # 以前叫J2SE, 桌面应用, 完整API
-        Java EE(Enterprise Edition)      # 企业应用(ERP, CRM), 扩充API(javax包, 有些合入了JavaSE), 部署支持
+
+        o->JDK发行版 
+        Open JDK
+        Oracle JDK
+        IBM JDK
+    概念
+        JDK(java development kit)       # java开发的最小环境
+            Java语言
+            JVM
+            Java API类库
+        JRE(java runtime environment)
+            JVM
+            Java SE API
+        平台
+            Java Card                        # Applets, 运行在小内存设备
+            Java ME(Micro Edition)           # 以前叫J2ME。手机, PDA, 精简API
+            Java SE(Standard Edition)        # 以前叫J2SE, 桌面应用, 完整API
+            Java EE(Enterprise Edition)      # 企业应用(ERP, CRM), 扩充API(javax包, 有些合入了JavaSE), 部署支持
+# JDK
+    5
+        自动装箱拆箱
+        枚举类型
+        import static
+        可变参数
+        内省
+        泛型
+        for增强
+        注解
+    6
+        AWT新类Desktop、SystemTray
+        JAXB2，把Bean变为XML
+        StAX XML处理
+        Compiler API动态生成class
+        Http Server API, 轻量http容器
+        Common Annotations补充, Annotations API
+        Console类
+        脚本语言引擎: js, groovy, ruby
+    7
+        switch支持String
+        泛型推断
+            new ArrayList<>()
+        AutoCloseable interface，对象销毁时自动调用close()
+        FileSystem新方法, 取环境变量
+            getJavaIoTempDir()      # IO临时文件夹
+            getJavaHomeDir()        # JRE目录
+            getUserHomeDir()        # 用户目录
+            getUserDir()            # 运行目录
+        Boolean加方法
+            negate()
+            and()
+            or()
+            xor()
+        Character加方法
+            equalsIgnoreCase()
+        Math加方法，安全计算
+            safeToInt()
+            safeNegate()
+            safeSubtract()
+            safeMultiply()
+            safeAdd()
+        switch case可以匹配String
+        数值可下划线, 二进制
+            int i = 1_000_000
+            int i = 0b1001_1001
+        多异常类型
+            catch(A|B e){}
+        try with resource自动关闭资源
+            try (FileInputStream s1 = new FileInputStream(""); FileOutputStream o1 = new FileOutputStream("")) {}
+    8
+        interface default方法
+        lambda表达式
+        lambda作用域可访问实际final变量, 可访问对象字段和静态变量 
+        函数式接口
+            @FunctionalInterface
+        函数引用
+            Converter<String, Integer> f = Integer::valueOf
+            User::new
+        Predicate类, Function接口, Supplier接口, Consumer接口, Comparator接口, Optional接口
+        Stream接口
+            filter()...
+            Collection
+                stream()
+                parallelStream()
+        Date API
+            Clock
+                static systemDefaultZone()
+                millis()
+                instant()
+            Date.from(instant)
+            ZoneId
+                static getAvailableZoneIds()
+                static of()
+                getRules()
+            LocalTime
+                static now()
+                static of()
+                static parse
+                plust()...
+            LocalDate
+                static parse()
+            LocalDateTime
+                static of()
+                toInstant()...
+            ChronoUnit.HOURS.between()
+            DateTimeFormatter
+                static ofLocalizedTime(FormatStyle.SHORT)
+                static ofPattern()
+                withLocale(Locale.GERMAN)
+        多重注解, 同一注解使用多次
+            @Repeatable
+    9
+        JDK模块化加载，瘦身
+        AOT(Ahead of Time Compilation)
+        接口私有方法
+        jshell
+        try with resource改进
+            FileInputStream s1 = new FileInputStream("");
+            FileOutputStream o1 = new FileOutputStream("");
+            try (s1;o1){}
+        下划线不能单独成为变量名，后续会成为关键字
+        String从char[]改为byte[]
+        stream加强，集合加强
+            list.of()
+            map.of()
+            copyof()
+    10
+        引入var, 只能声明局部变量
+            var a = "a";
+    11
+        直接运行源码
+            java a.java
+        String
+            strip()             # 可去除unicode空白字符
+            isBlank()           # 长度为0或空格
+            repeat(4)           # 重复4次生成新串
+        lambda var类型推断
+            (var a) -> a
+        Optional加强
+        InputStream
+            transferTo()
+        HTTP Client API
+    12
+        switch多值（preview）
+            switch(a) {
+                case 1,2,3 -> a;
+            }
+    13
+        switch返回值(preview)
+            String s = switch(a) {
+                case 1 -> "a";
+            }
+        文本块(preview)
+            String s = """
+                abc
+                """;
+    14
+        instanceof模式匹配(preview)
+            if (o instanceof Integer i){
+                i++;
+            }
+        空指针定位到对象        # a().b().c的情况
+            -XX:+ShowCodeDetailsInExceptionMessages
+        record类型(preview)
+            public record User(String name, Integer age){}
+        jpackage
+    15
+        sealed类(preview), 限制子类继承
+            public sealed class Animal permits Cat, Dog {}
+            public final class Cat extends Animal {}
+            public sealed class Dog extends Animal permits Husky {}
+            public final class Husky extends Dog {}
+        CharSequence interface添加default isEmpty()
+        TreeMap添加方法
+            putIfAbsent()
+            computeIfAbsent()
+            computeIfPresent()
+            compute()
+            merge()
+        正式版: 文本块
+    16
+        包装类编译时警告
+            Integer i = new Integer(1)
+            synchronized(i){}
+        获取AM或PM
+            DateTimeFormatter.ofPattern("B").format(LocalDateTime.now())
+        InvocationHandler添加方法
+            invokeDefault()     # 调interface default方法
+        JVM优化: ZGC并发栈处理，弹性metaspace
+        Stream
+            toList()
+        正式版: record类型、instanceof模式匹配、jpackage
+    17, LTS版
+        去掉AOT、GraalVM的JIT
+        switch模式匹配(preview)
+            switch(a) {
+                case B b -> b.b();
+                case null -> ;
+            }
+        伪随机数增加interface, 用于使用stream
+            RandomGeneratorFactory
+            RandomGenerator, 由Random和ThreadLocalRandom继承
+
+        正式版: sealed类
+    21, LTS版
 # 命令与工具
     bin目录
         javac           #  编译器
@@ -117,6 +308,18 @@ date: 2018-10-09T08:48:07+08:00
             # eclipse MAT插件分析dump文件
         JProfiler
             # 图形化全面性能分析
+    常见场景
+        分析GC效果，内存泄漏
+            jstat -gcutil -t -h8 [pid] 1000
+        dump内存
+            jmap -dump:live,format=b,file=heap.bin [pid]
+        查死锁
+            jstack |grep deadlock            # deadlock会列在最后
+        CPU占用
+            top
+            top -Hp [pid]
+            printf '%x' [tid]
+            jstack [pid] | grep [16进制tid] -A 10
 # 语法
 ## 基础
     类型

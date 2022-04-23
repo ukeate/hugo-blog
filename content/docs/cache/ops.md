@@ -1,3 +1,6 @@
+# 查日志
+    ERROR
+    __tag__:__path__:/var/log/nginx/error.log
 # 环境
     scp eureka-server-1.0-SNAPSHOT.jar shenwq@36.137.165.51:~
 # 源
@@ -30,6 +33,9 @@
     -javaagent:/opt/svc/apache-skywalking-apm-bin/agent/skywalking-agent.jar
     -Dspring.profiles.active=prod
     -Dlogging.config=classpath:logback-spring-prod.xml
+# mvn
+    mvn dependency:tree -Dverbose -Dincludes=org.apache.commons:commons-lang3
+        # 分析包依赖
 # go
     go env -w GOPROXY=https://goproxy.cn,direct
     go list -m -u all 来检查可以升级的package，使用go get -u need-upgrade-package 升级后会将新的依赖版本
@@ -145,7 +151,7 @@
         /var/lib/docker
     配置
         systemctl daemon-reload
-        systemctl restart
+        systemctl restart docker
         docker login -u outrun -p asdf
     registry
         docker login -u outrun -p asdf registry:5000
@@ -181,7 +187,7 @@
                 -v
         docker status 45370         # 显示资源占用
         docker inspect 45370        # 详情
-
+            --format "{{.State.Pid}}"
         docker run --name gateway --rm -d java/gateway:1.0
         docker run -it ubuntu
 
@@ -190,181 +196,6 @@
         docker logs -f -t ef2
     system
         docker system prune -a
-# kubenetes
-## minikube
-    docker login --username=934260428@qq.com registry.cn-hangzhou.aliyuncs.com
-    命令
-        minikube
-            start --vm-driver=virtualbox \
-                --memory=4096 \
-                --cpus=2 \
-                --log_dir=/home/outrun/logs \
-                --insecure-registry=192.168.99.1:5000 \
-                --insecure-registry=registry.cn-qingdao.aliyuncs.com \
-                --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
 
-                --kubernetes-version v1.17.0
-                --docker-env=HTTP_PROXY=$HTTP_PROXY \
-                --docker-env=HTTPS_PROXY=$HTTPS_PROXY \
-                --docker-env=NO_PROXY=$NO_PROXY \
-                --image-mirror-country=cn \
-                --registry-mirror=https://registry.docker-cn.com \
-                --extra-config=kubelet.MaxPods=5.
-                    # registry一定是minikube容器ip, 可用ifconfig查看
-                    # --insecure-registry修改需要minikube delete
-            stop
-            delete
-            status 
-            docker-env
-            ip      # 得到单机集群ip
-            service  -n iot mosquitto --url
-                # 得到service的nodePort
-
-            ssh
-            dashboard
-            addons
-                list
-                enable heapster
-                enable ingress
-    服务
-        kube-system
-            coredns
-            etcd-minikube
-            kube-addon-manager-minikube
-            kube-proxy
-            kube-scheduler-minikube
-            nginx-ingress-controller
-            storage-provisioner
-        kubernetes-dashboard
-            dashboard-metrics-scraper
-            kubernetes-dashboard
-## kubeadm
-    kubeadm init
-## kubectl
-    配置
-        envsubst < iot.yml |kubectl apply -f -
-
-    全局参数
-        --output="jsonpath={.data.\.dockerconfigjson}"
-        --output=yaml
-        --context=iot
-        --namespace=iot 
-        --all-namespaces=true
-        -n
-            # namespace
-    Basic Commands (Beginner):
-        create
-            -f y1.yml
-        expose
-            deployment deploy1
-                --target-port=8080
-                --type=NodePort
-        run   
-            run deploy1 --image=gcr.io/google-samples/hello-app:1.0
-            --port=8080
-        set   
-            image deploy gateway *=registry.cn-qingdao.aliyuncs.com/mrs-iot/gateway:1.0
-
-    Basic Commands (Intermediate):
-        explain
-        get
-            -o 
-                # 格式
-                yaml
-                wide
-            -l app=a1
-            -c gateway
-            --show-labels
-            --selector app=a1
-            --all-containers=true
-        edit
-            ingress iot-ingress
-        delete 
-            --force  
-            --grace-period=0
-
-    Deploy Commands:
-        rollout
-        scale
-            deployment nginx-deployment
-                --replicas=1
-        autoscale
-            deployment nginx-deployment 
-                --min=2 --max=10 --cpu-percent=80
-
-    Cluster Management Commands:
-        certificate  
-        cluster-info 
-        top          
-        cordon       
-        uncordon     
-        drain        
-        taint        
-
-    Troubleshooting and Debugging Commands:
-        describe     
-        logs
-            -f
-            --since=5m
-        attach       
-        exec         
-            -it device-7b8965d85d-xz4qm bash
-            -it device-7b8965d85d-xz4qm --container device -- /bin/bash
-        port-forward 
-        proxy        
-            --port=8080
-            http://localhost:8080/api/v1/proxy/namespaces/iot/services/device:http/
-                # 访问内部端口
-        cp           
-        auth         
-
-    Advanced Commands:
-        diff      
-        apply           # 升级
-            -f y1.yml
-        patch     
-        replace   
-        wait      
-        convert   
-        kustomize 
-
-    Settings Commands:
-        label     
-        annotate  
-        completion
-
-    Other Commands:
-        api-resources 
-        api-versions  
-        config        
-            view
-            current-context
-            set-context $(kubectl config current-context) --namespace=iot
-            use-context iot
-
-        plugin        
-        version       
-
-    方案
-        连阿里云k8s
-            kubectl config set-cluster mrs --server=https://106.14.49.217:6443 --certificate-authority=/home/outrun/scripts/work/mrs-k8s/crt --embed-certs=true
-            kubectl config set-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f --cluster=mrs --user=297351062922226746 --namespace=lora-app
-            kubectl config use-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f
-            kubectl config set-credentials 297351062922226746  --user=297351062922226746 --client-key=/home/outrun/scripts/work/mrs-k8s/297351062922226746.key.pem --client-certificate=/home/outrun/scripts/work/mrs-k8s/297351062922226746.crt --embed-certs=true
-        私有仓库
-            kubectl delete secret local
-            kubectl -n iot create secret docker-registry local1 \
-            --docker-server=192.168.99.1:5000 \
-            --docker-username=outrun \
-            --docker-password=asdf \
-            --docker-email=934260428@qq.com
-        所有nodeport
-            kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
-        node上跑pod个数
-            kubectl get po --all-namespaces -o wide | grep cn-shanghai.i-uf6iudwa5b1tvdxb3yy8 |  wc -l 
-
-
-## chrome
+# chrome
     chrome://net-internals/#dns
-
-
