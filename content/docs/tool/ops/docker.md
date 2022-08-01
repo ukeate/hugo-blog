@@ -10,23 +10,30 @@ date: 2018-10-11T18:18:21+08:00
     优点
         低成本、高利用率、充分灵活、动态调度
         核心网的最终形态
-    镜象网站
-        https://hub.docker.com/
     目录
         /var/lib/docker
-    配置
-        /etc/sysconfig/docker
-            # /etc/init.d/docker.conf
-            OPTIONS='--selinux-enabled --log-driver=journald --insecure-registry 45.55.56.16:5000 --dns 8.8.8.8'
-            DOCKER_CERT_PATH=/etc/docker
+# 配置
+    镜象网站
+        https://hub.docker.com/
+    阿里云个人仓库
+        入口: cr.console.aliyun.com
+            docker login -u 934260428@qq.com registry.cn-qingdao.aliyuncs.com
+            docker tag java/device:1.0 registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
+            docker push registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
+            docker pull registry.cn-qingdao.aliyuncs.com/mrs-iot/device:1.0
+    /etc/sysconfig/docker
+        # /etc/init.d/docker.conf
+        OPTIONS='--selinux-enabled --log-driver=journald --insecure-registry 45.55.56.16:5000 --dns 8.8.8.8'
+        DOCKER_CERT_PATH=/etc/docker
 # 命令
-## nsenter
-    # 不需ssh进入容器shell
-    docker inspect --format {{.State.Pid}} nginx
-    nsenter -t4629 -n
+## 常用系统命令
+    systemctl daemon-reload
+    systemctl restart docker
 ## docker
     -h
     version
+    login
+        docker login -u outrun -p asdf
     search mysql                    # 搜索镜像
     pull centos:7                   # 下载镜像
         centos:latest
@@ -39,6 +46,9 @@ date: 2018-10-11T18:18:21+08:00
     rmi centos:latest               # 删除镜象
     container
         run                         # 新建容器
+            --user root
+            --name a
+            --privileged
             --name                  # 显示名
             -t                      # 伪tty, -i 交互的
             -rm=true                # 执行完后删除
@@ -73,6 +83,7 @@ date: 2018-10-11T18:18:21+08:00
         restart 026e
         attach 026                  # 进入容器运行命令行, 可显示日志
         kill 026e
+        prune
     ps -a                           # 容器列表
     rm                              # 移除容器
         docker rm docker ps -aq
@@ -80,7 +91,6 @@ date: 2018-10-11T18:18:21+08:00
         rm -f 026
 
 
-    login
     build .                         # 用当前目录Dockerfile创建新镜像
         -t="nginx/test"             # target
         --no-cache                  # 不用cache
@@ -104,8 +114,8 @@ date: 2018-10-11T18:18:21+08:00
         scale                       # 加减副本
         update                      # 变更属性
         logs                        # 查日志
-
-
+    system 
+        prune                       # 清理所有container, network, image, cache
     network                         # 网卡
         ls
         rm
@@ -113,21 +123,43 @@ date: 2018-10-11T18:18:21+08:00
         inspect                     # 详情
         create
             -d nat                  # 指定驱动
-
-
     volume                          # 卷标, 默认挂载到/var/lib/docker/volumes
         create
         ls
         rm
         prune                       # 删除全部未使用
         inspect
-
-
     stack                           # 单文件定义多服务
         deploy
         ls
         ps
         rm
+    
+    常用
+        docker inspect 45370        # 详情
+            --format "{{.State.Pid}}"
+        docker login a.com -u outrun -p asdf
+        docker build -t java/gateway:1.0 .
+        docker push java/gateway:1.0
+        docker images|grep none|awk '{print $3}'|xargs docker rmi -f
+            # 删除none镜像
+        docker image inspect 4de
+        docker system prune -a
+        docker exec -it -u root ef2 /bin/bash
+        docker run --name gateway --rm -d java/gateway:1.0
+        docker run -it ubuntu
+        docker restart ef2
+        docker logs -f -t ef2
+        docker status 45370         # 显示资源占用
+        docker save -o a.tar.gz a
+        docker load < a.tar.gz
+## nsenter
+    # 指定pid, 不需ssh进入容器运行shell
+    docker inspect --format {{.State.Pid}} nginx
+    nsenter -t4629 -n
+### 场景
+    查看/var/lib/docker/overlay2/id文件对应container
+        docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Id}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep bff250
 # Dockerfile
     指令
         FROM nginx                          # 基于镜像
@@ -191,7 +223,7 @@ date: 2018-10-11T18:18:21+08:00
 ## registry
     htpasswd  -Bbn outrun asdf > auth/htpasswd
 
-    客户端
+    客户端使用
         /etc/docker/daemon.json
             {"insecure-registries":["127.0.0.1:5000"]}
         sudo systemctl daemon-reload
@@ -204,6 +236,19 @@ date: 2018-10-11T18:18:21+08:00
         curl --user outrun:asdf 127.0.0.1:5000/v2/_catalog
             # v2表示版本 registry:2
         docker pull 127.0.0.1:5000/java/device:1.0
+    常用API
+        curl --user outrun:asdf -X GET  registry:5000/v2/_catalog
+            # 列表
+        curl --user outrun:asdf -X GET  registry:5000/v2/ubuntu/tags/list
+            # tags
+        curl --user outrun:asdf -X GET  registry:5000/v2/ubuntu/manifests/latest
+            # tag
+        curl --user outrun:asdf -X GET -v --silent -H "Accept: application/vnd.docker.distribution.manifest.v2+json" registry:5000/v2/ubuntu/manifests/latest 2>&1 | grep Docker-Content-Digest | awk '{print ($3)}'
+            # digest
+        curl --user outrun:asdf -X DELETE -v --silent -H "Accept: application/vnd.docker.distribution.manifest.v2+json" registry:5000/v2/ubuntu/manifests/sha256:134c7fe821b9d359490cd009ce7ca322453f4f2d018623f849e580a89a685e5d
+            # 删除
+        docker exec -it 4ebff4cdc646 /bin/registry garbage-collect  /etc/docker/registry/config.yml
+            # 删除后, 运行垃圾回收
 # 方案
     查容器pid
         docker container top ea1

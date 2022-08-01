@@ -577,6 +577,9 @@ type: docs
         命令
         filebeat --environment systemd -c /etc/filebeat/filebeat.yml --path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat
 ## log.io
+# DNS服务
+## Nscd
+    DNS本地缓存
 # 实时计算
 	阿里云Flink
 		集群

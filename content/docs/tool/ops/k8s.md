@@ -5,16 +5,39 @@ date: 2018-10-11T18:18:21+08:00
 ---
 
 # 常用
+## 查看
     kubectl get 
     kubectl describe 
     kubectl logs 
+    kubectl get pods --namespace=mdw-log -l app=logstash-logstash -w    # 等待启动
+    journalctl -u kubelet | tail
+    kubectl api-resources --verbs=list --namespaced -o name   | xargs -n 1 kubectl get --show-kind --ignore-not-found -nmdw
+## 监控
+    kubectl top node -l app=app1
+    kubectl top pod -nmdw --containers
+    kubectl describe PodMetrics p1 -njnc-dev
+## 编辑
     kubectl apply -f a.yml
     envsubst < jnc.yml |kubectl apply -f -
     kubectl label ns jnc istio-injection=enabled --overwrite
     kubectl label ns jnc istio-injection-
+## 亲和性
+    kubectl get nodes --show-labels
+    kubectl label nodes node1 deploy=mdw
+    kubectl taint nodes node1 key=value:NoSchedule                      # NoSchedule、PreferNoSchedule、NoExecute
+## 调试
+    kubectl proxy --port=8080 &
+        # 以非https形式暴露api
+    kubectl debug a1 -it --image=yauritux/busybox-curl --share-processes --copy-to=a1-debug
+        # 嫁接
+    kubectl run -it --rm test --image=a:0.1.0 --command -- /bin/bash
+        # 改镜像命令
+    kubectl run -it --rm  busybox1 --image=yauritux/busybox-curl -- /bin/bash
+        # 同环境busybox
+## 清理
+    kubectl get po -njnc-dev | grep Evicted |awk '{print$1}'|xargs kubectl delete pod -njnc-dev
+    kubectl delete po -nmdw --force --grace-period=0
 
-    resources(kubectl get)
-        mutatingwebhookconfigurations.admissionregistration.k8s.io      # 查看sidecar
 # 目录
     /etc/kubernetes
     /etc/resolve.conf
@@ -184,10 +207,41 @@ date: 2018-10-11T18:18:21+08:00
             deployment.yaml
         
     helm命令
-        install nginx
-            --values=values.yaml
-        uninstall
-        upgrade
+        查看
+            ls/list
+                --all-namespaces
+            get values a1                   # 查看已部署的values变更
+            history  a1                     # 查看历史版本
+            get manifest a1                 # 查看已安装模板
+            template                        # 查看编译后内容
+                --debug
+            search repo a1 
+                --versions
+        安装
+            repo
+                update
+            install [deployName] [packageName|packageFile|packagePath] 
+                -f values.yaml
+                --values=values.yaml
+                --set a=b
+            upgrade                         # 热更新部署文件
+                --debug --dry-run           # 只输出编译结果
+                -i                          # 没有时执行install
+                --disable-openapi-validation
+            uninstall
+        插件
+            plugin
+                install --version master https://gitee.com/mirrors_sonatype-nexus-community/helm-nexus-push.git
+                ls
+        运维
+            rollback a1 1                   # 回滚到1版本
+        打包
+            create a1
+            lint --strict a1                # 校验
+            package a1                      # 打包成a1-0.1.0.tgz
+
+    相关命令
+        
 # 方案
 ## 查询
     日志

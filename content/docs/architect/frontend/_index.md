@@ -6,7 +6,7 @@ type: docs
 ---
 
 
-# layout
+# 组件化Layout
 	layout service
 		# 缓存layout到redis
 		crud layout功能

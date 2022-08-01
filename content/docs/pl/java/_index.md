@@ -268,9 +268,16 @@ date: 2018-10-09T08:48:07+08:00
         正式版: sealed类
     21, LTS版
 # 命令与工具
-    bin目录
+    bin
         javac           #  编译器
         java            #  解释器
+            -jar a.jar
+                --spring.config.location=/application.yml 
+                --spring.profiles.active=prod 
+                    # 指定spring config
+                -Xmx2g
+                -Dserver.port
+                    # 覆盖properties
         javadoc         #  生成HTML格式的帮助文档
             javadoc -d docs -sourcepath src/ -subpackages com.ryx -author
         jdb             #  java调试器

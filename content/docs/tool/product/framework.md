@@ -33,37 +33,32 @@
                         dnspod 中 绑定ip
 ## hugo
     简介
-
         hugo由go编写，开源，特点为编译快
         本文基于hugo0.49
-
-    help
-        hugo help
-        hugo help server    # server代表任何子命令
-
-     生成站点
-        hugo new site blog1 # 站点命令在blog1中执行
-
-     生成文章
-        hugo new about.md
-        hugo new post/first.md
-
+    安装
+        go install --tags extended
+    命令
+        hugo
+            help
+            help server    # server代表任何子命令
+    场景
+        发布
+            hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
+        生成站点
+            hugo new site blog1 # 站点命令在blog1中执行
+        生成文章
+            hugo new about.md
+            hugo new post/first.md
+        本地服务器
+            hugo server
+                # 自带watch
+                -s /path/to/codes
+                --theme=hyde
+                --buildDrafts
+                -p 1315
+                    # 默认端口1313
      主题
         git clone https://github.com/spf13/hyde.git themes/hyde # 更多主题在https://themes.gohugo.io
-
-
-     本地服务器
-        hugo server
-            # 自带watch
-            -s /path/to/codes
-            --theme=hyde
-            --buildDrafts
-            -p 1315
-                # 默认端口1313
-
-     发布
-        hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
-
      文章
         开头
             ---
@@ -76,7 +71,6 @@
             draft = true    # 文章隐藏
             menu = ""
             title = "a" # 文章标题
-
      配置
         打开config.toml   # 可以是config.yaml、config.json
         baseURL = ""

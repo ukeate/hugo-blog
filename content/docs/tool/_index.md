@@ -312,6 +312,7 @@ type: docs
         chrome:flags                                # 可以开启硬件加速解码
     集成抓包工具
         chrome://net-internals/#events
+        chrome://net-export 导出文件,netlog-viewer.appspot.com分析
     插件
         ARC Welder  # android模拟器
 ## firefox

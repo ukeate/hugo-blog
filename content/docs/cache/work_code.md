@@ -1,103 +1,72 @@
 # 框架编写
-优雅关闭相关的，使用到的是enable**
-choice-driver-shutdown
-jwt相关
-choice-driver-jwt
-通用
-choice-driver-common
-choice-driver-all
-gray-spring-boot
-
-0
-FAT
-
-1
-eureka.instance.prefer-ip-address=true
-eureka.instance.instance-id=fat:jncloud-account
-eureka.instance.ip-address=192.168.0.9
-
-2 TEST04 dev -> fat
-
-3 0.9
-
-4 fat:
-
-5
-36.137.165.51:31019
-
-6 redis
-
-7 删除
 
 # 命令
 git update-index --assume-unchanged a
 mvn clean deploy -P keruyun -pl alsc-item-solution-kryun-dish-client -DskipTests
 
-# 搜索词
-分库 DynamicDataSource determineCurrentLookupKey
+# 阿里云搜索词
+## 大屏
+* and __tag__:__path__: "/data/app/jncloud/screen/log/info.log"  and resourceMap and {7435ca87-1c8c-4c76-bcfd-6f45b9c8b167}
+
+## 时长请求
+__tag__:__path__:/var/log/nginx/access.log and upstream_response_time > 1 | select distinct request_uri , count(request_uri) as "count", max(upstream_response_time) as max_time, min(upstream_response_time) as min_time, avg(upstream_response_time) as avg_time from log group by request_uri order by count desc
+
+## IP分布
+ __tag__:__path__:/var/log/nginx/access.log | select count(1) as c, ip_to_province(remote_addr) as address group by address order by c desc limit 100 
+ __tag__:__path__:/var/log/nginx/access.log | select count(1) as c, remote_addr, ip_to_province(remote_addr) as address group by remote_addr order by c desc limit 100 
+
+## PV、UV
+__tag__:__path__:/var/log/nginx/access.log not request_uri:  "/stub_status" |
+select
+  time_series(__time__, '2m', '%H:%i', '0') as time,
+  COUNT(1) as pv,
+  approx_distinct(remote_addr) as uv
+GROUP by
+  time
+ORDER by
+  time
+LIMIT
+  1000
+
+## 流量
+__tag__:__path__:/var/log/nginx/access.log not request_uri:  "/stub_status" |
+select
+  sum(body_bytes_sent) / 1024 as net_out,
+  sum(request_length) / 1024 as net_in,
+  date_format(date_trunc('hour', __time__), '%m-%d %H:%i') as time
+group by
+  date_format(date_trunc('hour', __time__), '%m-%d %H:%i')
+order by
+  time
+limit
+  10000
+
+## 地址排名
+ __tag__:__path__:/var/log/nginx/access.log not request_uri:  "/stub_status" |
+select
+  split_part(request_uri, '?', 1) as path,
+  count(1) as pv
+group by
+  path
+order by
+  pv desc
+limit
+  10
+
+## tomcat状态
+__tag__:__path__:/var/log/nginx/access.log not request_uri:  "/stub_status" |
+select
+  date_format(date_trunc('minute', __time__), '%H:%i') as time,
+  COUNT(1) as count,
+  status
+GROUP by
+  time,
+  status
+ORDER by
+  time
+LIMIT
+  1000
 
 # snip
-org.apache.ibatis.mapping.MappedStatement#getBoundSql
-
-PageHelper.startPage(Optional.ofNullable(scmDirectSendCheckQueryDTO.getPageNum()).orElse(1),
-                Optional.ofNullable(scmDirectSendCheckQueryDTO.getPageSize()).orElse(10));
-
-com.choice.scm.utils.enums.EnumSalesOrderType 订单类型
-com.choice.scm.utils.enums.EnumSalesOrderStatus 订单状态
-com.choice.scm.utils.common.ScmConstants.SCM_ORDER_TYPE 汇总类型
-com.choice.scm.utils.common.BillTypeEnum 出库类型
-com.choice.scm.entity.dispatch.enums.ScmDispatchOutStatusEnum: 配送出库状态
-
-// 设置属性
-System.getProperties().set()
-// 查属性
-ServletContext sc = ContextLoader.getCurrentWebApplicationContext().getServletContext();
-WebApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sc);
-Environment env = (Environment) ac.getBean("environment");
-env.getProperty("name");
-
 
 # sql
-	update scm_out_posorderredu_detail_summary
-	set 
-	goods_qty = case uniq_key
-	<foreach collection="list" item="item" index="index">
-		WHEN #{item.uniqKey} THEN goods_qty + #{item.goodsQty}
-	</foreach>
-	END,
-
-	goods_amt = case uniq_key
-	<foreach collection="list" item="item" index="index">
-		WHEN #{item.uniqKey} THEN goods_amt + #{item.goodsAmt}
-	</foreach>
-	END,
-
-	unit_price = case uniq_key
-	<foreach collection="list" item="item" index="index">
-		WHEN #{item.uniqKey} THEN
-		if(0=goods_qty, 0, convert((goods_amt) / (goods_qty) , decimal(65,#{item.precision})))
-	</foreach>
-	END
-
-	where
-	tenant_id = #{tenantId} and delete_flag=0
-	and uniq_key in
-	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-		#{item.uniqKey}
-	</foreach>
-
-
-        if (req.getIsOnlyFav() != null && req.getIsOnlyFav()) {
-            Fav favReq = Fav.builder().
-                    type(BizEnum.fav_type_article.getCode()).
-                    userId(req.getLoginUserId()).
-                    build();
-            PageInfo<Fav> favResp = favService.list(favReq);
-            if (favResp == null || CollectionUtils.isEmpty(favResp.getList())) {
-                return new PageInfo<>(new ArrayList<>());
-            }
-            req.idListIntersect(favResp.getList().stream().map(Fav::getTargetId).collect(Collectors.toSet()));
-            if (CollectionUtils.isEmpty(req.getIdList())){
-                return resp;
-            }
-        }

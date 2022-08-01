@@ -5,31 +5,6 @@ date: 2018-10-10T17:33:07+08:00
 type: docs
 ---
 
-# 指标
-    标准
-        ITIL(IT Infrastructure Library)
-        ITSM(IT System Management)
-    目标
-        安全性
-            账号管理
-            漏洞修复
-            安全审计
-        可用性
-            服务监控
-            架构优化
-            冗余备份
-            预案演练
-            故障响应
-        运维成本
-            成本核算
-            服务选型
-            成本优化
-        运维效率
-            研发工作流支持
-            服务支持平台建设
-            运维自动化平台建设
-    工作方式
-        邮件申请开通 LDAP, VPN, 测试, 线上
 # 持续集成(CI/CD)
     # Continuous Integration(持续集成), Continuous Delivery(持续部署)
     Jenkins
@@ -657,6 +632,8 @@ type: docs
         provided    # 编译和测试有效
         system      # 本地仓库
         import
+    源
+        阿里云maven: https://maven.aliyun.com/mvn/view
     mvn                                         # 相当于mvn compile
         全局
             -version                            # 版本
@@ -711,7 +688,9 @@ type: docs
             dependency:resolve                  # 列出已解决的依赖
             dependency:sources                  # 下载源码
             dependency:copy-dependencies        # 得到jar包
-    经验
+    常用
+        分析包依赖
+            mvn dependency:tree -Dverbose -Dincludes=org.apache.commons:commons-lang3
         清理打包文件
             mvn clean package -DskipTests
         idea工具

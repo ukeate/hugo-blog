@@ -539,3 +539,16 @@ date: 2018-10-09T08:48:07+08:00
     cw.toByteArray();
 ## 解释器(Intepreter)
     # 解释出AST
+
+# 其它补充
+    元素模式
+        # 抽象各模式成元素，简化表示
+    actor
+        # 消息通信
+    reactor
+        # 事件轮循，注册回调，如libevent
+    proactor
+        # 注册事件回调，os通知触发回调
+    惰性求值
+        链式定义(配方)，后自动触发(js tick调度)终止操作
+    dsl测试(如jasmine.js)

@@ -63,12 +63,12 @@ date: 2018-10-09T16:10:44+08:00
         env                     # 打印go环境信息
         run                     # 编译并运行
             -race               # 检查运行中的竞态冲突并报告
-        build                   # 库被舍弃，main包编译成二进制执行文件
+        build                   # 库被舍弃，main包编译成二进制执行文件, 会检测mod
             go build gopl.io
             go build x.go
             -race
             -i                  # 编译到指定位置
-        install                 # 编译安装
+        install                 # 编译安装, 会检测mod
         clean                   # 清理build产生的文件
             -c                  # 清理.test文件
             -i                  # 清理生成的可执行文件
@@ -86,6 +86,8 @@ date: 2018-10-09T16:10:44+08:00
 
         get                     # 下载依赖, 默认目录是GOPATH下的pkg。下载后自动install
             go get gopl.io/...  # ...通配
+            get gopl.io@2       # 指定mod版本号
+            -u                  # 更新到mod最新版本
             -v                  # 查看进度
         list                    # 列出指定代码包的信息
             go list ...         # ...通配
@@ -129,41 +131,160 @@ date: 2018-10-09T16:10:44+08:00
             cgo                 # 生成能够调用c语言代码的go源码文件
             compile
                 -help           # 可传给编译器的参数
-
+        mod
+            init packageName1   # 生成go.mod
+            download            # 下载mod
+            tidy                # 下载缺少，删除多余
+            edit                # 编辑go.mod
+            graph               # 打印依赖图
+            vendor              # 复制依赖到vendor
+            verify              # 验证mod
+            why                 # 打印依赖原因
     godoc                       # 提供html页面
         -http=:6060             # 运行本地帮助网站
         -analysis=type          # 提供静态分析结果
             -analysis=pointer
     gofmt
     golint                          # 检查风格
-# mod
-    环境变量
-        GO111MODULE
-            off                     # 总关闭
-            on                      # 总开启
-            auto                    # 默认，有go.mod开启
-    路径
-        $GOPATH/pkg/mod             # 保存多版本依赖, 被多项目引用
-        go.mod                      # 被go命令维护, 融入了go命令的各个模块
-        go.sum                      # 记录lock
-    依赖加载顺序
-        最新release tag
-        最新commit
-    命令                            # 融入到各个子命令中
-        go
-            build                   # 检测mod
-            install                 # 检测mod
-            get gopl.io@2           # 指定mod版本号
-                -u                  # 更新到mod最新版本
-            mod
-                init packageName1   # 生成go.mod
-                download            # 下载mod
-                tidy                # 下载缺少，删除多余
-                edit                # 编辑go.mod
-                graph               # 打印依赖图
-                vendor              # 复制依赖到vendor
-                verify              # 验证mod
-                why                 # 打印依赖原因
+
+## 常用
+    go mod 配置
+        环境变量
+            GO111MODULE
+                off                     # 总关闭
+                on                      # 总开启
+                auto                    # 默认，有go.mod开启
+        路径
+            $GOPATH/pkg/mod             # 保存多版本依赖, 被多项目引用
+            go.mod                      # 被go命令维护, 融入了go命令的各个模块
+            go.sum                      # 记录lock
+        依赖加载顺序
+            最新release tag
+            最新commit
+        命令
+            go mod vendor
+    代理
+        go env -w GOPROXY=https://goproxy.cn,direct
+    包升级
+        go list -m -u all               # 检查可以升级的package
+        go get -u need-upgrade-package  # 升级
+    性能测试
+        go test -bench=.  --cpuprofile=cpu.prof --memprofile=mem.prof -config ../conf/config_lc.toml -test.run TestCreateType
+    覆盖率
+        go test -cover -args -config config.toml -test.run "TestCreate"
+    性能分析
+        go tool pprof service.test cpu.prof
+        go-torch -b cpu.prof
+    包管理
+        go list -m -u all
+            # 列可升级包
+        go list -u need-upgrade-package
+            # 升级可升级包
+        go get -u
+            # 升级所有依赖
+# 工具
+## glide
+    介绍
+        包管理
+    目录
+        glide.yaml
+        glide.lock
+        main.go
+        subpackages
+        vendor
+    命令
+        glide
+            init
+                # 扫描代码目录，创建glide.yaml文件，记录所有依赖
+                删除glide.yaml中自己项目本身
+            get
+                # 安装并更新glide.yaml
+                --all-dependencies -s -v github.com/go-redis/redis#5.0.0
+                    # --all-dependencies会更新subpackages
+            update
+                # 下载和更新glide.yaml中的所有依赖，放到vendor下
+                # 递归更新
+            install
+                # 依据glide.lock与glide.yaml文件安装特定版本
+                # glide.lock与glide.yaml不同步时，发出警告
+            up
+                # 更新依赖树，重建glide.lock文件
+            name
+                # 查看glide.yaml中依赖名称
+            list
+                # 依赖列表
+            help
+            --version
+    glide.yaml
+        package: .
+        import:
+        - package: github.com/go-redis/redis
+        version: 5.0.0
+        repo:git@github.com:go-redis/redis
+    常见问题
+        o-> cannot detect vcs
+            glide.lock或vendor依赖旧版本
+                清理glide.lock和vendor, 检查glide.yaml旧版本
+            glide.yaml子目录处理不完善
+                subpackages:
+                - cloudsql
+            glide mirror找不到包
+                glide mirror set a a --vcs git
+                    # 改~/.glide/mirrors.yaml文件
+        o-> does not appear to be a git repository
+            加速服务没有项目
+        o-> glide up依赖不是最新
+            ~/.glide/cache中缓存了旧版本
+        o-> cannot find package "." in
+            glide对非git协议自有域名处理歧义，子目录分析不准确
+                清理缓存
+                    ~/.glide/cache/src/包名
+                    ~/.glide/cache/info/包名
+                glide.yaml添加repo重定向及subpackages
+                    package: github.com/grpc-ecosystem/grpc-gateway
+                    repo: git@github.com:grpc-ecosystem/grpc-gateway.git
+                    subpackages:
+                    - internal
+## govendor
+    介绍
+        包管理
+    使用
+        go get -u -v github.com/kardianos/govendor
+## godev
+    # 依赖管理
+## gv
+    # 依赖管理
+## gvt
+    # 依赖管理
+## gvm
+    # 版本管理
+    命令
+        gvm
+            install go1.5
+            use go1.5
+            list
+            listall
+            implode
+                # 删除所有go版本和gvm本身
+## gore
+    # repl
+## go-torch
+    # 性能火焰图
+    go-torch -b cpu.prof
+## gf
+    -v/version
+    -h/help
+    init
+    build
+    gen         # 生成模块
+        gen dao
+    run
+    swagger
+    pack
+    get
+    docker
+    mod
+    update
 # 语法
     包                              # 路径引用，命名空间
         不能循环依赖
@@ -1508,107 +1629,3 @@ date: 2018-10-09T16:10:44+08:00
                 m.Unlock()
             }
             concurrent(done, do, 999, 100, 1e3)
-
-# 工具
-## glide
-    介绍
-        包管理
-    目录
-        glide.yaml
-        glide.lock
-        main.go
-        subpackages
-        vendor
-    命令
-        glide
-            init
-                # 扫描代码目录，创建glide.yaml文件，记录所有依赖
-                删除glide.yaml中自己项目本身
-            get
-                # 安装并更新glide.yaml
-                --all-dependencies -s -v github.com/go-redis/redis#5.0.0
-                    # --all-dependencies会更新subpackages
-            update
-                # 下载和更新glide.yaml中的所有依赖，放到vendor下
-                # 递归更新
-            install
-                # 依据glide.lock与glide.yaml文件安装特定版本
-                # glide.lock与glide.yaml不同步时，发出警告
-            up
-                # 更新依赖树，重建glide.lock文件
-            name
-                # 查看glide.yaml中依赖名称
-            list
-                # 依赖列表
-            help
-            --version
-    glide.yaml
-        package: .
-        import:
-        - package: github.com/go-redis/redis
-        version: 5.0.0
-        repo:git@github.com:go-redis/redis
-    常见问题
-        o-> cannot detect vcs
-            glide.lock或vendor依赖旧版本
-                清理glide.lock和vendor, 检查glide.yaml旧版本
-            glide.yaml子目录处理不完善
-                subpackages:
-                - cloudsql
-            glide mirror找不到包
-                glide mirror set a a --vcs git
-                    # 改~/.glide/mirrors.yaml文件
-        o-> does not appear to be a git repository
-            加速服务没有项目
-        o-> glide up依赖不是最新
-            ~/.glide/cache中缓存了旧版本
-        o-> cannot find package "." in
-            glide对非git协议自有域名处理歧义，子目录分析不准确
-                清理缓存
-                    ~/.glide/cache/src/包名
-                    ~/.glide/cache/info/包名
-                glide.yaml添加repo重定向及subpackages
-                    package: github.com/grpc-ecosystem/grpc-gateway
-                    repo: git@github.com:grpc-ecosystem/grpc-gateway.git
-                    subpackages:
-                    - internal
-## govendor
-    介绍
-        包管理
-    使用
-        go get -u -v github.com/kardianos/govendor
-## godev
-    # 依赖管理
-## gv
-    # 依赖管理
-## gvt
-    # 依赖管理
-## gvm
-    # 版本管理
-    命令
-        gvm
-            install go1.5
-            use go1.5
-            list
-            listall
-            implode
-                # 删除所有go版本和gvm本身
-## gore
-    # repl
-## go-torch
-    # 性能火焰图
-    go-torch -b cpu.prof
-## gf
-    -v/version
-    -h/help
-    init
-    build
-    gen         # 生成模块
-        gen dao
-    run
-    swagger
-    pack
-    get
-    docker
-    mod
-    update
