@@ -7,3 +7,12 @@
 # mac os 改mac
     sudo /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -z
     sudo ifconfig <intf> lladdr 00:bb:cc:dd:ee:ff 
+# python
+    pyenv versions
+    pyenv install 3.7.6
+        -l
+    pyenv virtualenv 3.7.6 37
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    pyenv activate 37
+    pyenv deactivate
