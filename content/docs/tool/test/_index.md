@@ -44,6 +44,12 @@ type: docs
         # mysql 压测
         --db-driver=mysql --mysql-host=visitor-bench.ctysoosgzk4k.rds.cn-north-1.amazonaws.com.cn --mysql-user=root --mysql-password=12345678 --threads=512 --events=1000000 --time=0 --report-interval=15 ./bench_visit_page_insert.lua run
 # 接口
+## jmeter
+    压测场景
+        HEAP="-Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m"
+        jmeter -n -t [jmx file] -l [results file] -e -o [Path to web report folder]
+
+
 ## loadrunner
         脚本参数
             get
@@ -132,8 +138,6 @@ type: docs
                     # -s 总计访问时间
     yslow
             # firefox插件，网页性能测试工具
-    jmeter
-            # apache性能测试
     gatling
             # dsl脚本, 生成报表
     wrk

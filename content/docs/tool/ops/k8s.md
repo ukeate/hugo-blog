@@ -6,12 +6,27 @@ date: 2018-10-11T18:18:21+08:00
 
 # 常用
 ## 查看
-    kubectl get 
-    kubectl describe 
-    kubectl logs 
-    kubectl get pods --namespace=mdw-log -l app=logstash-logstash -w    # 等待启动
-    journalctl -u kubelet | tail
-    kubectl api-resources --verbs=list --namespaced -o name   | xargs -n 1 kubectl get --show-kind --ignore-not-found -nmdw
+    系统日志
+        journalctl -u kubelet | tail
+        kubectl api-resources --verbs=list --namespaced -o name   | xargs -n 1 kubectl get --show-kind --ignore-not-found -nmdw
+    日志
+        kubectl logs -f --since=5m --all-containers=true -lapp=[svcName] -o wide
+        kubectl get pod [podName] -o yaml
+        kubectl get pods --namespace=mdw-log -l app=logstash-logstash -w    # 等待启动
+        kubectl describe pods [podName]
+        kubectl rollout status deploy/[deployName]          # 查升级记录
+    节点详情
+        kubectl get nodes -o json
+    查状态
+        kubectl rollout status deploy/[deployName]
+    进容器
+        kubectl exec -it [podName]  -- /bin/bash
+    用busybox运行命令
+        kubectl run -it --image busybox -n [nameSpace] [name] --restart=Never --rm
+    查询所有nodeport
+        kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
+    查询node上跑pod个数
+        kubectl get po --all-namespaces -o wide | grep cn-shanghai.i-uf6iudwa5b1tvdxb3yy8 |  wc -l 
 ## 监控
     kubectl top node -l app=app1
     kubectl top pod -nmdw --containers
@@ -35,10 +50,64 @@ date: 2018-10-11T18:18:21+08:00
     kubectl run -it --rm  busybox1 --image=yauritux/busybox-curl -- /bin/bash
         # 同环境busybox
 ## 清理
-    kubectl get po -njnc-dev | grep Evicted |awk '{print$1}'|xargs kubectl delete pod -njnc-dev
-    kubectl delete po -nmdw --force --grace-period=0
+    删除Evicted pod
+        kubectl get po -njnc-dev | grep Evicted |awk '{print$1}'|xargs kubectl delete pod -njnc-dev
+    强制删除pod
+        kubectl delete po -nmdw --force --grace-period=0
+    删除pv
+        kubectl patch pv mdw-mysql-data -p '{"metadata":{"finalizers":null}}'
+## 操作
+    升级镜像
+        kubectl set image deploy/[deployName] [imageName]=[imageName:Version]
+        kubectl edit deploy/[deployName]
+    扩容
+        kubectl scale deployment [deployName] --replicas=3
+        kubectl patch deployment [deployName] -p '{"spec":{"replicas":3}}'
+    重启
+        kubectl rollout restart deploy xxx
+    回滚
+        kubectl rollout undo deploy xxx
+    打污点
+        kubectl taint nodes node1 key1=a:NoExecute
+            # 添加
+        kubectl taint nodes --all key1-
+            # 删除
+    打标签
+        kubectl label nodes node1 a=b
+## 容器配置
+    部署.docker/config.json成secret
+        kubectl create secret generic regcred --from-file=.dockerconfigjson=<path/to/.docker/config.json> --type=kubernetes.io/dockerconfigjson
+    配置私有仓库
+        kubectl delete secret local
+        kubectl -n iot create secret docker-registry local1 \
+        --docker-server=192.168.99.1:5000 \
+        --docker-username=outrun \
+        --docker-password=asdf \
+        --docker-email=934260428@qq.com
+    连阿里云k8s
+        kubectl config set-cluster mrs --server=https://106.14.49.217:6443 --certificate-authority=/home/outrun/scripts/work/mrs-k8s/crt --embed-certs=true
+        kubectl config set-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f --cluster=mrs --user=297351062922226746 --namespace=lora-app
+        kubectl config use-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f
+        kubectl config set-credentials 297351062922226746  --user=297351062922226746 --client-key=/home/outrun/scripts/work/mrs-k8s/297351062922226746.key.pem --client-certificate=/home/outrun/scripts/work/mrs-k8s/297351062922226746.crt --embed-certs=true
+## 集群配置
+    设置当前集群namespace
+        kubectl config set-context $(kubectl config current-context) --namespace=default
+    配置DNS解析
+        kubectl edit configmap coredns -n kube-system
+            apiVersion: v1
+            data:
+            Corefile: |
+                .:53 {
+                    errors
+                    hosts {
+                        192.168.1.107 a.b.com
+                    }
+                }
+        kubectl rollout restart deploy coredns -n kube-system
 
-# 目录
+
+
+# 文件目录
     /etc/kubernetes
     /etc/resolve.conf
 # 命令
@@ -242,77 +311,6 @@ date: 2018-10-11T18:18:21+08:00
 
     相关命令
         
-# 方案
-## 查询
-    日志
-        kubectl logs -f --since=5m --all-containers=true -lapp=[svcName] -o wide
-        kubectl get pod [podName] -o yaml
-        kubectl describe pods [podName]
-        kubectl rollout status deploy/[deployName]          # 查升级记录
-    节点详情
-        kubectl get nodes -o json
-    查状态
-        kubectl rollout status deploy/[deployName]
-    进容器
-        kubectl exec -it [podName]  -- /bin/bash
-    用busybox运行命令
-        kubectl run -it --image busybox -n [nameSpace] [name] --restart=Never --rm
-    查询所有nodeport
-        kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
-    查询node上跑pod个数
-        kubectl get po --all-namespaces -o wide | grep cn-shanghai.i-uf6iudwa5b1tvdxb3yy8 |  wc -l 
-## 操作
-    删除pv
-        kubectl patch pv mdw-mysql-data -p '{"metadata":{"finalizers":null}}'
-    升级镜像
-        kubectl set image deploy/[deployName] [imageName]=[imageName:Version]
-        kubectl edit deploy/[deployName]
-    扩容
-        kubectl scale deployment [deployName] --replicas=3
-        kubectl patch deployment [deployName] -p '{"spec":{"replicas":3}}'
-    重启
-        kubectl rollout restart deploy xxx
-    回滚
-        kubectl rollout undo deploy xxx
-    打污点
-        kubectl taint nodes node1 key1=a:NoExecute
-            # 添加
-        kubectl taint nodes --all key1-
-            # 删除
-    打标签
-        kubectl label nodes node1 a=b
-## 容器配置
-    部署.docker/config.json成secret
-        kubectl create secret generic regcred --from-file=.dockerconfigjson=<path/to/.docker/config.json> --type=kubernetes.io/dockerconfigjson
-    配置私有仓库
-        kubectl delete secret local
-        kubectl -n iot create secret docker-registry local1 \
-        --docker-server=192.168.99.1:5000 \
-        --docker-username=outrun \
-        --docker-password=asdf \
-        --docker-email=934260428@qq.com
-    连阿里云k8s
-        kubectl config set-cluster mrs --server=https://106.14.49.217:6443 --certificate-authority=/home/outrun/scripts/work/mrs-k8s/crt --embed-certs=true
-        kubectl config set-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f --cluster=mrs --user=297351062922226746 --namespace=lora-app
-        kubectl config use-context 297351062922226746-cdf45d630b2284f8ab79bea186c161d9f
-        kubectl config set-credentials 297351062922226746  --user=297351062922226746 --client-key=/home/outrun/scripts/work/mrs-k8s/297351062922226746.key.pem --client-certificate=/home/outrun/scripts/work/mrs-k8s/297351062922226746.crt --embed-certs=true
-## 集群配置
-    设置当前集群namespace
-        kubectl config set-context $(kubectl config current-context) --namespace=default
-    配置DNS解析
-        kubectl edit configmap coredns -n kube-system
-            apiVersion: v1
-            data:
-            Corefile: |
-                .:53 {
-                    errors
-                    hosts {
-                        192.168.1.107 a.b.com
-                    }
-                }
-        kubectl rollout restart deploy coredns -n kube-system
-
-
 
 
 # minikube
