@@ -545,18 +545,20 @@ date: 2018-10-11T18:47:57+08:00
     arp -n                  # 显示局域网 ip mac表
         -s ip mac           # 设置ip mac表
     ip                      # 网卡与ip信息
+        添加路由
+            ip route add 10.146.81.0/24 via 10.146.81.29
         配置ip段互斥的宿主机转发
-        服务器
-            ip link set up dev tun0
-            sysctl net.ipv4.ip_forward=1
-            /etc/sysctl.d/30-ipforward.conf
-                net.ipv4.ip_forward=1
-                net.ipv6.conf.default.forwarding=1
-                net.ipv6.conf.all.forwarding=1
-        客户端
-            ip addr add 192.168.123.201/24 dev eth0             # 要转发的网段
-            ip link set up dev eth0
-            ip route add default via 192.168.123.100 dev eth0   # 服务器ip
+            服务器
+                ip link set up dev tun0
+                sysctl net.ipv4.ip_forward=1
+                /etc/sysctl.d/30-ipforward.conf
+                    net.ipv4.ip_forward=1
+                    net.ipv6.conf.default.forwarding=1
+                    net.ipv6.conf.all.forwarding=1
+            客户端
+                ip addr add 192.168.123.201/24 dev eth0             # 要转发的网段
+                ip link set up dev eth0
+                ip route add default via 192.168.123.100 dev eth0   # 服务器ip
     hostapd                 # 无线热点
         yum install hostapd
         vi /etc/hostapd/hostapd.conf

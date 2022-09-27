@@ -49,6 +49,7 @@ date: 2018-10-11T18:18:21+08:00
         # 改镜像命令
     kubectl run -it --rm  busybox1 --image=yauritux/busybox-curl -- /bin/bash
         # 同环境busybox
+    kubectl cp dir1 ns1/po1:/dir1 -c c1
 ## 清理
     删除Evicted pod
         kubectl get po -njnc-dev | grep Evicted |awk '{print$1}'|xargs kubectl delete pod -njnc-dev
@@ -75,6 +76,16 @@ date: 2018-10-11T18:18:21+08:00
     打标签
         kubectl label nodes node1 a=b
 ## 容器配置
+    HTTPS
+        openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.crt -subj "/CN=my-domain.com"
+        kubectl create secret tls my-domain-com-tls --cert=tls.crt --key=tls.key --namespace=allure-docker-service
+        ingress.yml
+            spec:
+                tls:
+                - secretName: my-domain-com-tls
+                  hosts:
+                    - my-domain.com
+                  
     部署.docker/config.json成secret
         kubectl create secret generic regcred --from-file=.dockerconfigjson=<path/to/.docker/config.json> --type=kubernetes.io/dockerconfigjson
     配置私有仓库

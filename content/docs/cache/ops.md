@@ -10,7 +10,7 @@
 # python
     pyenv versions
     pyenv install 3.7.6
-        -l
+        --list
     pyenv virtualenv 3.7.6 37
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"

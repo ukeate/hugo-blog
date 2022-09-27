@@ -158,6 +158,8 @@ date: 2018-10-11T18:18:21+08:00
     docker inspect --format {{.State.Pid}} nginx
     nsenter -t4629 -n
 ### 场景
+    查看镜像内文件
+        docker run -it --entrypoint sh nginx:latest
     查看/var/lib/docker/overlay2/id文件对应container
         docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Id}}, {{.Name}}, {{.GraphDriver.Data.WorkDir}}' | grep bff250
 # Dockerfile
