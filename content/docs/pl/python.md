@@ -471,13 +471,6 @@ date: 2018-10-09T16:05:05+08:00
     celery
         # 定时调度
 # 工具
-    steuptools
-        easy_install
-    pip
-        pip install -i http://pypi.douban.com/simple/ torndb
-            # 用豆辨的pypi索引
-        pip install ipython==4.2.0
-            # 安装指定版本
     ipython notebook
         # 在线运行python
     bpython
@@ -486,6 +479,38 @@ date: 2018-10-09T16:05:05+08:00
         # 调试
     cprofile
         # 性能测试
+## steuptools
+    easy_install
+## pip
+    pip install -i http://pypi.douban.com/simple/ torndb
+        # 用豆辨的pypi索引
+    pip install ipython==4.2.0
+        # 安装指定版本
+## pyenv
+    pyenv versions
+    pyenv install 3.7.6
+        --list
+    pyenv virtualenv 3.7.6 37
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    pyenv activate 37
+    pyenv deactivate
+## conda
+    环境相关
+        conda env
+            create -f e.yml     # 创建环境
+                -n name1    
+            list                # 列出所有环境
+            remove -n name1     # 删除环境
+        conda activate e1
+        conda init bash
+    包相关
+        conda list              # 当前环境所有软件包
+        conda search pillow     # 列出包所有版本
+        conda install pillow=7.0.0
+            -c                  # 指定channel，相当于命名空间
+        conda uninstall pillow
+        conda upgrade numpy
 # 容器
     gunicorn
         # python实现

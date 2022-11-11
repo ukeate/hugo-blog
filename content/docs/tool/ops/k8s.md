@@ -12,21 +12,26 @@ date: 2018-10-11T18:18:21+08:00
     日志
         kubectl logs -f --since=5m --all-containers=true -lapp=[svcName] -o wide
         kubectl get pod [podName] -o yaml
-        kubectl get pods --namespace=mdw-log -l app=logstash-logstash -w    # 等待启动
+        kubectl get pods -nmdw-log -l app=logstash-logstash -w    # 等待启动
         kubectl describe pods [podName]
         kubectl rollout status deploy/[deployName]          # 查升级记录
-    节点详情
+        kubectl get events -njnc
+            -oyaml
+            --field-selector=type=Normal            # Normal, Warning
+    查ns所有资源
+        kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl get --show-kind --ignore-not-found -nairflow
+    查节点详情
         kubectl get nodes -o json
-    查状态
+    查扩缩状态
         kubectl rollout status deploy/[deployName]
+    查所有nodeport
+        kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
+## 操作
     进容器
         kubectl exec -it [podName]  -- /bin/bash
+        kubectl attach [podName]            # 进入主进程IO
     用busybox运行命令
         kubectl run -it --image busybox -n [nameSpace] [name] --restart=Never --rm
-    查询所有nodeport
-        kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
-    查询node上跑pod个数
-        kubectl get po --all-namespaces -o wide | grep cn-shanghai.i-uf6iudwa5b1tvdxb3yy8 |  wc -l 
 ## 监控
     kubectl top node -l app=app1
     kubectl top pod -nmdw --containers
@@ -51,12 +56,26 @@ date: 2018-10-11T18:18:21+08:00
         # 同环境busybox
     kubectl cp dir1 ns1/po1:/dir1 -c c1
 ## 清理
-    删除Evicted pod
-        kubectl get po -njnc-dev | grep Evicted |awk '{print$1}'|xargs kubectl delete pod -njnc-dev
+    删除Evicted/OutOfmemory pod
+        kubectl get po -njnc-dev | grep OutOfmemory |awk '{print$1}' | tr '\n' '' | xargs kubectl delete pod -njnc-dev
     强制删除pod
         kubectl delete po -nmdw --force --grace-period=0
-    删除pv
+    删除pv/pvc
         kubectl patch pv mdw-mysql-data -p '{"metadata":{"finalizers":null}}'
+    重建pv
+        kubectl get pvc p1 -o yaml > a.yml
+        编辑a.yml
+        kubectl apply -f a.yml
+    删除node
+        kubectl drain node1
+    维护node不可调度与恢复
+        kubectl cordon node1
+        kubectl uncordon node1
+    强制删除ns
+        kubectl get ns n1 -o json >tmp.json
+        删除finalizers列表
+        kubectl proxy
+        curl -k -H "Content-Type: application/json" -X PUT --data-binary @tmp.json http://127.0.0.1:8001/api/v1/namespaces/n1/finalize
 ## 操作
     升级镜像
         kubectl set image deploy/[deployName] [imageName]=[imageName:Version]

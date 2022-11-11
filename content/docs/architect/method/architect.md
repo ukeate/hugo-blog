@@ -1,5 +1,5 @@
 ---
-Categories : ["服务治理"]
+Categories : ["规划"]
 title: "服务治理"
 date: 2018-10-10T16:49:27+08:00
 ---
