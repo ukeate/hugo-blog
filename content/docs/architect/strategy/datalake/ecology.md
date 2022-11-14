@@ -83,6 +83,35 @@
                 HDFS(存), MapReduce(算), Yarn(资源调度), Common
             Hadoop3.x
 ## HDFS
+	# Hadoop Distributed File System, 一开始为Nutch搜索引擎开发
+	存储模型
+		按字节切割,block存储,block多副本
+		不支持修改(因为修改文件而非block, 且会引发规模修改)，可以追加
+	主从架构
+		NameNode
+			树形目录
+			内存存储元数据，可持久化(EditLog事务日志, FsImage)
+				NameNode启动时安全模式
+					SecondaryNameNode合并EditLog到新FsImage
+					DataNode上报block列表
+			存副本策略
+		DataNode
+			本地文件形式存block, 存校验
+			与NameNode心跳，汇报block列表
+		Client
+			交互元数据和block
+	API结构
+		推荐节点数不过5000
+		角色：一个进程
+	Block副本放置策略
+		Pipeline
+	HA
+		JournalNode
+			NameNode同步EditLog
+		FailoverController
+			利用ZooKeeper
+			同主机下监控NameNode
+			验证对方主机主NN是否真的挂掉，调用对方降级为Standby
     问题及方案
         单点故障
             多NameNode，主备(2.x只能1主1备, 3.x可以1主5备)
@@ -135,7 +164,7 @@
         访问页面 node01:50070 node01:50090
         hdfs dfs -mkdir -p /user/root
         hdfs dfs -D dfs.blocksize=1048576 -put a.txt /user/root
-## 例子
+## 使用
     软件结构
         0        jdk, Hadoop                        NameNode, DFSZKFailoverController
         1        jdk, Hadoop                        NameNode, DFSZKFailoverController
@@ -257,5 +286,125 @@
             ./sbin/Hadoop-daemons.sh start journalnode
         0 上格式化namenode
             Hadoop namenode -format
+## HBase
+	介绍
+		Hadoop Database, 实时分布式, bigtable列簇数据库, 非结构化，自动切分, 并发读写
+		只能row key查询, master有单点问题
+	版本
+		0.98
+		1.x
+		2.x
+	原理
+		修改只追加记录，合并时删除
+	架构
+		Client
+			提供接口，维护客户端缓存
+		Zookeeper
+			只有一个活跃master
+			存Region寻址入口
+			实时监控region server在线信息，通知master
+			存schema、table元数据
+		Master
+			为region server分配region	
+			region server负载均衡
+			失效region server重新分配region
+			管理table CRUD
+		RegionServer
+			维护region
+			切分大region
+		Region
+			表水平分region分配在多个region server, region增大时裂变
+		HLog
+			写Store之前先写HLog, flush到HDFS, store写完后HDFS存储移到old，2天后删除	
+		Store
+			region由多个store组成, 一个store对应一个CF
+			store先写入memstore, 到阈值后启动flashcache写入storefile
+			storefile增长到阈值，进行合并
+				minor compaction
+				major compaction，默认最多256M
+			region所有storefile达到阈值，region分割
+## Spark
+	介绍
+		in memory, 准实时的批处理，生态好于Storm
+		无事务
+	集群
+		Master
+		Worker
+		Driver
+		Executor	
+	组件
+		Spark RDD(Resiliennt Distributed Datasets)
+		Spark Core 批计算，取代MR
+			粗粒度资源申请，task自行分配启动快，executor不kill
+			内存计算
+			chain
+		Spark Streamming 流计算，取代Storm
+			批计算无限缩小，实时性差
+			默认无状态
+				用updateStateByKey保存上次计算结果，变成有状态
+				借助Redis或ES存
+		Spark SQL 数据处理
+		Spark MlLib 机器学习
+		Spark R 数据分析
+	使用
+		val session = SparkSessionBase.createSparkSession()
+		var sc = session.sparkContext
+		var rdd = sc.makeRDD(List(1,2,3,4,5,6))
+		val mapRDD = rdd.map(x -> {
+			x
+		})
+		val filterRDD = mapRDD.filter(x => {
+			true
+		})
+		filterRDD.count
+# 独立体系
+## Flink	
+	特点
+		高吞吐、低延迟、高性能
+		支持事件时间(Event Time)
+		擅长有状态的计算	
+			内存
+			磁盘
+			RocksDB
+		灵活的窗口（Window）操作： time, count, session
+		基于轻量级分布式快照（CheckPoint）实现容错，保证exactly-once
+		基于JVM实现独立内存管理
+		Save Points方便代码升级
+	批计算是流计算的特例
+		unbound streams		# 定义开始不定义结束，流计算
+		bounded streams		# 定义开始也定义结束，批计算
+	迟到数据问题
+		温度窗口
+		水位线(Watermark)
+	集群
+		JobManager(JVM进程)
+		TaskManager(JVM进程)
+			Task Slot	
+				一组固定的资源，隔离内存，不隔离核
+				一般与核数对应，核支持超线程时一个算两个
+	配置
+		/etc
+			/flink-conf.yaml
+			/slaves
+			/masters
+	组件
+		部署
+			Single JVM		# 多线程模拟
+			Standalone
+			YARN	
+		库
+			CEP				# 复杂事件库
+			Table
+			FlinkML
+			Gelly
+	使用
+		import org.apache.flink.streaming.api.scala._
 
-
+		val env = StreamExecutionEnvironment.getExecutionEnvironment
+		val initStream:DataStream[String] = env.socketTextStream("node01", 8888)
+		val wordStream = initStream.flatMap(_.split(" "))
+		val pairStream = wordStream.map((_, 1))
+		val keyByStream = pairStream.keyBy(0)
+		val restStream = keyByStream.sum(1)
+		restStream.print()
+		env.execute("job1")
