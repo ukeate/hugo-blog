@@ -20,7 +20,7 @@ headless: true
     - [****物联网****](/docs/architect/strategy/iot)
         - [框架](/docs/architect/strategy/iot/framework)
     - [****区块链****](/docs/architect/strategy/block_chain)
-    - [****元宇宙****](/docs/architect/strategy/meta)
+    - [****元宇宙Web3.0****](/docs/architect/strategy/meta)
         - [媒体](/docs/architect/strategy/meta/media)
   - [****工程设计原则****](/docs/architect/project)
       - [DDD](/docs/architect/project/ddd)
