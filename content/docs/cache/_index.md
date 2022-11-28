@@ -1,5 +1,7 @@
 ---
-title: Register
+bookCollapseSection: true
+weight: 0
+title: Cache
 type: docs
 ---
 

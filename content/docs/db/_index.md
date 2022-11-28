@@ -1,4 +1,6 @@
 ---
+bookCollapseSection: true
+weight: 0
 title: 数据库
 type: docs
 ---

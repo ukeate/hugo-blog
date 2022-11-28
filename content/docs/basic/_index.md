@@ -1,5 +1,7 @@
 ---
-title: 设计
+bookCollapseSection: true
+weight: 0
+title: 基本功
 type: docs
 ---
 # 思维
