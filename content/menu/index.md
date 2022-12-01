@@ -17,6 +17,7 @@ headless: true
     - [****湖仓一体****](/docs/architect/strategy/datalake)
         - [生态体系](/docs/architect/strategy/big_data/ecology)
     - [****人工智能****](/docs/architect/strategy/ai)
+        - [深度学习](/docs/architect/strategy/ai/deep)
         - [知识图谱](/docs/architect/strategy/ai/map)
     - [****物联网****](/docs/architect/strategy/iot)
         - [框架](/docs/architect/strategy/iot/framework)
