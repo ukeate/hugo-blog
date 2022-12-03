@@ -24,7 +24,7 @@ draft: true
 * 数据服务: 熟悉Mysql、Redis、ElasticSearch、MongoDB
 * 中间件: 熟悉Tomcat、Nginx、NSQ、Kafka等
 * 系统集成：熟悉K8S、Docker、Git等，一直用Linux + VIM工作
-* 前端：熟悉HTML5、Three.JS、VUE、Angluar、Webpack
+* 前端：熟悉HTML5、Three.JS、VUE、Angular、Webpack
 
 # 主要项目经历
 ## 餐饮供应链SaaS
