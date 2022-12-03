@@ -22,6 +22,8 @@ headless: true
     - [****区块链****](/docs/architect/strategy/block_chain)
     - [****元宇宙Web3.0****](/docs/architect/strategy/meta)
         - [媒体](/docs/architect/strategy/meta/media)
+    - [****云原生****](/docs/architect/strategy/cloud)
+    - [****边缘计算****](/docs/architect/strategy/edge)
   - [****工程设计原则****](/docs/architect/project)
       - [DDD](/docs/architect/project/ddd)
       - [前端设计](/docs/architect/project/frontend)
