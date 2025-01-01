@@ -11,7 +11,7 @@ rm -r public
 hugo
 
 
-cd ../outrunJ.github.io
+cd ../ukeate.github.io
 mv .git ..
 rm -r *
 mv ../hugo-blog/public/*  .
