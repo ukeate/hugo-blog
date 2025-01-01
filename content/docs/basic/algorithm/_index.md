@@ -302,7 +302,7 @@ func QuickSort2(arr []int, start int, end int) {
 	}
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func TestQuickSort(t *testing.T) {
 	assert := assert.New(t)
@@ -311,7 +311,7 @@ func TestQuickSort(t *testing.T) {
 	assert.Equal([]int{0, 1, 2, 2, 2, 4, 4, 7, 8, 9, 12, 34, 65}, arr)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 堆排序(heap sort)
 ```golang
 /*
@@ -423,7 +423,7 @@ func HeapSort2(arr []int) {
 	//}
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func TestHeapsort(t *testing.T) {
 	assert := assert.New(t)
@@ -435,7 +435,7 @@ func TestHeapsort(t *testing.T) {
 	)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 归并排序(merge sort)
 ```golang
 /*
@@ -607,7 +607,7 @@ func topK2(arr []int, k int) []int {
 	return heap
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func main() {
 	arr := []int{1, 10, 2, 20, 3, 30, 4, 40, 5, 50, 6, 60, 7, 70, 8, 80, 9, 90}
@@ -615,7 +615,7 @@ func main() {
 	fmt.Print(arr)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 倒排索引
 # 数字
 ## 斐波那契
@@ -870,13 +870,13 @@ func TwoSum3(arr []int, s int) {
 	}
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func TestTwoSum(t *testing.T) {
 	TwoSum([]int{ 1, 2, 3, 4, 5, 6, 7, 8, 9 },10)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 猴子吃桃
 ```golang
 /*
@@ -1161,7 +1161,7 @@ func savewater(arr []int) int {
 	return volume
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func main() {
 	arr := []int{1, 2, 3, 4, 2, 1, 1, 5, 3, 2,4}
@@ -1169,7 +1169,7 @@ func main() {
 	fmt.Println(volume)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 # 字符串
 ## 字符统计
 ```golang
@@ -1255,7 +1255,7 @@ func ReverseWords(s []rune) {
 	reverse(0, n-1)
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func TestReverseWords(t *testing.T) {
 	assert := assert.New(t)
@@ -1264,7 +1264,7 @@ func TestReverseWords(t *testing.T) {
 	assert.Equal([]rune("world the in"), s)
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 同字异序
 ```golang
 const ALPHABET_LENGHT = 26
@@ -1468,7 +1468,7 @@ func LongestPalindrome2(s string) string {
 	return s[maxLeft : maxRight+1]
 }
 ```
-{{< expand >}}
+{{% details title="test" open=false %}}
 ```golang
 func TestLongestPalindrome(t *testing.T) {
 	assert := assert.New(t)
@@ -1480,7 +1480,7 @@ func TestLongestPalindrome2(t *testing.T) {
 	assert.Equal("woabcbaow", LongestPalindrome2("sdbsdaswoabcbaowe"))
 }
 ```
-{{< /expand >}}
+{{% /details %}}
 ## 模式匹配
 ```golang
 /*
