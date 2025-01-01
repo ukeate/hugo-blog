@@ -7,7 +7,7 @@ googleAnalytics: "UA-154152836-1"
 
 baseURL: 'https://runout.run/'
 title: 'outrun的笔记'
-theme: 'book'
+theme: 'hugo-book'
 
 # (Optional) Set this to true if you use capital letters in file names
 disablePathToLower: true

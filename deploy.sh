@@ -16,7 +16,7 @@ mv .git ..
 rm -r *
 mv ../hugo-blog/public/*  .
 mv ../.git .
-echo runout.run > CNAME
+echo ukeate.com > CNAME
 
 
 git add -A .
