@@ -43,7 +43,7 @@
             help server    # server代表任何子命令
     场景
         发布
-            hugo --theme=hyde --baseUrl="https://outrunJ.github.io"
+            hugo --theme=hyde --baseUrl="https://ukeate.github.io"
         生成站点
             hugo new site blog1 # 站点命令在blog1中执行
         生成文章

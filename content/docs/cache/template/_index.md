@@ -4,4 +4,4 @@ type: docs
 ---
 
 # 详见
-https://github.com/outrunJ/backup-script
+https://github.com/ukeate/backup-script

@@ -175,4 +175,4 @@ type: docs
         管理服务状态、位置
 
 # 本地生活
-[服务与功能](https://github.com/outrunJ/logseq/blob/main/jncloud/pages/%E5%AE%9E%E4%BD%93%E8%A7%86%E5%9B%BE.md)
+[服务与功能](https://github.com/ukeate/logseq/blob/main/jncloud/pages/%E5%AE%9E%E4%BD%93%E8%A7%86%E5%9B%BE.md)
