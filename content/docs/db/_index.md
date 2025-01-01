@@ -1,5 +1,5 @@
 ---
-weight: 2
+weight: 5
 title: 数据库
 type: docs
 ---

@@ -1,5 +1,5 @@
 ---
-weight: 5
+weight: 4
 title: 工具
 type: docs
 ---
