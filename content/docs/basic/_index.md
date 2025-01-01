@@ -1,5 +1,4 @@
 ---
-bookCollapseSection: true
 weight: 0
 title: 基本功
 type: docs

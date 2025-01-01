@@ -1,6 +1,5 @@
 ---
-bookCollapseSection: true
-weight: 0
+weight: 5
 title: 工具
 type: docs
 ---

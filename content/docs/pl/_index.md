@@ -1,6 +1,5 @@
 ---
-bookCollapseSection: true
-weight: 0
+weight: 4
 Categories: ["语言"]
 title: 程序语言
 type: docs

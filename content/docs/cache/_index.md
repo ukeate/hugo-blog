@@ -1,6 +1,5 @@
 ---
-bookCollapseSection: true
-weight: 0
+weight: 50
 title: Cache
 type: docs
 ---
