@@ -1,6 +1,7 @@
 ---
 title: 这些年我做过的技术
 type: docs
+Categories : ["架构"]
 ---
 
 

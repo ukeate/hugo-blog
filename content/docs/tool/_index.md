@@ -2,6 +2,7 @@
 weight: 4
 title: 工具
 type: docs
+Categories: ["工具"]
 ---
 # 采用
 ## 趋向

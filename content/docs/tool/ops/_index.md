@@ -1,6 +1,6 @@
 ---
 title: 运维
-Categories: ["运维"]
+Categories: ["运维","工具"]
 date: 2018-10-10T17:33:07+08:00
 type: docs
 ---

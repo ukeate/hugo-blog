@@ -1,6 +1,6 @@
 ---
 title: 小功能
-Categories : ["功能"]
+Categories : ["功能", "中间件"]
 date: 2018-10-10T14:36:50+08:00
 type: docs
 ---

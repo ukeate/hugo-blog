@@ -1,5 +1,5 @@
 ---
-Categories : ["元宇宙Web3.0"]
+Categories : ["元宇宙Web3.0","架构"]
 title: "IoT"
 date: 2018-10-10T16:49:27+08:00
 ---

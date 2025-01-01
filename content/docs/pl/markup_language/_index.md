@@ -1,4 +1,6 @@
-
+---
+Categories: ["语言"]
+---
 # xml
     介绍
         可扩展性标记语言，使用DTD和XML Schema标准化XML结构

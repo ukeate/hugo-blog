@@ -1,6 +1,7 @@
 ---
 title: 算法
 type: docs
+Categories : ["基础"]
 ---
 # 名词
     graph                           图

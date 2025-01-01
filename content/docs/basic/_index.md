@@ -2,6 +2,7 @@
 weight: 1
 title: 基本功
 type: docs
+Categories : ["基础"]
 ---
 # 思维
 ## 第一性原理

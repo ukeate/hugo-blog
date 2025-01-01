@@ -2,6 +2,7 @@
 weight: 5
 title: 数据库
 type: docs
+Categories : ["数据库"]
 ---
 # 基础
     数据库类型

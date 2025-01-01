@@ -1,5 +1,5 @@
 ---
-Categories: ["计算机"]
+Categories: ["计算机", "基础"]
 title: "Computer"
 date: 2018-10-09T08:48:07+08:00
 ---

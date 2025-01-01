@@ -1,6 +1,7 @@
 ---
 title: 测试
 type: docs
+Categories: ["工具"]
 ---
 
 # 基础
