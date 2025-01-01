@@ -52,12 +52,12 @@ params:
 
   # Set source repository location.
   # Used for 'Last Modified' and 'Edit this page' links.
-  BookRepo: 'https://github.com/outrunJ/hugo-blog'
+  BookRepo: 'https://github.com/ukeate/hugo-blog'
 
   # Enable 'Edit this page' links for 'doc' page type.
   # Disabled by default. Uncomment to enable. Requires 'BookRepo' param.
   # Path must point to 'content' directory of repo.
-  BookEditPath: 'tree/master/content'
+  BookEditPath: 'blob/master/'
 
   # (Optional, default January 2, 2006) Configure the date format used on the pages
   # - In git information
