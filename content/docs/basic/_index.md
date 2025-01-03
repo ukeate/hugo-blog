@@ -1,5 +1,5 @@
 ---
-weight: 1
+weight: 2
 title: 基本功
 type: docs
 Categories : ["基础"]
