@@ -1,5 +1,5 @@
 ---
-weight: 3
+weight: 1
 Categories: ["语言"]
 title: 程序语言
 type: docs
